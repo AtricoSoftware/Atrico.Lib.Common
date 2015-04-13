@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3BA95440-9DFA-4A2A-AD77-B8ECA13200D6}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atrico.Lib.Common", "Atrico.Lib.Common\Atrico.Lib.Common.csproj", "{983A29AC-8A3B-4D78-81D7-BCAF9B520877}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atrico.Lib.Common.Test", "Atrico.Lib.Common.Test\Atrico.Lib.Common.Test.csproj", "{CB825E69-206F-4A9F-A2A5-C3017C871F21}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{983A29AC-8A3B-4D78-81D7-BCAF9B520877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{983A29AC-8A3B-4D78-81D7-BCAF9B520877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{983A29AC-8A3B-4D78-81D7-BCAF9B520877}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{983A29AC-8A3B-4D78-81D7-BCAF9B520877}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB825E69-206F-4A9F-A2A5-C3017C871F21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB825E69-206F-4A9F-A2A5-C3017C871F21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB825E69-206F-4A9F-A2A5-C3017C871F21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB825E69-206F-4A9F-A2A5-C3017C871F21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
