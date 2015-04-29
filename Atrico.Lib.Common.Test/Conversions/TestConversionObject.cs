@@ -1,4 +1,6 @@
 using Atrico.Lib.Assertions;
+using Atrico.Lib.Assertions.Constraints;
+using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Testing;
 using Atrico.Lib.Testing.NUnitAttributes;
 
@@ -17,8 +19,8 @@ namespace Atrico.Lib.Common.Test.Conversions
 			var converted = Conversion.Convert<string>(value);
 
 			// Assert
-			Assert.That(converted, Is.TypeOf<string>(), "Type");
-			Assert.That(converted, Is.ReferenceEqualTo(value), "Value");
+			Assert.That(Value.Of(converted).Is().TypeOf(typeof(string)), "Type");
+			Assert.That(Value.Of(converted).Is().ReferenceEqualTo(value), "Value");
 		}
 
 		[Test]
@@ -30,7 +32,7 @@ namespace Atrico.Lib.Common.Test.Conversions
 			var converted = Conversion.Convert<string>(null);
 
 			// Assert
-			Assert.That(converted, Is.Null, "Value");
+			Assert.That(Value.Of(converted).Is().Null(), "Value");
 		}
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Atrico.Lib.Assertions;
+using Atrico.Lib.Assertions.Constraints;
+using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.Collections;
 using Atrico.Lib.Testing.NUnitAttributes;
 
@@ -20,7 +22,7 @@ namespace Atrico.Lib.Common.Test.Collections
             var differences = CollectionComparer.Differences(actual, expected);
 
             // Assert
-            Assert.That(differences, Is.TypeOf<CollectionDifferencesEqual>(), "Return type");
+            Assert.That(Value.Of(differences).Is().TypeOf(typeof (CollectionDifferencesEqual)), "Return type");
             Debug.WriteLine(differences.ToString());
         }
 
@@ -35,12 +37,12 @@ namespace Atrico.Lib.Common.Test.Collections
             var differences = CollectionComparer.Differences(actual, expected);
 
             // Assert
-            Assert.That(differences, Is.TypeOf<CollectionDifferencesWrongItems>(), "Return type");
+            Assert.That(Value.Of(differences).Is().TypeOf(typeof (CollectionDifferencesWrongItems)), "Return type");
             var differencesT = differences as CollectionDifferencesWrongItems;
 // ReSharper disable once PossibleNullReferenceException (Test will throw appropriately if so)
-            Assert.That(differencesT.CountDelta, Is.EqualTo(-1), "Count delta");
-            Assert.That(differencesT.Missing, AsCollection.Is.EquivalentTo(new[] {3}), "Missing");
-            Assert.That(differencesT.Extra, AsCollection.Is.EquivalentTo(new int[] {}), "Extra");
+            Assert.That(Value.Of(differencesT.CountDelta).Is().EqualTo(-1), "Count delta");
+            Assert.That(Value.Of(differencesT.Missing).Is().EquivalentTo(new object[] {3}), "Missing");
+            Assert.That(Value.Of(differencesT.Extra).Is().EquivalentTo(new object[] {}), "Extra");
             Debug.WriteLine(differences.ToString());
         }
 
@@ -55,12 +57,12 @@ namespace Atrico.Lib.Common.Test.Collections
             var differences = CollectionComparer.Differences(actual, expected);
 
             // Assert
-            Assert.That(differences, Is.TypeOf<CollectionDifferencesWrongItems>(), "Return type");
+            Assert.That(Value.Of(differences).Is().TypeOf(typeof (CollectionDifferencesWrongItems)), "Return type");
             var differencesT = differences as CollectionDifferencesWrongItems;
 // ReSharper disable once PossibleNullReferenceException (Test will throw appropriately if so)
-            Assert.That(differencesT.CountDelta, Is.EqualTo(+1), "Count delta");
-            Assert.That(differencesT.Extra, AsCollection.Is.EquivalentTo(new[] {3}), "Extra");
-            Assert.That(differencesT.Missing, AsCollection.Is.EquivalentTo(new int[] {}), "Missing");
+            Assert.That(Value.Of(differencesT.CountDelta).Is().EqualTo(+1), "Count delta");
+            Assert.That(Value.Of(differencesT.Extra).Is().EquivalentTo(new object[] {3}), "Extra");
+            Assert.That(Value.Of(differencesT.Missing).Is().EquivalentTo(new object[] {}), "Missing");
             Debug.WriteLine(differences.ToString());
         }
 
@@ -75,12 +77,12 @@ namespace Atrico.Lib.Common.Test.Collections
             var differences = CollectionComparer.Differences(actual, expected);
 
             // Assert
-            Assert.That(differences, Is.TypeOf<CollectionDifferencesWrongItems>(), "Return type");
+            Assert.That(Value.Of(differences).Is().TypeOf(typeof (CollectionDifferencesWrongItems)), "Return type");
             var differencesT = differences as CollectionDifferencesWrongItems;
 // ReSharper disable once PossibleNullReferenceException (Test will throw appropriately if so)
-            Assert.That(differencesT.CountDelta, Is.EqualTo(0), "Count delta");
-            Assert.That(differencesT.Missing, AsCollection.Is.EquivalentTo(new[] {3}), "Missing");
-            Assert.That(differencesT.Extra, AsCollection.Is.EquivalentTo(new[] {6}), "Extra");
+            Assert.That(Value.Of(differencesT.CountDelta).Is().EqualTo(0), "Count delta");
+            Assert.That(Value.Of(differencesT.Missing).Is().EquivalentTo(new object[] {3}), "Missing");
+            Assert.That(Value.Of(differencesT.Extra).Is().EquivalentTo(new object[] {6}), "Extra");
             Debug.WriteLine(differences.ToString());
         }
 
@@ -95,12 +97,12 @@ namespace Atrico.Lib.Common.Test.Collections
             var differences = CollectionComparer.Differences(actual, expected);
 
             // Assert
-            Assert.That(differences, Is.TypeOf<CollectionDifferencesWrongItems>(), "Return type");
+            Assert.That(Value.Of(differences).Is().TypeOf(typeof (CollectionDifferencesWrongItems)), "Return type");
             var differencesT = differences as CollectionDifferencesWrongItems;
 // ReSharper disable once PossibleNullReferenceException (Test will throw appropriately if so)
-            Assert.That(differencesT.CountDelta, Is.EqualTo(+1), "Count delta");
-            Assert.That(differencesT.Extra, AsCollection.Is.EquivalentTo(new[] {3}), "Extra");
-            Assert.That(differencesT.Missing, AsCollection.Is.EquivalentTo(new int[] {}), "Missing");
+            Assert.That(Value.Of(differencesT.CountDelta).Is().EqualTo(+1), "Count delta");
+            Assert.That(Value.Of(differencesT.Extra).Is().EquivalentTo(new object[] {3}), "Extra");
+            Assert.That(Value.Of(differencesT.Missing).Is().EquivalentTo(new object[] {}), "Missing");
             Debug.WriteLine(differences.ToString());
         }
 
@@ -115,10 +117,10 @@ namespace Atrico.Lib.Common.Test.Collections
             var differences = CollectionComparer.Differences(actual, expected);
 
             // Assert
-            Assert.That(differences, Is.TypeOf<CollectionDifferencesWrongOrder>(), "Return type");
+            Assert.That(Value.Of(differences).Is().TypeOf(typeof (CollectionDifferencesWrongOrder)), "Return type");
             var differencesT = differences as CollectionDifferencesWrongOrder;
 // ReSharper disable once PossibleNullReferenceException (Test will throw appropriately if so)
-            Assert.That(differencesT.OutOfOrder, AsCollection.Is.EquivalentTo(new[] {5}), "Out of order");
+            Assert.That(Value.Of(differencesT.OutOfOrder).Is().EquivalentTo(new object[] {5}), "Out of order");
             Debug.WriteLine(differences.ToString());
         }
 
@@ -133,10 +135,10 @@ namespace Atrico.Lib.Common.Test.Collections
             var differences = CollectionComparer.Differences(actual, expected);
 
             // Assert
-            Assert.That(differences, Is.TypeOf<CollectionDifferencesWrongOrder>(), "Return type");
+            Assert.That(Value.Of(differences).Is().TypeOf(typeof (CollectionDifferencesWrongOrder)), "Return type");
             var differencesT = differences as CollectionDifferencesWrongOrder;
 // ReSharper disable once PossibleNullReferenceException (Test will throw appropriately if so)
-            Assert.That(differencesT.OutOfOrder, AsCollection.Is.EquivalentTo(new[] {3, 4}), "Out of order");
+            Assert.That(Value.Of(differencesT.OutOfOrder).Is().EquivalentTo(new object[] {3, 4}), "Out of order");
             Debug.WriteLine(differences.ToString());
         }
 
@@ -151,10 +153,10 @@ namespace Atrico.Lib.Common.Test.Collections
             var differences = CollectionComparer.Differences(actual, expected);
 
             // Assert
-            Assert.That(differences, Is.TypeOf<CollectionDifferencesWrongOrder>(), "Return type");
+            Assert.That(Value.Of(differences).Is().TypeOf(typeof (CollectionDifferencesWrongOrder)), "Return type");
             var differencesT = differences as CollectionDifferencesWrongOrder;
 // ReSharper disable once PossibleNullReferenceException (Test will throw appropriately if so)
-            Assert.That(differencesT.OutOfOrder, AsCollection.Is.EquivalentTo(new[] {1, 5}), "Out of order");
+            Assert.That(Value.Of(differencesT.OutOfOrder).Is().EquivalentTo(new object[] {1, 5}), "Out of order");
             Debug.WriteLine(differences.ToString());
         }
     }
