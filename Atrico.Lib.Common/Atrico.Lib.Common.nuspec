@@ -14,8 +14,10 @@
     <description>$description$</description>
     <copyright>$copyright$</copyright>
     <releaseNotes>
+      1.4.0.0
+      IEnumerable ForEach added
       1.3.0.0
-      Paramaters added to "ToCollectionString" for braces
+      Parameters added to "ToCollectionString" for braces
       1.2.0.0
       Count delta added to collection comparer
       1.1.0.0

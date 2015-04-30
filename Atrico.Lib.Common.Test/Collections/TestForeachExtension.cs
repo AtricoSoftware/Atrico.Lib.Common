@@ -23,5 +23,15 @@ namespace Atrico.Lib.Common.Test.Collections
             // Assert
             Assert.That(Value.Of(result).Is().EqualTo(new object[] {2, 4, 6}));
         }
+
+        [Test]
+        public void TestEmptyList()
+        {
+            // Arrange
+            var list = new int[] {};
+
+            // Act
+            list.ForEach(item => Assert.Fail("Action called"));
+        }
     }
 }
