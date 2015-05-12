@@ -46,6 +46,7 @@
     <Compile Include="Collections\CollectionDifferencesWrongItems.cs" />
     <Compile Include="Collections\CollectionDifferencesWrongOrder.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
+    <Compile Include="Events\EventHelper.cs" />
     <Compile Include="Permutations\PermutationsSetBase.cs" />
     <Compile Include="Permutations\Factorials.cs" />
     <Compile Include="Permutations\CombinationSet.cs" />
