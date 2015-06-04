@@ -47,6 +47,8 @@
     <Compile Include="Collections\CollectionDifferencesWrongOrder.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Console\Table.cs" />
+    <Compile Include="DateAndTime\DateTimeHelper.cs" />
+    <Compile Include="DateAndTime\IDateTime.cs" />
     <Compile Include="Events\EventHelper.cs" />
     <Compile Include="Permutations\PermutationsSetBase.cs" />
     <Compile Include="Permutations\Factorials.cs" />

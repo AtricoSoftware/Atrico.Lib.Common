@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Atrico.Lib.Common.Console
@@ -9,6 +11,14 @@ namespace Atrico.Lib.Common.Console
     public class Table
     {
         private readonly List<List<object>> _rows = new List<List<object>>();
+        private readonly char?[] _border;
+
+        public Table()
+        {
+            _border = new char?[Enum.GetNames(typeof (Border)).Count()];
+            // Default vertical space
+            SetBorder(Border.Vertical, ' ');
+        }
 
         public int Rows
         {
@@ -20,11 +30,36 @@ namespace Atrico.Lib.Common.Console
             get { return _rows.Count == 0 ? 0 : _rows[0].Count; }
         }
 
+        public enum Border
+        {
+            Up,
+            Down,
+            Left,
+            Right,
+            Horizontal,
+            Vertical,
+            TopLeftCorner,
+            TopMiddleCorner,
+            TopRightCorner,
+            MiddleLeftCorner,
+            InternalCorner,
+            MiddleRightCorner,
+            BottomLeftCorner,
+            BottomMiddleCorner,
+            BottomRightCorner,
+        }
+
+        public Table SetBorder(Border border, char? ch = null)
+        {
+            _border[(int) border] = ch;
+            return this;
+        }
+
         /// <summary>
         ///     Appends the row at the bottom of table
         /// </summary>
         /// <param name="row">The items in the row</param>
-        public void AppendRow(params object[] row)
+        public Table AppendRow(params object[] row)
         {
             // Ensure there are enough columns
             if (Columns < row.Length)
@@ -40,6 +75,7 @@ namespace Atrico.Lib.Common.Console
             }
 
             _rows.Add(newRow);
+            return this;
         }
 
         /// <summary>
@@ -61,23 +97,61 @@ namespace Atrico.Lib.Common.Console
                     }
                 }
             }
+            // Borders
+            var up = CreateHorizontalBorder(GetBorder(Border.Up), GetBorder(Border.TopLeftCorner), GetBorder(Border.TopMiddleCorner), GetBorder(Border.TopRightCorner), columnWidth);
+            var down = CreateHorizontalBorder(GetBorder(Border.Down), GetBorder(Border.BottomLeftCorner), GetBorder(Border.BottomMiddleCorner), GetBorder(Border.BottomRightCorner), columnWidth);
+            var horizontal = CreateHorizontalBorder(GetBorder(Border.Horizontal), GetBorder(Border.MiddleLeftCorner), GetBorder(Border.InternalCorner), GetBorder(Border.MiddleRightCorner), columnWidth);
+
             // Output lines
             var lines = new List<string>();
+            if (up != null) lines.Add(up);
+            var firstRow = true;
             foreach (var row in _rows)
             {
                 var line = new StringBuilder();
+                if (HasBorder(Border.Left)) line.Append(GetBorder(Border.Left));
                 for (var column = 0; column < row.Count; ++column)
                 {
-                    if (line.Length > 0)
+                    if (column > 0 && HasBorder(Border.Vertical))
                     {
-                        line.Append(' ');
+                        line.Append(GetBorder(Border.Vertical));
                     }
                     var text = ReferenceEquals(row[column], null) ? "" : row[column].ToString();
                     line.AppendFormat("{0,-" + columnWidth[column] + "}", text);
                 }
+                if (HasBorder(Border.Right)) line.Append(GetBorder(Border.Right));
+                if (!firstRow && horizontal != null) lines.Add(horizontal);
+                firstRow = false;
                 lines.Add(line.ToString());
             }
+            if (down != null) lines.Add(down);
             return lines;
+        }
+
+        private string CreateHorizontalBorder(char? ch, char? left, char? right, char? mid, IEnumerable<int> columnWidths)
+        {
+            if (!ch.HasValue) return null;
+            var text = new StringBuilder();
+            if (HasBorder(Border.Left)) text.Append(ch.Value);
+            var firstCol = true;
+            foreach (var width in columnWidths)
+            {
+                if (!firstCol && HasBorder(Border.Vertical)) text.Append(ch.Value);
+                firstCol = false;
+                text.Append(ch.Value, width);
+            }
+            if (HasBorder(Border.Right)) text.Append(ch.Value);
+            return text.ToString();
+        }
+
+        private char? GetBorder(Border border)
+        {
+            return _border[(int) border];
+        }
+
+        private bool HasBorder(Border border)
+        {
+            return _border[(int) border].HasValue;
         }
     }
 
