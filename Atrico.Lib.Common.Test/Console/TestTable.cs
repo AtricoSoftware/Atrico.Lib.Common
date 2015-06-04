@@ -25,7 +25,10 @@ namespace Atrico.Lib.Common.Test.Console
 
         private static void DisplayTable(Table tab)
         {
-            foreach (var row in tab.Tabulate()) Debug.WriteLine(row);
+            foreach (var row in tab.Tabulate())
+            {
+                Debug.WriteLine(row);
+            }
         }
 
         [Test]
@@ -259,7 +262,7 @@ namespace Atrico.Lib.Common.Test.Console
             Assert.That(Value.Of(tab[4]).Is().EqualTo("G   I"), "Tab row 4");
         }
 
-        [Test, Ignore]
+        [Test]
         public void TestBordersInsideCorners()
         {
             // Arrange
