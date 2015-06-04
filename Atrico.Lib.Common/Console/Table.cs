@@ -97,18 +97,27 @@ namespace Atrico.Lib.Common.Console
                     }
                 }
             }
+            // Borders
+            var up = PadColumns(GetBorder(Border.Up), columnWidth);
+            var down = PadColumns(GetBorder(Border.Down), columnWidth);
             // Write each row
             var lines = new List<string>();
+            if (up != null)
+            {
+                lines.Add(CreateRow(up));
+            }
             foreach (var row in _rows)
             {
                 var padded = PadColumns(row, columnWidth);
                 lines.Add(CreateRow(padded));
             }
+            if (down != null)
+            {
+                lines.Add(CreateRow(down));
+            }
 
             return lines;
-            //// Borders
-            //var up = CreateHorizontalBorder(GetBorder(Border.Up), GetBorder(Border.TopLeftCorner), GetBorder(Border.TopMiddleCorner), GetBorder(Border.TopRightCorner), columnWidth);
-            //var down = CreateHorizontalBorder(GetBorder(Border.Down), GetBorder(Border.BottomLeftCorner), GetBorder(Border.BottomMiddleCorner), GetBorder(Border.BottomRightCorner), columnWidth);
+
             //var horizontal = CreateHorizontalBorder(GetBorder(Border.Horizontal), GetBorder(Border.MiddleLeftCorner), GetBorder(Border.InternalCorner), GetBorder(Border.MiddleRightCorner), columnWidth);
 
             //var hasLeft = HasBorder(Border.Left, Border.TopLeftCorner, Border.MiddleLeftCorner, Border.BottomLeftCorner);
@@ -153,7 +162,7 @@ namespace Atrico.Lib.Common.Console
             //return lines;
         }
 
-        private string CreateRow(IEnumerable<string> items)
+        private string CreateRow(IEnumerable<string> items, char? left, char? right)
         {
             var line = new StringBuilder();
             foreach (var item in items)
@@ -163,10 +172,14 @@ namespace Atrico.Lib.Common.Console
             return line.ToString();
         }
 
-        private IEnumerable<string> PadColumns(char ch, IEnumerable<int> columnWidths)
+        private static IEnumerable<string> PadColumns(char? ch, IEnumerable<int> columnWidths)
         {
+            if (!ch.HasValue)
+            {
+                return null;
+            }
             var widths = columnWidths as int[] ?? columnWidths.ToArray();
-            return PadColumns(new String(ch, widths.Count()).ToCharArray().Cast<object>(), widths, ch);
+            return PadColumns(new String(ch.Value, widths.Count()).ToCharArray().Cast<object>(), widths, ch.Value);
         }
 
         private static IEnumerable<string> PadColumns(IEnumerable<object> items, IEnumerable<int> columnWidths, char fill = ' ')
@@ -176,7 +189,7 @@ namespace Atrico.Lib.Common.Console
             foreach (var item in items)
             {
                 var width = widthEn.MoveNext() ? widthEn.Current : 0;
-                var col = new StringBuilder(item.ToString());
+                var col = new StringBuilder((item ?? "").ToString());
                 while (col.Length < width)
                 {
                     col.Append(fill);
