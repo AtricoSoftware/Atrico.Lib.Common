@@ -234,8 +234,33 @@ namespace Atrico.Lib.Common.Test.Console
             Assert.That(Value.Of(tab[6]).Is().EqualTo("ddddddd"), "Tab row 6");
         }
 
+        [Test]
+        public void TestBordersOutsideCorners()
+        {
+            // Arrange
+
+            // Act
+            var table = Test3x3Table
+                .SetBorder(Table.Border.TopLeftCorner, 'A')
+                .SetBorder(Table.Border.TopRightCorner, 'C')
+                .SetBorder(Table.Border.BottomLeftCorner, 'G')
+                .SetBorder(Table.Border.BottomRightCorner, 'I');
+            DisplayTable(table);
+            var tab = table.Tabulate().ToArray();
+
+            // Assert
+            Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
+            Assert.That(Value.Of(table.Columns).Is().EqualTo(3), "Columns");
+            Assert.That(Value.Of(tab).Count().Is().EqualTo(5), "Tab rows");
+            Assert.That(Value.Of(tab[0]).Is().EqualTo("A   C"), "Tab row 0");
+            Assert.That(Value.Of(tab[1]).Is().EqualTo(" 123 "), "Tab row 1");
+            Assert.That(Value.Of(tab[2]).Is().EqualTo(" 123 "), "Tab row 2");
+            Assert.That(Value.Of(tab[3]).Is().EqualTo(" 123 "), "Tab row 3");
+            Assert.That(Value.Of(tab[4]).Is().EqualTo("G   I"), "Tab row 4");
+        }
+
         [Test, Ignore]
-        public void TestBordersCorners()
+        public void TestBordersInsideCorners()
         {
             // Arrange
 

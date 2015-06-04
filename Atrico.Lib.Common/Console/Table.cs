@@ -102,6 +102,8 @@ namespace Atrico.Lib.Common.Console
             var down = CreateHorizontalBorder(GetBorder(Border.Down), GetBorder(Border.BottomLeftCorner), GetBorder(Border.BottomMiddleCorner), GetBorder(Border.BottomRightCorner), columnWidth);
             var horizontal = CreateHorizontalBorder(GetBorder(Border.Horizontal), GetBorder(Border.MiddleLeftCorner), GetBorder(Border.InternalCorner), GetBorder(Border.MiddleRightCorner), columnWidth);
 
+            var hasLeft = HasBorder(Border.Left, Border.TopLeftCorner, Border.MiddleLeftCorner, Border.BottomLeftCorner);
+            var hasRight = HasBorder(Border.Right, Border.TopRightCorner, Border.MiddleRightCorner, Border.BottomRightCorner);
             // Output lines
             var lines = new List<string>();
             if (up != null) lines.Add(up);
@@ -109,7 +111,7 @@ namespace Atrico.Lib.Common.Console
             foreach (var row in _rows)
             {
                 var line = new StringBuilder();
-                if (HasBorder(Border.Left)) line.Append(GetBorder(Border.Left));
+                if (hasLeft) line.Append(GetBorder(Border.Left) ?? ' ');
                 for (var column = 0; column < row.Count; ++column)
                 {
                     if (column > 0 && HasBorder(Border.Vertical))
@@ -119,7 +121,7 @@ namespace Atrico.Lib.Common.Console
                     var text = ReferenceEquals(row[column], null) ? "" : row[column].ToString();
                     line.AppendFormat("{0,-" + columnWidth[column] + "}", text);
                 }
-                if (HasBorder(Border.Right)) line.Append(GetBorder(Border.Right));
+                if (hasRight) line.Append(GetBorder(Border.Right) ?? ' ');
                 if (!firstRow && horizontal != null) lines.Add(horizontal);
                 firstRow = false;
                 lines.Add(line.ToString());
@@ -128,19 +130,21 @@ namespace Atrico.Lib.Common.Console
             return lines;
         }
 
-        private string CreateHorizontalBorder(char? ch, char? left, char? right, char? mid, IEnumerable<int> columnWidths)
+        private string CreateHorizontalBorder(char? ch, char? left, char? mid, char? right, IEnumerable<int> columnWidths)
         {
-            if (!ch.HasValue) return null;
+            if (!ch.HasValue && !left.HasValue && !right.HasValue && !mid.HasValue) return null;
+            var leftCorner = left ?? ch ?? GetBorder(Border.Left);
+            var rightCorner = right ?? ch ?? GetBorder(Border.Right);
             var text = new StringBuilder();
-            if (HasBorder(Border.Left)) text.Append(ch.Value);
+            if (leftCorner.HasValue) text.Append(leftCorner);
             var firstCol = true;
             foreach (var width in columnWidths)
             {
-                if (!firstCol && HasBorder(Border.Vertical)) text.Append(ch.Value);
+                if (!firstCol && HasBorder(Border.Vertical)) text.Append(ch ?? ' ');
                 firstCol = false;
-                text.Append(ch.Value, width);
+                text.Append(ch ?? ' ', width);
             }
-            if (HasBorder(Border.Right)) text.Append(ch.Value);
+            if (rightCorner.HasValue) text.Append(rightCorner);
             return text.ToString();
         }
 
@@ -149,9 +153,9 @@ namespace Atrico.Lib.Common.Console
             return _border[(int) border];
         }
 
-        private bool HasBorder(Border border)
+        private bool HasBorder(params Border[] borders)
         {
-            return _border[(int) border].HasValue;
+            return borders.Any(border => _border[(int) border].HasValue);
         }
     }
 
