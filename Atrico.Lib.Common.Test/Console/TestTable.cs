@@ -293,5 +293,86 @@ namespace Atrico.Lib.Common.Test.Console
             Assert.That(Value.Of(tab[5]).Is().EqualTo(" 1 2 3 "), "Tab row 5");
             Assert.That(Value.Of(tab[6]).Is().EqualTo("G H H I"), "Tab row 6");
         }
+        [Test]
+        public void TestBordersFull()
+        {
+            // Arrange
+
+            // Act
+            var table = Test3x3Table
+                .SetBorder(Table.Border.Up, '=')
+                .SetBorder(Table.Border.Down, '=')
+                .SetBorder(Table.Border.Left, '|')
+                .SetBorder(Table.Border.Right, '|')
+                .SetBorder(Table.Border.Horizontal, '-')
+                .SetBorder(Table.Border.Vertical, ':')
+                .SetBorder(Table.Border.TopLeftCorner, '#')
+                .SetBorder(Table.Border.TopMiddleCorner, '+')
+                .SetBorder(Table.Border.TopRightCorner, '#')
+                .SetBorder(Table.Border.MiddleLeftCorner, '+')
+                .SetBorder(Table.Border.InternalCorner, '+')
+                .SetBorder(Table.Border.MiddleRightCorner, '+')
+                .SetBorder(Table.Border.BottomLeftCorner, '#')
+                .SetBorder(Table.Border.BottomMiddleCorner, '+')
+                .SetBorder(Table.Border.BottomRightCorner, '#');
+            DisplayTable(table);
+            var tab = table.Tabulate().ToArray();
+
+            // Assert
+            Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
+            Assert.That(Value.Of(table.Columns).Is().EqualTo(3), "Columns");
+            Assert.That(Value.Of(tab).Count().Is().EqualTo(7), "Tab rows");
+            Assert.That(Value.Of(tab[0]).Is().EqualTo("#=+=+=#"), "Tab row 0");
+            Assert.That(Value.Of(tab[1]).Is().EqualTo("|1:2:3|"), "Tab row 1");
+            Assert.That(Value.Of(tab[2]).Is().EqualTo("+-+-+-+"), "Tab row 2");
+            Assert.That(Value.Of(tab[3]).Is().EqualTo("|1:2:3|"), "Tab row 3");
+            Assert.That(Value.Of(tab[4]).Is().EqualTo("+-+-+-+"), "Tab row 4");
+            Assert.That(Value.Of(tab[5]).Is().EqualTo("|1:2:3|"), "Tab row 5");
+            Assert.That(Value.Of(tab[6]).Is().EqualTo("#=+=+=#"), "Tab row 6");
+        }
+        [Test]
+        public void TestBordersAsciiExternal()
+        {
+            // Arrange
+
+            // Act
+            var table = Test3x3Table
+                .SetBorderSimpleAscii(false);
+            DisplayTable(table);
+            var tab = table.Tabulate().ToArray();
+
+            // Assert
+            Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
+            Assert.That(Value.Of(table.Columns).Is().EqualTo(3), "Columns");
+            Assert.That(Value.Of(tab).Count().Is().EqualTo(5), "Tab rows");
+            Assert.That(Value.Of(tab[0]).Is().EqualTo("+---+"), "Tab row 0");
+            Assert.That(Value.Of(tab[1]).Is().EqualTo("|123|"), "Tab row 1");
+            Assert.That(Value.Of(tab[2]).Is().EqualTo("|123|"), "Tab row 2");
+            Assert.That(Value.Of(tab[3]).Is().EqualTo("|123|"), "Tab row 3");
+            Assert.That(Value.Of(tab[4]).Is().EqualTo("+---+"), "Tab row 4");
+        }
+        [Test]
+        public void TestBordersAsciiFull()
+        {
+            // Arrange
+
+            // Act
+            var table = Test3x3Table
+                .SetBorderSimpleAscii();
+            DisplayTable(table);
+            var tab = table.Tabulate().ToArray();
+
+            // Assert
+            Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
+            Assert.That(Value.Of(table.Columns).Is().EqualTo(3), "Columns");
+            Assert.That(Value.Of(tab).Count().Is().EqualTo(7), "Tab rows");
+            Assert.That(Value.Of(tab[0]).Is().EqualTo("+-+-+-+"), "Tab row 0");
+            Assert.That(Value.Of(tab[1]).Is().EqualTo("|1|2|3|"), "Tab row 1");
+            Assert.That(Value.Of(tab[2]).Is().EqualTo("+-+-+-+"), "Tab row 2");
+            Assert.That(Value.Of(tab[3]).Is().EqualTo("|1|2|3|"), "Tab row 3");
+            Assert.That(Value.Of(tab[4]).Is().EqualTo("+-+-+-+"), "Tab row 4");
+            Assert.That(Value.Of(tab[5]).Is().EqualTo("|1|2|3|"), "Tab row 5");
+            Assert.That(Value.Of(tab[6]).Is().EqualTo("+-+-+-+"), "Tab row 6");
+        }
     }
 }

@@ -79,6 +79,36 @@ namespace Atrico.Lib.Common.Console
         }
 
         /// <summary>
+        ///     Sets the border as simple ASCII.
+        /// </summary>
+        /// <param name="internals">Ff set to <c>true</c>, internal borders are also set, otherwise external border only</param>
+        public Table SetBorderSimpleAscii(bool internals = true)
+        {
+            // External
+            SetBorder(Border.Up, '-');
+            SetBorder(Border.Down, '-');
+            SetBorder(Border.Left, '|');
+            SetBorder(Border.Right, '|');
+            SetBorder(Border.TopLeftCorner, '+');
+            SetBorder(Border.TopRightCorner, '+');
+            SetBorder(Border.BottomLeftCorner, '+');
+            SetBorder(Border.BottomRightCorner, '+');
+            // Internal
+            if (internals)
+            {
+                SetBorder(Border.Horizontal, '-');
+                SetBorder(Border.Vertical, '|');
+                SetBorder(Border.TopMiddleCorner, '+');
+                SetBorder(Border.MiddleLeftCorner, '+');
+                SetBorder(Border.InternalCorner, '+');
+                SetBorder(Border.MiddleRightCorner, '+');
+                SetBorder(Border.BottomMiddleCorner, '+');
+            }
+
+            return this;
+        }
+
+        /// <summary>
         ///     Tabulates this instance as a list of lines of text
         /// </summary>
         /// <returns>multiple lines of text</returns>
@@ -99,88 +129,55 @@ namespace Atrico.Lib.Common.Console
             }
             // Borders
             var up = PadColumns(GetBorder(Border.Up), columnWidth);
-            var horizontal = PadColumns(GetBorder(Border.Horizontal), columnWidth);
+            var horizontal = PadColumns(GetBorder(Border.Horizontal), columnWidth).ToArray();
             var down = PadColumns(GetBorder(Border.Down), columnWidth);
             var hasLeft = HasBorder(Border.Left, Border.TopLeftCorner, Border.MiddleLeftCorner, Border.BottomLeftCorner);
             var hasMiddle = HasBorder(Border.Vertical, Border.TopMiddleCorner, Border.InternalCorner, Border.BottomMiddleCorner);
             var hasRight = HasBorder(Border.Right, Border.TopRightCorner, Border.MiddleRightCorner, Border.BottomRightCorner);
             // Write each row
             var lines = new List<string>();
-            if (up != null)
+            // Top border
             {
                 var left = hasLeft ? GetBorder(Border.TopLeftCorner) ?? GetBorder(Border.Up) : null;
                 var middle = hasMiddle ? GetBorder(Border.TopMiddleCorner) ?? GetBorder(Border.Up) : null;
                 var right = hasRight ? GetBorder(Border.TopRightCorner) ?? GetBorder(Border.Up) : null;
-                lines.Add(CreateRow(up, left, middle, right));
+                var text = CreateRow(up, left, middle, right);
+                if (!string.IsNullOrWhiteSpace(text)) lines.Add(text);
             }
+            // Table rows
             var firstItem = true;
             foreach (var row in _rows)
             {
-                if (!firstItem && horizontal != null)
+                // Internal border
+                if (!firstItem)
                 {
                     var left = hasLeft ? GetBorder(Border.MiddleLeftCorner) ?? GetBorder(Border.Horizontal) : null;
                     var middle = hasMiddle ? GetBorder(Border.InternalCorner) ?? GetBorder(Border.Horizontal) : null;
                     var right = hasRight ? GetBorder(Border.MiddleRightCorner) ?? GetBorder(Border.Horizontal) : null;
-                    lines.Add(CreateRow(horizontal, left, middle, right));                   
+                    var text = CreateRow(horizontal, left, middle, right);
+                    if (!string.IsNullOrWhiteSpace(text)) lines.Add(text);
                 }
                 else firstItem = false;
-                var padded = PadColumns(row, columnWidth);
-                lines.Add(CreateRow(padded, GetBorder(Border.Left), GetBorder(Border.Vertical), GetBorder(Border.Right)));
+                // Items
+                {
+                    var left = hasLeft ? GetBorder(Border.Left) ?? (char?) ' ' : null;
+                    var middle = hasMiddle ? GetBorder(Border.Vertical) ?? (char?) ' ' : null;
+                    var right = hasRight ? GetBorder(Border.Right) ?? (char?) ' ' : null;
+                    var paddedRow = PadColumns(row, columnWidth);
+                    var text = CreateRow(paddedRow, left, middle, right);
+                    if (!string.IsNullOrWhiteSpace(text)) lines.Add(text);
+                }
             }
-            if (down != null)
+            // Bottom border
             {
                 var left = hasLeft ? GetBorder(Border.BottomLeftCorner) ?? GetBorder(Border.Down) : null;
                 var middle = hasMiddle ? GetBorder(Border.BottomMiddleCorner) ?? GetBorder(Border.Down) : null;
                 var right = hasRight ? GetBorder(Border.BottomRightCorner) ?? GetBorder(Border.Down) : null;
-                lines.Add(CreateRow(down, left, middle, right));
+                var text = CreateRow(down, left, middle, right);
+                if (!string.IsNullOrWhiteSpace(text)) lines.Add(text);
             }
 
             return lines;
-
-            #region Old
-            //var horizontal = CreateHorizontalBorder(GetBorder(Border.Horizontal), GetBorder(Border.MiddleLeftCorner), GetBorder(Border.InternalCorner), GetBorder(Border.MiddleRightCorner), columnWidth);
-
-            //var hasLeft = HasBorder(Border.Left, Border.TopLeftCorner, Border.MiddleLeftCorner, Border.BottomLeftCorner);
-            //var hasRight = HasBorder(Border.Right, Border.TopRightCorner, Border.MiddleRightCorner, Border.BottomRightCorner);
-            //// Output lines
-            //if (up != null)
-            //{
-            //    lines.Add(up);
-            //}
-            //var firstRow = true;
-            //foreach (var row in _rows)
-            //{
-            //    var line = new StringBuilder();
-            //    if (hasLeft)
-            //    {
-            //        line.Append(GetBorder(Border.Left) ?? ' ');
-            //    }
-            //    for (var column = 0; column < row.Count; ++column)
-            //    {
-            //        if (column > 0 && HasBorder(Border.Vertical))
-            //        {
-            //            line.Append(GetBorder(Border.Vertical));
-            //        }
-            //        var text = ReferenceEquals(row[column], null) ? "" : row[column].ToString();
-            //        line.AppendFormat("{0,-" + columnWidth[column] + "}", text);
-            //    }
-            //    if (hasRight)
-            //    {
-            //        line.Append(GetBorder(Border.Right) ?? ' ');
-            //    }
-            //    if (!firstRow && horizontal != null)
-            //    {
-            //        lines.Add(horizontal);
-            //    }
-            //    firstRow = false;
-            //    lines.Add(line.ToString());
-            //}
-            //if (down != null)
-            //{
-            //    lines.Add(down);
-            //}
-            //return lines;
-            #endregion
         }
 
         private static string CreateRow(IEnumerable<string> items, char? left, char? middle, char? right)
@@ -200,12 +197,8 @@ namespace Atrico.Lib.Common.Console
 
         private static IEnumerable<string> PadColumns(char? ch, IEnumerable<int> columnWidths)
         {
-            if (!ch.HasValue)
-            {
-                return null;
-            }
             var widths = columnWidths as int[] ?? columnWidths.ToArray();
-            return PadColumns(new String(ch.Value, widths.Count()).ToCharArray().Cast<object>(), widths, ch.Value);
+            return PadColumns(new String(ch ?? ' ', widths.Count()).ToCharArray().Cast<object>(), widths, ch ?? ' ');
         }
 
         private static IEnumerable<string> PadColumns(IEnumerable<object> items, IEnumerable<int> columnWidths, char fill = ' ')
