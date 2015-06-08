@@ -16,11 +16,11 @@ namespace Atrico.Lib.Common.Test.RegEx
         {
             // Arrange
             var text = value.ToString("D");
-
-            // Act
             var number = new RegExHelpers.NumberMatcher()
                 .AddRange(3, 8);
             var regex = new Regex(number.ToString());
+
+            // Act
             var result = regex.Match(text);
 
             // Assert
@@ -29,47 +29,58 @@ namespace Atrico.Lib.Common.Test.RegEx
             Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(text), string.Format("{0} - Full match", text));
         }
 
-        //[Test]
-        //public void TestSingleDigitInvalid([Values("", "0", "1", "2", "9")] string text)
-        //{
-        //    // Arrange
+        [Test]
+        public void TestSingleDigitInvalid([Values("", "0", "1", "2", "9")] string text)
+        {
+            // Arrange
+            var number = new RegExHelpers.NumberMatcher()
+                .AddRange(3, 8);
+            var regex = new Regex(number.ToString());
 
-        //    // Act
-        //    var regex = new Regex(RegExHelpers.NumberRange(3, 8));
-        //    var result = regex.Match(text);
+            // Act
+            var result = regex.Match(text);
 
-        //    // Assert
-        //    Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure", text));
-        //}
+            // Assert
+            Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure", text));
+        }
 
         //[Test]
         //public void TestDoubleDigitValid([Range(63, 81)] int value)
         //{
         //    // Arrange
         //    var text = value.ToString("D");
+        [Test]
+        public void TestDoubleDigitValid()
+        {
+            // Arrange
+            var text = 63.ToString("D");
+            var number = new RegExHelpers.NumberMatcher()
+                .AddRange(63, 81);
+            var regex = new Regex(number.ToString());
 
-        //    // Act
-        //    var regex = new Regex(RegExHelpers.NumberRange(63, 81));
-        //    var result = regex.Match(text);
+            // Act
+            var result = regex.Match(text);
 
-        //    // Assert
-        //    Assert.That(Value.Of(result.Success).Is().True(), string.Format("{0} - Success", text));
-        //    Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), string.Format("{0} - Group count", text));
-        //    Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(text), string.Format("{0} - Full match", text));
-        //}
+            // Assert
+            Assert.That(Value.Of(result.Success).Is().True(), string.Format("{0} - Success", text));
+            Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), string.Format("{0} - Group count", text));
+            Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(text), string.Format("{0} - Full match", text));
+        }
 
-        //[Test]
-        //public void TestDoubleDigitInvalid([Values("", "0", "62", "82", "100")] string text)
-        //{
-        //    // Arrange
+        [Test]
+        public void TestDoubleDigitInvalid([Values("", "0", "62", "82", "100")] string text)
+        {
+            // Arrange
+            var number = new RegExHelpers.NumberMatcher()
+                .AddRange(63, 81);
+            var regex = new Regex(number.ToString());
 
-        //    // Act
-        //    var regex = new Regex(RegExHelpers.NumberRange(63, 81));
-        //    var result = regex.Match(text);
+            // Act
+            var result = regex.Match(text);
 
-        //    // Assert
-        //    Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure", text));
-        //}
+            // Assert
+            Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure", text));
+        }
 
         //[Test, Ignore]
         //public void TestInvalid([Values(0, 3, 11, 124, 200)] int value)
