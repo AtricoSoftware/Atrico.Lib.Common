@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{983A29AC-8A3B-4D78-81D7-BCAF9B520877}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{A4D5A5BF-5266-4086-8A76-0077C7FA059C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Atrico.Lib.Common</RootNamespace>
-    <AssemblyName>Atrico.Lib.Common</AssemblyName>
+    <RootNamespace>ConsoleApplication1</RootNamespace>
+    <AssemblyName>ConsoleApplication1</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,39 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\CollectionDifferences.cs" />
-    <Compile Include="Collections\CollectionDifferencesEqual.cs" />
-    <Compile Include="Collections\CollectionDifferencesError.cs" />
-    <Compile Include="Collections\CollectionDifferencesWrongItems.cs" />
-    <Compile Include="Collections\CollectionDifferencesWrongOrder.cs" />
-    <Compile Include="Collections\EnumerableExtensions.cs" />
-    <Compile Include="Console\Table.cs" />
-    <Compile Include="DateAndTime\DateTimeHelper.cs" />
-    <Compile Include="DateAndTime\IDateTime.cs" />
-    <Compile Include="Events\EventHelper.cs" />
-    <Compile Include="Permutations\PermutationsSetBase.cs" />
-    <Compile Include="Permutations\Factorials.cs" />
-    <Compile Include="Permutations\CombinationSet.cs" />
-    <Compile Include="Permutations\IPermutations.cs" />
-    <Compile Include="Permutations\Permutations.cs" />
-    <Compile Include="Permutations\PermutationSet.cs" />
-    <Compile Include="Properties\AssemblyVersion.cs" />
-    <Compile Include="Collections\CollectionComparer.cs" />
-    <Compile Include="Conversion.cs" />
-    <Compile Include="Collections\FormatCollection.cs" />
-    <Compile Include="INamedObject.cs" />
-    <Compile Include="NamesByConvention\EverythingBefore.cs" />
-    <Compile Include="NamesByConvention\NameByConvention.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\CommonAssemblyInfo.cs" />
-    <Compile Include="Reflection\ReflectionHelper.cs" />
-    <Compile Include="RegEx.cs" />
-    <Compile Include="ResettableCache\ResettableCache.cs" />
-    <Compile Include="ResettableCache\IResettable.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Atrico.Lib.Common.nuspec" />
+    <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Atrico.Lib.Common\Atrico.Lib.Common.csproj">
+      <Project>{983a29ac-8a3b-4d78-81d7-bcaf9b520877}</Project>
+      <Name>Atrico.Lib.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
