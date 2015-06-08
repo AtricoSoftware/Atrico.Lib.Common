@@ -7,12 +7,13 @@ namespace ConsoleApplication1
         private static void Main(string[] args)
         {
             var nm = new NumberMatcher();
-            nm.AddRange(123,321);
+            nm.AddRange(123, 321);
             foreach (var line in nm.Display())
             {
                 Console.WriteLine(line);
             }
-                Console.WriteLine(nm.GetRegex());
+            var regex = nm.GetRegex();
+            Console.WriteLine(regex);
         }
     }
 }
