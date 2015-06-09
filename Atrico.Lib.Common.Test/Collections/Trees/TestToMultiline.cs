@@ -25,7 +25,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             // Assert
             foreach (var line in lines) Debug.WriteLine(line);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(1), "Number of lines");
-            Assert.That(Value.Of(lines[0]).Is().EqualTo("+-root"), "Root node");
+            Assert.That(Value.Of(lines[0]).Is().EqualTo(@"+-root"), "Root node");
         }
 
         [Test]
@@ -42,8 +42,8 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             // Assert
             foreach (var line in lines) Debug.WriteLine(line);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(2), "Number of lines");
-            Assert.That(Value.Of(lines[0]).Is().EqualTo("+-root"), "Root");
-            Assert.That(Value.Of(lines[1]).Is().EqualTo("  +-branch"), "Branch");
+            Assert.That(Value.Of(lines[0]).Is().EqualTo(@"+-root"), "Root");
+            Assert.That(Value.Of(lines[1]).Is().EqualTo(@"  \-branch"), "Branch");
         }
 
         [Test]
@@ -62,10 +62,10 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             // Assert
             foreach (var line in lines) Debug.WriteLine(line);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(4), "Number of lines");
-            Assert.That(Value.Of(lines[0]).Is().EqualTo("+-root"), "Root");
-            Assert.That(Value.Of(lines[1]).Is().EqualTo("  +-one"), "One");
-            Assert.That(Value.Of(lines[2]).Is().EqualTo("    +-two"), "Two");
-            Assert.That(Value.Of(lines[3]).Is().EqualTo("      +-three"), "Three");
+            Assert.That(Value.Of(lines[0]).Is().EqualTo(@"+-root"), "Root");
+            Assert.That(Value.Of(lines[1]).Is().EqualTo(@"  \-one"), "One");
+            Assert.That(Value.Of(lines[2]).Is().EqualTo(@"    \-two"), "Two");
+            Assert.That(Value.Of(lines[3]).Is().EqualTo(@"      \-three"), "Three");
         }
 
         [Test]
@@ -83,9 +83,9 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             // Assert
             foreach (var line in lines) Debug.WriteLine(line);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(3), "Number of lines");
-            Assert.That(Value.Of(lines[0]).Is().EqualTo("  +-one"), "One");
-            Assert.That(Value.Of(lines[1]).Is().EqualTo("+-root"), "Root");
-            Assert.That(Value.Of(lines[2]).Is().EqualTo("  +-two"), "Two");
+            Assert.That(Value.Of(lines[0]).Is().EqualTo(@"  /-one"), "One");
+            Assert.That(Value.Of(lines[1]).Is().EqualTo(@"+-root"), "Root");
+            Assert.That(Value.Of(lines[2]).Is().EqualTo(@"  \-two"), "Two");
         }
 
         [Test]
@@ -107,13 +107,13 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             // Assert
             foreach (var line in lines) Debug.WriteLine(line);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(7), "Number of lines");
-            Assert.That(Value.Of(lines[0]).Is().EqualTo("    +-one1"), "One1");
-            Assert.That(Value.Of(lines[1]).Is().EqualTo("  +-one"), "One");
-            Assert.That(Value.Of(lines[2]).Is().EqualTo("  | +-one2"), "One2");
-            Assert.That(Value.Of(lines[3]).Is().EqualTo("+-root"), "Root");
-            Assert.That(Value.Of(lines[4]).Is().EqualTo("  | +-two1"), "Two1");
-            Assert.That(Value.Of(lines[5]).Is().EqualTo("  +-two"), "Two");
-            Assert.That(Value.Of(lines[6]).Is().EqualTo("    +-two2"), "Two2");
+            Assert.That(Value.Of(lines[0]).Is().EqualTo(@"    /-one1"), "One1");
+            Assert.That(Value.Of(lines[1]).Is().EqualTo(@"  /-one"), "One");
+            Assert.That(Value.Of(lines[2]).Is().EqualTo(@"  | \-one2"), "One2");
+            Assert.That(Value.Of(lines[3]).Is().EqualTo(@"+-root"), "Root");
+            Assert.That(Value.Of(lines[4]).Is().EqualTo(@"  | /-two1"), "Two1");
+            Assert.That(Value.Of(lines[5]).Is().EqualTo(@"  \-two"), "Two");
+            Assert.That(Value.Of(lines[6]).Is().EqualTo(@"    \-two2"), "Two2");
         }
 
         [Test]
@@ -136,14 +136,14 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             // Assert
             foreach (var line in lines) Debug.WriteLine(line);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(8), "Number of lines");
-            Assert.That(Value.Of(lines[0]).Is().EqualTo("+-root1"), "Root1");
-            Assert.That(Value.Of(lines[1]).Is().EqualTo("| +-one1"), "One1");
-            Assert.That(Value.Of(lines[2]).Is().EqualTo("| | +-two1"), "Two1");
-            Assert.That(Value.Of(lines[3]).Is().EqualTo("| |   +-three1"), "Three1");
-            Assert.That(Value.Of(lines[4]).Is().EqualTo("+-root2"), "Root2");
-            Assert.That(Value.Of(lines[5]).Is().EqualTo("  +-one2"), "One2");
-            Assert.That(Value.Of(lines[6]).Is().EqualTo("    +-two2"), "Two2");
-            Assert.That(Value.Of(lines[7]).Is().EqualTo("      +-three2"), "Three2");
+            Assert.That(Value.Of(lines[0]).Is().EqualTo(@"+-root1"), "Root1");
+            Assert.That(Value.Of(lines[1]).Is().EqualTo(@"| \-one1"), "One1");
+            Assert.That(Value.Of(lines[2]).Is().EqualTo(@"|   \-two1"), "Two1");
+            Assert.That(Value.Of(lines[3]).Is().EqualTo(@"|     \-three1"), "Three1");
+            Assert.That(Value.Of(lines[4]).Is().EqualTo(@"+-root2"), "Root2");
+            Assert.That(Value.Of(lines[5]).Is().EqualTo(@"  \-one2"), "One2");
+            Assert.That(Value.Of(lines[6]).Is().EqualTo(@"    \-two2"), "Two2");
+            Assert.That(Value.Of(lines[7]).Is().EqualTo(@"      \-three2"), "Three2");
         }
 
         [Test]
@@ -165,13 +165,13 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             // Assert
             foreach (var line in lines) Debug.WriteLine(line);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(7), "Number of lines");
-            Assert.That(Value.Of(lines[0]).Is().EqualTo("    +-one11"), "One11");
-            Assert.That(Value.Of(lines[1]).Is().EqualTo("  +-one1"), "One1");
-            Assert.That(Value.Of(lines[2]).Is().EqualTo("  | +-one12"), "One12");
-            Assert.That(Value.Of(lines[3]).Is().EqualTo("+-root1"), "Root1");
-            Assert.That(Value.Of(lines[4]).Is().EqualTo("| +-one2"), "One2");
-            Assert.That(Value.Of(lines[5]).Is().EqualTo("| | +-one21"), "One21");
-            Assert.That(Value.Of(lines[6]).Is().EqualTo("+-root2"), "Root2");
+            Assert.That(Value.Of(lines[0]).Is().EqualTo(@"    /-one11"), "One11");
+            Assert.That(Value.Of(lines[1]).Is().EqualTo(@"  /-one1"), "One1");
+            Assert.That(Value.Of(lines[2]).Is().EqualTo(@"  | \-one12"), "One12");
+            Assert.That(Value.Of(lines[3]).Is().EqualTo(@"+-root1"), "Root1");
+            Assert.That(Value.Of(lines[4]).Is().EqualTo(@"| \-one2"), "One2");
+            Assert.That(Value.Of(lines[5]).Is().EqualTo(@"|   \-one21"), "One21");
+            Assert.That(Value.Of(lines[6]).Is().EqualTo(@"+-root2"), "Root2");
         }
     }
 }

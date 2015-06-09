@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -49,7 +48,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 var lines = new List<string>();
                 var depths = new List<int>();
                 GetDepths(0, depths);
-                ToMultilineString(0, lines, depths);
+                ToMultilineString(0, lines, depths, NodeType.Middle);
                 return lines;
             }
 
@@ -68,14 +67,20 @@ namespace Atrico.Lib.Common.Collections.Tree
                 }
             }
 
-            private void ToMultilineString(int depth, ICollection<string> lines, IList<int> depths)
+            enum NodeType
+            {
+                First,
+                Middle,
+                Last
+            }
+            private void ToMultilineString(int depth, ICollection<string> lines, IList<int> depths, NodeType nodeType)
             {
                 var lineNum = lines.Count();
                 var nextDepth = (this is RootNode) ? depth : depth + 1;
                 var child = 0;
                 for (; child < _children.Count() / 2; ++child)
                 {
-                    _children[child].ToMultilineString(nextDepth, lines, depths);
+                    _children[child].ToMultilineString(nextDepth, lines, depths, child == 0 ? NodeType.First : NodeType.Middle);
                 }
                 if (!(this is RootNode))
                 {
@@ -84,13 +89,24 @@ namespace Atrico.Lib.Common.Collections.Tree
                     {
                         line.Append(IsBranchAtThisDepth(i, lineNum, depths) ? "| " : "  ");
                     }
-                    line.Append("+-");
+                    switch (nodeType)
+                    {
+                        case NodeType.First:
+                            line.Append(depth == 0 ? "+-" : "/-");
+                            break;
+                        case NodeType.Last:
+                            line.Append(depth == 0 ? "+-" : @"\-");
+                            break;
+                        default:
+                            line.Append("+-");
+                            break;
+                    }
                     line.Append(_data);
                     lines.Add(line.ToString());
                 }
                 for (; child < _children.Count(); ++child)
                 {
-                    _children[child].ToMultilineString(nextDepth, lines, depths);
+                    _children[child].ToMultilineString(nextDepth, lines, depths, child == _children.Count() - 1? NodeType.Last : NodeType.Middle);
                 }
             }
 
