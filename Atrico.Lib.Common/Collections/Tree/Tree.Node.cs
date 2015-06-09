@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -47,36 +47,72 @@ namespace Atrico.Lib.Common.Collections.Tree
             public IEnumerable<string> ToMultilineString()
             {
                 var lines = new List<string>();
-                ToMultilineString(new bool[]{}, lines);
+                var depths = new List<int>();
+                GetDepths(0, depths);
+                ToMultilineString(0, lines, depths);
                 return lines;
             }
 
-            private void ToMultilineString(IEnumerable<bool> branches, ICollection<string> lines)
+            private void GetDepths(int depth, ICollection<int> depths)
             {
-                var branchesA = branches as bool[] ?? branches.ToArray();
-                IEnumerable<bool> newBranches;
-                if (!string.IsNullOrEmpty(MultilineValue))
+                var nextDepth = (this is RootNode) ? depth : depth + 1;
+                var child = 0;
+                for (; child < _children.Count() / 2; ++child)
                 {
-                    var line = new StringBuilder();
-                    foreach (var branch in branchesA)
-                    {
-                        line.Append(branch ? "| " : "  ");
-                    }
-                    line.Append("+-");
-                    line.Append(MultilineValue);
-                    lines.Add(line.ToString());
-                    newBranches = branchesA.Concat(new[] {false});
+                    _children[child].GetDepths(nextDepth, depths);
                 }
-                else newBranches = branchesA;
-                foreach (var child in _children)
+                if (!(this is RootNode)) depths.Add(depth);
+                for (; child < _children.Count(); ++child)
                 {
-                    child.ToMultilineString(newBranches, lines);
+                    _children[child].GetDepths(nextDepth, depths);
                 }
             }
 
-            protected virtual string MultilineValue
+            private void ToMultilineString(int depth, ICollection<string> lines, IList<int> depths)
             {
-                get { return _data.ToString(); }
+                var lineNum = lines.Count();
+                var nextDepth = (this is RootNode) ? depth : depth + 1;
+                var child = 0;
+                for (; child < _children.Count() / 2; ++child)
+                {
+                    _children[child].ToMultilineString(nextDepth, lines, depths);
+                }
+                if (!(this is RootNode))
+                {
+                    var line = new StringBuilder();
+                    for (var i = 0; i < depth; ++i)
+                    {
+                        line.Append(IsBranchAtThisDepth(i, lineNum, depths) ? "| " : "  ");
+                    }
+                    line.Append("+-");
+                    line.Append(_data);
+                    lines.Add(line.ToString());
+                }
+                for (; child < _children.Count(); ++child)
+                {
+                    _children[child].ToMultilineString(nextDepth, lines, depths);
+                }
+            }
+
+            private static bool IsBranchAtThisDepth(int depth, int lineNum, IList<int> depths)
+            {
+                int? above = null;
+                for (var i = lineNum - 1; i >= 0; --i)
+                {
+                    if (depths[i] > depth) continue;
+                    if (depths[i] < (depth - 1)) return false;
+                    above = depths[i];
+                    break;
+                }
+                int? below = null;
+                for (var i = lineNum + 1; i < depths.Count; ++i)
+                {
+                    if (depths[i] > depth) continue;
+                    if (depths[i] < (depth - 1)) return false;
+                    below = depths[i];
+                    break;
+                }
+                return above.HasValue && below.HasValue;
             }
         }
 
@@ -85,11 +121,6 @@ namespace Atrico.Lib.Common.Collections.Tree
             public RootNode()
                 : base(default(T))
             {
-            }
-
-            protected override string MultilineValue
-            {
-                get { return null; }
             }
         }
     }
