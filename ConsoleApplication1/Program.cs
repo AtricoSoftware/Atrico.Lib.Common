@@ -8,10 +8,10 @@ namespace ConsoleApplication1
         {
             var nm = new NumberMatcher();
             nm.AddRange(123, 321);
-            foreach (var line in nm.Display())
-            {
-                Console.WriteLine(line);
-            }
+            //foreach (var line in nm.Display())
+            //{
+            //    Console.WriteLine(line);
+            //}
             var regex = nm.GetRegex();
             Console.WriteLine(regex);
         }

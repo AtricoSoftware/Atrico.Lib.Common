@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Atrico.Lib.Common.ResettableCache;
@@ -12,6 +13,11 @@ namespace ConsoleApplication1
         private string CreateRegEx()
         {
             var regex = _root.GetRegex();
+            var tree = regex.ToTree();
+            foreach (var line in tree.ToMultilineString())
+            {
+                Console.WriteLine(line);
+            }
             return regex.ToString();
         }
 

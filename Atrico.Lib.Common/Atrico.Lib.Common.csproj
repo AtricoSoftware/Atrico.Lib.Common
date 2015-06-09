@@ -49,10 +49,15 @@
     <Compile Include="Collections\CollectionDifferencesWrongItems.cs" />
     <Compile Include="Collections\CollectionDifferencesWrongOrder.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
+    <Compile Include="Collections\Tree\INode.cs" />
+    <Compile Include="Collections\Tree\INodeContainer.cs" />
+    <Compile Include="Collections\Tree\Tree.Node.cs" />
+    <Compile Include="Collections\Tree\Tree.cs" />
     <Compile Include="Console\Table.cs" />
     <Compile Include="DateAndTime\DateTimeHelper.cs" />
     <Compile Include="DateAndTime\IDateTime.cs" />
     <Compile Include="Events\EventHelper.cs" />
+    <Compile Include="IMultilineDisplayable.cs" />
     <Compile Include="Permutations\PermutationsSetBase.cs" />
     <Compile Include="Permutations\Factorials.cs" />
     <Compile Include="Permutations\CombinationSet.cs" />

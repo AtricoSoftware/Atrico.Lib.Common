@@ -25,7 +25,7 @@ namespace Atrico.Lib.Common.Test.Console
 
         private static void DisplayTable(Table tab)
         {
-            foreach (var row in tab.Tabulate())
+            foreach (var row in tab.ToMultilineString())
             {
                 Debug.WriteLine(row);
             }
@@ -43,7 +43,7 @@ namespace Atrico.Lib.Common.Test.Console
             table.AppendRow(1, 2, 3, 4);
             table.AppendRow(null, 2, null, 4);
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(4), "Rows");
@@ -63,7 +63,7 @@ namespace Atrico.Lib.Common.Test.Console
             // Act
             var table = Test3x3Table;
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -84,7 +84,7 @@ namespace Atrico.Lib.Common.Test.Console
                 .SetBorder(Table.Border.Up, 'u')
                 .SetBorder(Table.Border.Down, 'd');
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -107,7 +107,7 @@ namespace Atrico.Lib.Common.Test.Console
                 .SetBorder(Table.Border.Left, 'l')
                 .SetBorder(Table.Border.Right, 'r');
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -130,7 +130,7 @@ namespace Atrico.Lib.Common.Test.Console
                 .SetBorder(Table.Border.Left, 'l')
                 .SetBorder(Table.Border.Right, 'r');
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -152,7 +152,7 @@ namespace Atrico.Lib.Common.Test.Console
             var table = Test3x3Table
                 .SetBorder(Table.Border.Vertical, 'v');
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -172,7 +172,7 @@ namespace Atrico.Lib.Common.Test.Console
             var table = Test3x3Table
                 .SetBorder(Table.Border.Horizontal, 'h');
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -195,7 +195,7 @@ namespace Atrico.Lib.Common.Test.Console
                 .SetBorder(Table.Border.Vertical, 'v')
                 .SetBorder(Table.Border.Horizontal, 'h');
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -222,7 +222,7 @@ namespace Atrico.Lib.Common.Test.Console
                 .SetBorder(Table.Border.Vertical, 'v')
                 .SetBorder(Table.Border.Horizontal, 'h');
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -249,7 +249,7 @@ namespace Atrico.Lib.Common.Test.Console
                 .SetBorder(Table.Border.BottomLeftCorner, 'G')
                 .SetBorder(Table.Border.BottomRightCorner, 'I');
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -279,7 +279,7 @@ namespace Atrico.Lib.Common.Test.Console
                 .SetBorder(Table.Border.BottomMiddleCorner, 'H')
                 .SetBorder(Table.Border.BottomRightCorner, 'I');
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -316,7 +316,7 @@ namespace Atrico.Lib.Common.Test.Console
                 .SetBorder(Table.Border.BottomMiddleCorner, '+')
                 .SetBorder(Table.Border.BottomRightCorner, '#');
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -339,7 +339,7 @@ namespace Atrico.Lib.Common.Test.Console
             var table = Test3x3Table
                 .SetBorderSimpleAscii(false);
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");
@@ -360,7 +360,7 @@ namespace Atrico.Lib.Common.Test.Console
             var table = Test3x3Table
                 .SetBorderSimpleAscii();
             DisplayTable(table);
-            var tab = table.Tabulate().ToArray();
+            var tab = table.ToMultilineString().ToArray();
 
             // Assert
             Assert.That(Value.Of(table.Rows).Is().EqualTo(3), "Rows");

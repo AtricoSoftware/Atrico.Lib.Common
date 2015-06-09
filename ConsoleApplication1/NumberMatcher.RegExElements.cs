@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Atrico.Lib.Common.Collections.Tree;
 
 namespace ConsoleApplication1
 {
@@ -39,6 +40,18 @@ namespace ConsoleApplication1
                 return new RegExDigits(digits);
             }
 
+            public Tree<string> ToTree()
+            {
+                var tree = new Tree<string>();
+                AddNodeToTree(tree);
+                return tree;
+            }
+
+            protected virtual INode<string> AddNodeToTree(INodeContainer<string> container)
+            {
+                return container.Add(ToString());
+            }
+
             private class RegExNone : RegExElement
             {
                 public override int GetHashCode()
@@ -66,6 +79,16 @@ namespace ConsoleApplication1
                     Elements = elements;
                 }
 
+            protected override INode<string> AddNodeToTree(INodeContainer<string> container)
+            {
+                var node = container.Add(Separator);
+                foreach (var element in Elements)
+                {
+                    element.AddNodeToTree(node);
+                }
+                return node;
+            }
+
                 public override int GetHashCode()
                 {
                     return Elements.Aggregate(0, (current, item) => current ^ item.GetHashCode());
@@ -89,7 +112,7 @@ namespace ConsoleApplication1
 
                 public override string ToString()
                 {
-                    var andDigits = this is RegExAnd && Elements.All(el=>el is RegExDigits);
+                    var andDigits = this is RegExAnd && Elements.All(el => el is RegExDigits);
                     var text = new StringBuilder();
                     if (!andDigits) text.Append('(');
                     foreach (var element in Elements)
@@ -111,6 +134,11 @@ namespace ConsoleApplication1
                 {
                 }
 
+                public override int GetHashCode()
+                {
+                    return base.GetHashCode();
+                }
+
                 public override bool Equals(object obj)
                 {
                     return EqualsImpl(obj as RegExAnd);
@@ -126,8 +154,12 @@ namespace ConsoleApplication1
             {
                 public RegExOr(IEnumerable<RegExElement> elements)
                     : base(elements)
-
                 {
+                }
+
+                public override int GetHashCode()
+                {
+                    return base.GetHashCode();
                 }
 
                 public override bool Equals(object obj)

@@ -8,7 +8,8 @@ namespace Atrico.Lib.Common.Console
     /// <summary>
     ///     Write a table to the console
     /// </summary>
-    public class Table
+    public class Table : IMultilineDisplayable
+
     {
         private readonly List<List<object>> _rows = new List<List<object>>();
         private readonly char?[] _border;
@@ -112,7 +113,7 @@ namespace Atrico.Lib.Common.Console
         ///     Tabulates this instance as a list of lines of text
         /// </summary>
         /// <returns>multiple lines of text</returns>
-        public IEnumerable<string> Tabulate()
+        public IEnumerable<string> ToMultilineString()
         {
             // Calculate max width of each column
             var columnWidth = new int[Columns];
@@ -218,36 +219,6 @@ namespace Atrico.Lib.Common.Console
             return padded;
         }
 
-        private string CreateHorizontalBorder(char? ch, char? left, char? mid, char? right, IEnumerable<int> columnWidths)
-        {
-            if (!ch.HasValue && !left.HasValue && !right.HasValue && !mid.HasValue)
-            {
-                return null;
-            }
-            var leftCorner = left ?? ch ?? GetBorder(Border.Left);
-            var rightCorner = right ?? ch ?? GetBorder(Border.Right);
-            var text = new StringBuilder();
-            if (leftCorner.HasValue)
-            {
-                text.Append(leftCorner);
-            }
-            var firstCol = true;
-            foreach (var width in columnWidths)
-            {
-                if (!firstCol && HasBorder(Border.Vertical))
-                {
-                    text.Append(ch ?? ' ');
-                }
-                firstCol = false;
-                text.Append(ch ?? ' ', width);
-            }
-            if (rightCorner.HasValue)
-            {
-                text.Append(rightCorner);
-            }
-            return text.ToString();
-        }
-
         private char? GetBorder(Border border)
         {
             return _border[(int) border];
@@ -257,12 +228,10 @@ namespace Atrico.Lib.Common.Console
         {
             return borders.Any(border => _border[(int) border].HasValue);
         }
-    }
+
+     }
 
     // TODO
-    // Add borders
-    // Add headers
-    // Number rows
     // Remove empty columns/rows
     // Parameterise spacing
 }

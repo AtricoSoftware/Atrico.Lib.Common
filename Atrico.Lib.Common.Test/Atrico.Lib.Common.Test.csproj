@@ -55,6 +55,7 @@
     <Compile Include="Collections\TestCollectionDifferences.cs" />
     <Compile Include="Collections\TestPartitionByExtension.cs" />
     <Compile Include="Collections\TestForeachExtension.cs" />
+    <Compile Include="Collections\Trees\TestToMultiline.cs" />
     <Compile Include="Console\TestTable.cs" />
     <Compile Include="Conversions\TestConversionBool.cs" />
     <Compile Include="Conversions\TestConversionObject.cs" />
