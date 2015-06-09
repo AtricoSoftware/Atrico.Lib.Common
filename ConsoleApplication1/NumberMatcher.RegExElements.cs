@@ -1,8 +1,7 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Atrico.Lib.Common.Collections;
 
 namespace ConsoleApplication1
 {
@@ -22,7 +21,7 @@ namespace ConsoleApplication1
                 var lhsA = lhs as RegExAnd;
                 var rhsA = rhs as RegExAnd;
                 if (lhsA != null && rhsA != null) return new RegExAnd(lhsA.Elements.Concat(rhsA.Elements));
-                return new RegExAnd(new []{lhs, rhs});
+                return new RegExAnd(new[] {lhs, rhs});
             }
 
             public static RegExElement Or(RegExElement lhs, RegExElement rhs)
@@ -32,36 +31,12 @@ namespace ConsoleApplication1
                 var lhsO = lhs as RegExOr;
                 var rhsO = rhs as RegExOr;
                 if (lhsO != null && rhsO != null) return new RegExOr(lhsO.Elements.Concat(rhsO.Elements));
-                return new RegExOr(new []{lhs, rhs});
+                return new RegExOr(new[] {lhs, rhs});
             }
 
             public static RegExElement Digits(IEnumerable<char> digits)
             {
                 return new RegExDigits(digits);
-            }
-
-            internal IEnumerable<string> Display()
-            {
-                var lines = new List<string>();
-                Display(0, lines);
-                return lines;
-            }
-
-            private static string PadLine(int depth)
-            {
-                var line = new StringBuilder(" ");
-                for (var i = 0; i < depth; ++i)
-                {
-                    line.Append(i == depth - 1 ? "+-" : "| ");
-                }
-                return line.ToString();
-            }
-
-            protected virtual void Display(int depth, ICollection<string> lines)
-            {
-                var line = new StringBuilder(PadLine(depth));
-                line.Append(ToString());
-                lines.Add(line.ToString());
             }
 
             private class RegExNone : RegExElement
@@ -114,14 +89,15 @@ namespace ConsoleApplication1
 
                 public override string ToString()
                 {
+                    var andDigits = this is RegExAnd && Elements.All(el=>el is RegExDigits);
                     var text = new StringBuilder();
-                         text.Append('(');
-                   foreach (var element in Elements)
+                    if (!andDigits) text.Append('(');
+                    foreach (var element in Elements)
                     {
-                        if (text.Length > 0) text.Append(Separator);
+                        if (text.Length > 1) text.Append(Separator);
                         text.Append(element);
                     }
-                         text.Append(')');
+                    if (!andDigits) text.Append(')');
                     return text.ToString();
                 }
 
@@ -142,7 +118,7 @@ namespace ConsoleApplication1
 
                 protected override string Separator
                 {
-                    get { return " & "; }
+                    get { return ""; }
                 }
             }
 
@@ -168,10 +144,17 @@ namespace ConsoleApplication1
             private class RegExDigits : RegExElement
             {
                 private readonly IEnumerable<char> _digits;
+                private readonly Lazy<string> _regex;
 
                 public RegExDigits(IEnumerable<char> digits)
                 {
                     _digits = digits.Distinct().OrderBy(ch => ch);
+                    _regex = new Lazy<string>(CreateRegex);
+                }
+
+                private string CreateRegex()
+                {
+                    return _digits.Count() == 10 ? @"\d" : new Simplifier(_digits).ToString();
                 }
 
                 public override int GetHashCode()
@@ -198,7 +181,90 @@ namespace ConsoleApplication1
 
                 public override string ToString()
                 {
-                    return _digits.ToCollectionString();
+                    return _regex.Value;
+                }
+
+                private class Simplifier
+                {
+                    private enum State
+                    {
+                        Empty,
+                        AddingChar,
+                        NoRange,
+                        Range,
+                        EndingRange
+                    }
+
+                    private State _state = State.Empty;
+                    private readonly StringBuilder _regex = new StringBuilder();
+                    private char _last = '\0';
+
+                    public Simplifier(IEnumerable<char> chars)
+                    {
+                        foreach (var ch in chars) AddChar(ch);
+                    }
+
+                    private void AddChar(char ch)
+                    {
+                        var done = false;
+                        do
+                        {
+                            switch (_state)
+                            {
+                                case State.Empty:
+                                    _regex.Append('[');
+                                    _state = State.AddingChar;
+                                    break;
+                                case State.AddingChar:
+                                    _regex.AppendFormat("{0}", ch);
+                                    _state = State.NoRange;
+                                    done = true;
+                                    break;
+                                case State.NoRange:
+                                    if (ch == _last + 1)
+                                    {
+                                        _state = State.Range;
+                                        done = true;
+                                    }
+                                    else
+                                    {
+                                        _regex.Append(',');
+                                        _state = State.AddingChar;
+                                    }
+                                    break;
+                                case State.Range:
+                                    if (ch == _last + 1)
+                                    {
+                                        done = true;
+                                    }
+                                    else
+                                    {
+                                        _state = State.EndingRange;
+                                    }
+                                    break;
+                                case State.EndingRange:
+                                    _regex.AppendFormat("-{0}", _last);
+                                    _state = State.NoRange;
+                                    break;
+                            }
+                        } while (!done);
+
+                        _last = ch;
+                    }
+
+                    public override string ToString()
+                    {
+                        switch (_state)
+                        {
+                            case State.NoRange:
+                                _regex.Append(']');
+                                break;
+                            case State.Range:
+                                _regex.AppendFormat("-{0}]", _last);
+                                break;
+                        }
+                        return _regex.ToString();
+                    }
                 }
             }
         }
