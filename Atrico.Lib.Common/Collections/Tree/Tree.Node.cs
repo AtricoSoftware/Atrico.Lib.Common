@@ -72,7 +72,7 @@ namespace Atrico.Lib.Common.Collections.Tree
             {
             }
 
-            protected Node(T data, Node parent)
+            private Node(T data, Node parent)
             {
                 _data = data;
                 _parent = parent;
