@@ -50,6 +50,7 @@
     <Compile Include="Collections\CollectionDifferencesWrongOrder.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Collections\Tree\Tree.INode.cs" />
+    <Compile Include="Collections\Tree\Tree.Node.ToMultilineString.cs" />
     <Compile Include="Collections\Tree\Tree.Node.cs" />
     <Compile Include="Collections\Tree\Tree.cs" />
     <Compile Include="Console\Table.cs" />
