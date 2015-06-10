@@ -9,7 +9,7 @@ namespace ConsoleApplication1
 {
     public partial class NumberMatcher : IMultilineDisplayable
     {
-        private readonly Tree<char> _tree = new Tree<char>(false);
+        private readonly Tree<char>.INode _tree = Tree<char>.Create(false);
         private readonly ResettableCache<string> _regex;
 
         private string CreateRegEx()

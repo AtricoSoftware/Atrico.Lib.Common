@@ -45,14 +45,14 @@ namespace ConsoleApplication1
                 return new RegExDigits(digits);
             }
 
-            public Tree<string> ToTree()
+            public Tree<string>.INode ToTree()
             {
-                var tree = new Tree<string>(true);
+                var tree = Tree<string>.Create(true);
                 AddNodeToTree(tree);
                 return tree;
             }
 
-            protected virtual INode<string> AddNodeToTree(INodeContainer<string> container)
+            protected virtual Tree<string>.INode AddNodeToTree(Tree<string>.INode container)
             {
                 return container.Add(ToString());
             }
@@ -84,7 +84,7 @@ namespace ConsoleApplication1
                     Elements = elements;
                 }
 
-            protected override INode<string> AddNodeToTree(INodeContainer<string> container)
+            protected override Tree<string>.INode AddNodeToTree(Tree<string>.INode container)
             {
                 var node = container.Add(new EverythingAfter(GetType().Name, "RegEx").ToString());
                 foreach (var element in Elements)

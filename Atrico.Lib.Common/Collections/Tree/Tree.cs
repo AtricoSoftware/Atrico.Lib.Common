@@ -5,28 +5,12 @@ namespace Atrico.Lib.Common.Collections.Tree
     /// <summary>
     ///     Tree of nodes
     /// </summary>
-    public partial class Tree<T> : INodeContainer<T>
+    public static partial class Tree<T>
     {
-        private readonly RootNode _rootNode;
-
-        public Tree(bool allowDuplicateNodes)
+         public static INode Create(bool allowDuplicateNodes)
         {
-            _rootNode = new RootNode(allowDuplicateNodes);
+            return new Node(allowDuplicateNodes);
         }
 
-        public INode<T> Add(T data)
-        {
-            return _rootNode.Add(data);
-        }
-
-        public INode<T> Add(IEnumerable<T> path)
-        {
-            return _rootNode.Add(path);
-        }
-
-        public IEnumerable<string> ToMultilineString()
-        {
-            return _rootNode.ToMultilineString();
-        }
     }
 }

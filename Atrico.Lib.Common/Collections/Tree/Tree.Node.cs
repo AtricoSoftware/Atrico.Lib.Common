@@ -17,21 +17,34 @@ namespace Atrico.Lib.Common.Collections.Tree
         internal const char VerticalLine = '\u2502'; // '|'
         internal const char Space = ' '; // ' '
 
-        private class Node : INode<T>
+        private class Node : INode
         {
-            
             private readonly Node _parent;
             private readonly T _data;
             private readonly bool _allowDuplicateNodes;
             private readonly IList<Node> _children = new List<Node>();
-            private bool _isRootNode { get { return _parent == null; } }
+
+            private bool _isRootNode
+            {
+                get { return _parent == null; }
+            }
 
             public T Data
             {
                 get { return _data; }
             }
 
-            public INode<T> Add(T data)
+            public INode Parent
+            {
+                get { return _parent; }
+            }
+
+            public IEnumerable<INode> Children
+            {
+                get { return _children; }
+            }
+
+            public INode Add(T data)
             {
                 var node = _allowDuplicateNodes ? null : _children.FirstOrDefault(n => n.Equals(data));
                 if (node != null) return node;
@@ -40,7 +53,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return node;
             }
 
-            public INode<T> Add(IEnumerable<T> path)
+            public INode Add(IEnumerable<T> path)
             {
                 var pathArray = path as T[] ?? path.ToArray();
                 if (pathArray.Length == 0) return this;
@@ -48,7 +61,12 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return node.Add(pathArray.Skip(1));
             }
 
-            protected Node(bool allowDuplicateNodes)
+            public INode Insert(T data)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Node(bool allowDuplicateNodes)
                 : this(default(T), null, allowDuplicateNodes)
             {
             }
@@ -191,14 +209,5 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return string.Format("{0}:{1}", _isRootNode ? "" : _data.ToString(), _children.ToCollectionString());
             }
         }
-
-        private class RootNode : Node
-        {
-            public RootNode(bool allowDuplicateNodes)
-                : base(allowDuplicateNodes)
-            {
-            }
-
-         }
     }
 }

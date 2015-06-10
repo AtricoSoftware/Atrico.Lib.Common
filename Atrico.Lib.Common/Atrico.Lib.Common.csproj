@@ -49,8 +49,7 @@
     <Compile Include="Collections\CollectionDifferencesWrongItems.cs" />
     <Compile Include="Collections\CollectionDifferencesWrongOrder.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
-    <Compile Include="Collections\Tree\INode.cs" />
-    <Compile Include="Collections\Tree\INodeContainer.cs" />
+    <Compile Include="Collections\Tree\Tree.INode.cs" />
     <Compile Include="Collections\Tree\Tree.Node.cs" />
     <Compile Include="Collections\Tree\Tree.cs" />
     <Compile Include="Console\Table.cs" />

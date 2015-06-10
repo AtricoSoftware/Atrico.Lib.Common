@@ -10,7 +10,7 @@ using Atrico.Lib.Testing.NUnitAttributes;
 namespace Atrico.Lib.Common.Test.Collections.Trees
 {
     [TestFixture]
-    public class TestToMultiline : TestFixtureBase
+    public class TestToMultiline : TreeTestFixtureBase
     {
         private static string ConvertAscii(string ascii)
         {
@@ -30,14 +30,14 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestSingleNode()
         {
             // Arrange
-            var tree = new Tree<string>(false);
+            var tree = Tree<string>.Create(false);
             tree.Add("root");
 
             // Act
             var lines = tree.ToMultilineString().ToArray();
 
             // Assert
-            foreach (var line in lines) Debug.WriteLine(line);
+            Display(tree);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(1), "Number of lines");
             Assert.That(Value.Of(lines[0]).Is().EqualTo(ConvertAscii(@"~-root")), "Root node");
         }
@@ -46,7 +46,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestOneNodeSingleBranch()
         {
             // Arrange
-            var tree = new Tree<string>(false);
+            var tree = Tree<string>.Create(false);
             var root = tree.Add("root");
             root.Add("branch");
 
@@ -54,7 +54,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var lines = tree.ToMultilineString().ToArray();
 
             // Assert
-            foreach (var line in lines) Debug.WriteLine(line);
+            Display(tree);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(2), "Number of lines");
             Assert.That(Value.Of(lines[0]).Is().EqualTo(ConvertAscii(@"~-root")), "Root");
             Assert.That(Value.Of(lines[1]).Is().EqualTo(ConvertAscii(@"  \-branch")), "Branch");
@@ -64,7 +64,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestMultipleSingleBranches()
         {
             // Arrange
-            var tree = new Tree<string>(false);
+            var tree = Tree<string>.Create(false);
             var root = tree.Add("root");
             var one = root.Add("one");
             var two = one.Add("two");
@@ -74,7 +74,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var lines = tree.ToMultilineString().ToArray();
 
             // Assert
-            foreach (var line in lines) Debug.WriteLine(line);
+            Display(tree);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(4), "Number of lines");
             Assert.That(Value.Of(lines[0]).Is().EqualTo(ConvertAscii(@"~-root")), "Root");
             Assert.That(Value.Of(lines[1]).Is().EqualTo(ConvertAscii(@"  \-one")), "One");
@@ -86,7 +86,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestOneNodeDoubleBranch()
         {
             // Arrange
-            var tree = new Tree<string>(false);
+            var tree = Tree<string>.Create(false);
             var root = tree.Add("root");
             root.Add("one");
             root.Add("two");
@@ -95,7 +95,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var lines = tree.ToMultilineString().ToArray();
 
             // Assert
-            foreach (var line in lines) Debug.WriteLine(line);
+            Display(tree);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(3), "Number of lines");
             Assert.That(Value.Of(lines[0]).Is().EqualTo(ConvertAscii(@"  /-one")), "One");
             Assert.That(Value.Of(lines[1]).Is().EqualTo(ConvertAscii(@"~-root")), "Root");
@@ -106,7 +106,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestMultipleBranches()
         {
             // Arrange
-            var tree = new Tree<string>(false);
+            var tree = Tree<string>.Create(false);
             var root = tree.Add("root");
             var one = root.Add("one");
             one.Add("one1");
@@ -119,7 +119,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var lines = tree.ToMultilineString().ToArray();
 
             // Assert
-            foreach (var line in lines) Debug.WriteLine(line);
+            Display(tree);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(7), "Number of lines");
             Assert.That(Value.Of(lines[0]).Is().EqualTo(ConvertAscii(@"    /-one1")), "One1");
             Assert.That(Value.Of(lines[1]).Is().EqualTo(ConvertAscii(@"  /-one")), "One");
@@ -134,7 +134,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestMultipleRoots()
         {
             // Arrange
-            var tree = new Tree<string>(false);
+            var tree = Tree<string>.Create(false);
             var root1 = tree.Add("root1");
             var one1 = root1.Add("one1");
             var two1 = one1.Add("two1");
@@ -148,7 +148,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var lines = tree.ToMultilineString().ToArray();
 
             // Assert
-            foreach (var line in lines) Debug.WriteLine(line);
+            Display(tree);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(8), "Number of lines");
             Assert.That(Value.Of(lines[0]).Is().EqualTo(ConvertAscii(@">-root1")), "Root1");
             Assert.That(Value.Of(lines[1]).Is().EqualTo(ConvertAscii(@"| \-one1")), "One1");
@@ -164,7 +164,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestAllOverThePlace()
         {
             // Arrange
-            var tree = new Tree<string>(false);
+            var tree = Tree<string>.Create(false);
             var root1 = tree.Add("root1");
             var root2 = tree.Add("root2");
             var one1 = root2.Add("one1");
@@ -180,7 +180,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var lines = tree.ToMultilineString().ToArray();
 
             // Assert
-            foreach (var line in lines) Debug.WriteLine(line);
+            Display(tree);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(10), "Number of lines");
             Assert.That(Value.Of(lines[0]).Is().EqualTo(ConvertAscii(@"/-root1")), "Root1");
             Assert.That(Value.Of(lines[1]).Is().EqualTo(ConvertAscii(@"|   /-one11")), "One11");
@@ -198,7 +198,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestAllOverThePlace2()
         {
             // Arrange
-            var tree = new Tree<string>(false);
+            var tree = Tree<string>.Create(false);
             var root = tree.Add("0");
             var one1 = root.Add("1");
             var one2 = root.Add("2");
@@ -217,7 +217,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var lines = tree.ToMultilineString().ToArray();
 
             // Assert
-            foreach (var line in lines) Debug.WriteLine(line);
+            Display(tree);
             Assert.That(Value.Of(lines).Count().Is().EqualTo(13), "Number of lines");
             Assert.That(Value.Of(lines[00]).Is().EqualTo(ConvertAscii(@"    /-11")), "11");
             Assert.That(Value.Of(lines[01]).Is().EqualTo(ConvertAscii(@"  /-1")), "1");
@@ -235,17 +235,3 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         }
     }
 }
-
-//    ┌─[1]
-//  ┌─And
-//  │ ├─\d
-//  │ └─\d
-//──Or
-//  │ ┌─[2]
-//  ├─And
-//    ├─\d
-//    └─\d
-//    ┌─[3]
-//  └─And
-//    ├─\d
-//    └─\d
