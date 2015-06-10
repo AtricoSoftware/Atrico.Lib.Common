@@ -63,7 +63,7 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             public INode Insert(T data)
             {
-                throw new NotImplementedException();
+                return new Node(data, _parent, _allowDuplicateNodes);
             }
 
             public Node(bool allowDuplicateNodes)
@@ -208,6 +208,13 @@ namespace Atrico.Lib.Common.Collections.Tree
             {
                 return string.Format("{0}:{1}", _isRootNode ? "" : _data.ToString(), _children.ToCollectionString());
             }
+        }
+
+        private class NodeAllowDuplicates : Node
+        {
+         }
+        private class NodeMergeDuplicates : Node
+        {
         }
     }
 }
