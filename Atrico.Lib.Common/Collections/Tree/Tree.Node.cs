@@ -17,11 +17,10 @@ namespace Atrico.Lib.Common.Collections.Tree
         internal const char VerticalLine = '\u2502'; // '|'
         internal const char Space = ' '; // ' '
 
-        private class Node : INode
+        private abstract class Node : INode
         {
             private readonly Node _parent;
             private readonly T _data;
-            private readonly bool _allowDuplicateNodes;
             private readonly IList<Node> _children = new List<Node>();
 
             private bool _isRootNode
@@ -46,11 +45,7 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             public INode Add(T data)
             {
-                var node = _allowDuplicateNodes ? null : _children.FirstOrDefault(n => n.Equals(data));
-                if (node != null) return node;
-                node = new Node(data, this, _allowDuplicateNodes);
-                _children.Add(node);
-                return node;
+                return AddImpl(data, _children);
             }
 
             public INode Add(IEnumerable<T> path)
@@ -63,19 +58,24 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             public INode Insert(T data)
             {
-                return new Node(data, _parent, _allowDuplicateNodes);
+                //return new Node(data, _parent);
+                return null;
             }
 
-            public Node(bool allowDuplicateNodes)
-                : this(default(T), null, allowDuplicateNodes)
+            internal static INode CreateNode(bool allowDuplicateNodes)
+            {
+                return allowDuplicateNodes ? new NodeAllowDuplicates() : new NodeMergeDuplicates() as Node;
+            }
+
+            protected Node()
+                : this(default(T), null)
             {
             }
 
-            private Node(T data, Node parent, bool allowDuplicateNodes)
+            protected Node(T data, Node parent)
             {
                 _data = data;
                 _parent = parent;
-                _allowDuplicateNodes = allowDuplicateNodes;
             }
 
             public bool Equals(T other)
@@ -91,6 +91,8 @@ namespace Atrico.Lib.Common.Collections.Tree
                 ToMultilineString(0, lines, depths, NodeType.Middle);
                 return lines;
             }
+
+            protected abstract INode AddImpl(T data, IList<Node> children);
 
             private void GetDepths(int depth, ICollection<Tuple<int, ParentDirection>> depths, ParentDirection parentDirection)
             {
@@ -208,13 +210,46 @@ namespace Atrico.Lib.Common.Collections.Tree
             {
                 return string.Format("{0}:{1}", _isRootNode ? "" : _data.ToString(), _children.ToCollectionString());
             }
-        }
 
-        private class NodeAllowDuplicates : Node
-        {
-         }
-        private class NodeMergeDuplicates : Node
-        {
+            private class NodeAllowDuplicates : Node
+            {
+                public NodeAllowDuplicates()
+                {
+                }
+
+                private NodeAllowDuplicates(T data, Node parent)
+                    : base(data, parent)
+                {
+                }
+
+                protected override INode AddImpl(T data, IList<Node> children)
+                {
+                    var node = new NodeAllowDuplicates(data, this);
+                    children.Add(node);
+                    return node;
+                }
+            }
+
+            private class NodeMergeDuplicates : Node
+            {
+                public NodeMergeDuplicates()
+                {
+                }
+
+                private NodeMergeDuplicates(T data, Node parent)
+                    : base(data, parent)
+                {
+                }
+
+                protected override INode AddImpl(T data, IList<Node> children)
+                {
+                    var node = children.FirstOrDefault(n => n.Equals(data));
+                    if (node != null) return node;
+                    node = new NodeMergeDuplicates(data, this);
+                    children.Add(node);
+                    return node;
+                }
+            }
         }
     }
 }
