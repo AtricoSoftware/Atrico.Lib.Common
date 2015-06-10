@@ -18,6 +18,7 @@ namespace ConsoleApplication1
             {
                 Console.WriteLine(line);
             }
+            Console.WriteLine();
             return regex.ToString();
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Atrico.Lib.Common.Collections.Tree
 {
@@ -7,8 +8,12 @@ namespace Atrico.Lib.Common.Collections.Tree
     /// </summary>
     public partial class Tree<T> : INodeContainer<T>
     {
-        private readonly RootNode _rootNode = new RootNode();
+        private readonly RootNode _rootNode;
 
+        public Tree(bool allowDuplicateNodes)
+        {
+            _rootNode = new RootNode(allowDuplicateNodes);
+        }
         public INode<T> Add(T data)
         {
              return _rootNode.Add(data);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -20,6 +21,7 @@ namespace Atrico.Lib.Common.Collections.Tree
         private class Node : INode<T>
         {
             private readonly T _data;
+            private readonly bool _allowDuplicateNodes;
             private readonly IList<Node> _children = new List<Node>();
 
             public T Data
@@ -29,9 +31,9 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             public INode<T> Add(T data)
             {
-                var node = _children.FirstOrDefault(n => n.Equals(data));
+                var node = _allowDuplicateNodes ? null : _children.FirstOrDefault(n => n.Equals(data));
                 if (node != null) return node;
-                node = new Node(data);
+                node = new Node(data, _allowDuplicateNodes);
                 _children.Add(node);
                 return node;
             }
@@ -44,9 +46,10 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return node.Add(pathArray.Skip(1));
             }
 
-            protected Node(T data)
+            protected Node(T data, bool allowDuplicateNodes)
             {
                 _data = data;
+                _allowDuplicateNodes = allowDuplicateNodes;
             }
 
             public bool Equals(T other)
@@ -173,12 +176,17 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return ((above.Item1 == depth && above.Item2 != ParentDirection.Up) || above.Item1 == depth - 1)
                        && ((below.Item1 == depth && below.Item2 != ParentDirection.Down) || below.Item1 == depth - 1);
             }
+
+            public override string ToString()
+            {
+                return string.Format("{0}:{1}", (this is RootNode) ? "" : _data.ToString(), _children.ToCollectionString());
+            }
         }
 
         private class RootNode : Node
         {
-            public RootNode()
-                : base(default(T))
+            public RootNode(bool allowDuplicateNodes)
+                : base(default(T), allowDuplicateNodes )
             {
             }
         }

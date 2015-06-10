@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Atrico.Lib.Common.Collections.Tree;
+using Atrico.Lib.Common.NamesByConvention;
 
 namespace ConsoleApplication1
 {
@@ -21,8 +22,10 @@ namespace ConsoleApplication1
                 if (rhs is RegExNone) return lhs;
                 var lhsA = lhs as RegExAnd;
                 var rhsA = rhs as RegExAnd;
-                if (lhsA != null && rhsA != null) return new RegExAnd(lhsA.Elements.Concat(rhsA.Elements));
-                return new RegExAnd(new[] {lhs, rhs});
+                if ((lhsA == null || (rhsA == null && !(rhs is RegExDigits))) && (rhsA == null || !(lhs is RegExDigits))) return new RegExAnd(new[] {lhs, rhs});
+                var lhsEl = lhsA != null ? lhsA.Elements : new[] {lhs};
+                var rhsEl = rhsA != null ? rhsA.Elements : new[] {rhs};
+                return new RegExAnd(lhsEl.Concat(rhsEl));
             }
 
             public static RegExElement Or(RegExElement lhs, RegExElement rhs)
@@ -31,7 +34,9 @@ namespace ConsoleApplication1
                 if (rhs is RegExNone) return lhs;
                 var lhsO = lhs as RegExOr;
                 var rhsO = rhs as RegExOr;
-                if (lhsO != null && rhsO != null) return new RegExOr(lhsO.Elements.Concat(rhsO.Elements));
+                if ((lhsO == null || (rhsO == null && !(rhs is RegExDigits))) && (rhsO == null || !(lhs is RegExDigits))) return new RegExOr(new[] {lhs, rhs});
+                var lhsEl = lhsO != null ? lhsO.Elements : new[] {lhs};
+                var rhsEl = rhsO != null ? rhsO.Elements : new[] {rhs};
                 return new RegExOr(new[] {lhs, rhs});
             }
 
@@ -42,7 +47,7 @@ namespace ConsoleApplication1
 
             public Tree<string> ToTree()
             {
-                var tree = new Tree<string>();
+                var tree = new Tree<string>(true);
                 AddNodeToTree(tree);
                 return tree;
             }
@@ -81,7 +86,7 @@ namespace ConsoleApplication1
 
             protected override INode<string> AddNodeToTree(INodeContainer<string> container)
             {
-                var node = container.Add(Separator);
+                var node = container.Add(new EverythingAfter(GetType().Name, "RegEx").ToString());
                 foreach (var element in Elements)
                 {
                     element.AddNodeToTree(node);

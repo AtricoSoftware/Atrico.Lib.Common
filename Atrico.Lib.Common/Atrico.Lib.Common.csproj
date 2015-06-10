@@ -58,6 +58,7 @@
     <Compile Include="DateAndTime\IDateTime.cs" />
     <Compile Include="Events\EventHelper.cs" />
     <Compile Include="IMultilineDisplayable.cs" />
+    <Compile Include="NamesByConvention\EverythingAfter.cs" />
     <Compile Include="Permutations\PermutationsSetBase.cs" />
     <Compile Include="Permutations\Factorials.cs" />
     <Compile Include="Permutations\CombinationSet.cs" />

@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace Atrico.Lib.Common.NamesByConvention
 {
-	public class EverythingBefore : NameByConvention
+	public class EverythingAfter : NameByConvention
 	{
 		private readonly string _text;
 
-		public EverythingBefore(string baseName, string text)
+        public EverythingAfter(string baseName, string text)
 			: base(baseName)
 		{
 			_text = text;
@@ -18,7 +18,7 @@ namespace Atrico.Lib.Common.NamesByConvention
 		protected override string CreateName(string baseName)
 		{
 			var name = baseName.Split(new[] {_text}, StringSplitOptions.RemoveEmptyEntries);
-			return name.FirstOrDefault();
+			return name.LastOrDefault();
 		}
 	}
 }
