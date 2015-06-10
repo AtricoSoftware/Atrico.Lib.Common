@@ -173,8 +173,9 @@ namespace Atrico.Lib.Common.Collections.Tree
                     break;
                 }
                 if (above == null || below == null) return false;
-                return ((above.Item1 == depth && above.Item2 != ParentDirection.Up) || above.Item1 == depth - 1)
-                       && ((below.Item1 == depth && below.Item2 != ParentDirection.Down) || below.Item1 == depth - 1);
+                return (((above.Item1 == depth && above.Item2 != ParentDirection.Up) || above.Item1 == depth - 1)
+                       && ((below.Item1 == depth && below.Item2 != ParentDirection.Down) || below.Item1 == depth - 1))
+                       || (above.Item1 == depth && below.Item1 == depth && above.Item2 == below.Item2);
             }
 
             public override string ToString()

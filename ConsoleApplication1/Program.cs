@@ -9,6 +9,7 @@ namespace ConsoleApplication1
             var nm = new NumberMatcher();
             //nm.AddRange(9, 11);
             nm.AddRange(123, 321);
+            nm.AddRange(100, 399);
             //foreach (var line in nm.Display())
             //{
             //    Console.WriteLine(line);

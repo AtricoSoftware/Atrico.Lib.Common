@@ -22,7 +22,7 @@ namespace ConsoleApplication1
                 if (rhs is RegExNone) return lhs;
                 var lhsA = lhs as RegExAnd;
                 var rhsA = rhs as RegExAnd;
-                if ((lhsA == null || (rhsA == null && !(rhs is RegExDigits))) && (rhsA == null || !(lhs is RegExDigits))) return new RegExAnd(new[] {lhs, rhs});
+                if (lhsA == null && rhsA == null) return new RegExAnd(new[] {lhs, rhs});
                 var lhsEl = lhsA != null ? lhsA.Elements : new[] {lhs};
                 var rhsEl = rhsA != null ? rhsA.Elements : new[] {rhs};
                 return new RegExAnd(lhsEl.Concat(rhsEl));
@@ -34,10 +34,10 @@ namespace ConsoleApplication1
                 if (rhs is RegExNone) return lhs;
                 var lhsO = lhs as RegExOr;
                 var rhsO = rhs as RegExOr;
-                if ((lhsO == null || (rhsO == null && !(rhs is RegExDigits))) && (rhsO == null || !(lhs is RegExDigits))) return new RegExOr(new[] {lhs, rhs});
+                if (lhsO == null && rhsO == null) return new RegExOr(new[] {lhs, rhs});
                 var lhsEl = lhsO != null ? lhsO.Elements : new[] {lhs};
                 var rhsEl = rhsO != null ? rhsO.Elements : new[] {rhs};
-                return new RegExOr(new[] {lhs, rhs});
+                return new RegExOr(lhsEl.Concat(rhsEl));
             }
 
             public static RegExElement Digits(IEnumerable<char> digits)
@@ -119,10 +119,12 @@ namespace ConsoleApplication1
                 {
                     var andDigits = this is RegExAnd && Elements.All(el => el is RegExDigits);
                     var text = new StringBuilder();
-                    if (!andDigits) text.Append('(');
+                    if (!andDigits) text.Append("(?:");
+                    var first = true;
                     foreach (var element in Elements)
                     {
-                        if (text.Length > 1) text.Append(Separator);
+                        if (!first) text.Append(Separator);
+                        else first = false;
                         text.Append(element);
                     }
                     if (!andDigits) text.Append(')');

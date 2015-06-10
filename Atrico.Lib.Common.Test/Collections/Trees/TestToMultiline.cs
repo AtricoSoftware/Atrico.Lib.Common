@@ -193,5 +193,59 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             Assert.That(Value.Of(lines[8]).Is().EqualTo(ConvertAscii(@"|   \-one23")), "One23");
             Assert.That(Value.Of(lines[9]).Is().EqualTo(ConvertAscii(@"\-root3")), "Root3");
         }
+
+        [Test]
+        public void TestAllOverThePlace2()
+        {
+            // Arrange
+            var tree = new Tree<string>(false);
+            var root = tree.Add("0");
+            var one1 = root.Add("1");
+            var one2 = root.Add("2");
+            var one3 = root.Add("3");
+            var one11 = one1.Add("11");
+            var one12 = one1.Add("12");
+            var one13 = one1.Add("13");
+            var one21 = one2.Add("21");
+            var one22 = one2.Add("22");
+            var one23 = one2.Add("23");
+            var one31 = one3.Add("31");
+            var one32 = one3.Add("32");
+            var one33 = one3.Add("33");
+
+            // Act
+            var lines = tree.ToMultilineString().ToArray();
+
+            // Assert
+            foreach (var line in lines) Debug.WriteLine(line);
+            Assert.That(Value.Of(lines).Count().Is().EqualTo(13), "Number of lines");
+            Assert.That(Value.Of(lines[00]).Is().EqualTo(ConvertAscii(@"    /-11")), "11");
+            Assert.That(Value.Of(lines[01]).Is().EqualTo(ConvertAscii(@"  /-1")), "1");
+            Assert.That(Value.Of(lines[02]).Is().EqualTo(ConvertAscii(@"  | +-12")), "12");
+            Assert.That(Value.Of(lines[03]).Is().EqualTo(ConvertAscii(@"  | \-13")), "13");
+            Assert.That(Value.Of(lines[04]).Is().EqualTo(ConvertAscii(@"~-0")), "0");
+            Assert.That(Value.Of(lines[05]).Is().EqualTo(ConvertAscii(@"  | /-21")), "21");
+            Assert.That(Value.Of(lines[06]).Is().EqualTo(ConvertAscii(@"  +-2")), "2");
+            Assert.That(Value.Of(lines[07]).Is().EqualTo(ConvertAscii(@"  | +-22")), "22");
+            Assert.That(Value.Of(lines[08]).Is().EqualTo(ConvertAscii(@"  | \-23")), "23");
+            Assert.That(Value.Of(lines[09]).Is().EqualTo(ConvertAscii(@"  | /-31")), "31");
+            Assert.That(Value.Of(lines[10]).Is().EqualTo(ConvertAscii(@"  \-3")), "3");
+            Assert.That(Value.Of(lines[11]).Is().EqualTo(ConvertAscii(@"    +-32")), "32");
+            Assert.That(Value.Of(lines[12]).Is().EqualTo(ConvertAscii(@"    \-33")), "33");
+        }
     }
 }
+
+//    ┌─[1]
+//  ┌─And
+//  │ ├─\d
+//  │ └─\d
+//──Or
+//  │ ┌─[2]
+//  ├─And
+//    ├─\d
+//    └─\d
+//    ┌─[3]
+//  └─And
+//    ├─\d
+//    └─\d
