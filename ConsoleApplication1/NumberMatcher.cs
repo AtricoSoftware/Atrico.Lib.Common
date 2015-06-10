@@ -1,25 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Atrico.Lib.Common;
+using Atrico.Lib.Common.Collections.Tree;
 using Atrico.Lib.Common.ResettableCache;
 
 namespace ConsoleApplication1
 {
-    public partial class NumberMatcher
+    public partial class NumberMatcher : IMultilineDisplayable
     {
-        private DigitMatcher _root = new DigitMatcher();
+        private readonly Tree<char> _tree = new Tree<char>(false);
         private readonly ResettableCache<string> _regex;
 
         private string CreateRegEx()
         {
-            var regex = _root.GetRegex();
-            var tree = regex.ToTree();
-            foreach (var line in tree.ToMultilineString())
-            {
-                Console.WriteLine(line);
-            }
-            Console.WriteLine();
-            return regex.ToString();
+            //var regex = _tree.GetRegex();
+            //var tree = regex.ToTree();
+            //foreach (var line in tree.ToMultilineString())
+            //{
+            //    Console.WriteLine(line);
+            //}
+            //Console.WriteLine();
+            //return regex.ToString();
+            return "";
         }
 
         private int _digits = 1;
@@ -29,17 +32,12 @@ namespace ConsoleApplication1
             _regex = new ResettableCache<string>(CreateRegEx);
         }
 
-        internal IEnumerable<string> Display()
-        {
-            return _root.Display();
-        }
-
         public NumberMatcher AddRange(uint from, uint to)
         {
             for (var i = from; i <= to; ++i)
             {
                 var digits = GetDigits(i);
-                _root.Add(digits);
+                _tree.Add(digits);
             }
             _regex.Reset();
             return this;
@@ -53,7 +51,7 @@ namespace ConsoleApplication1
             // Pad tree if too big
             while (digits.Count > _digits)
             {
-                _root = DigitMatcher.Before(_root);
+                _tree.Insert('0');
                 ++_digits;
             }
             return digits;
@@ -67,6 +65,11 @@ namespace ConsoleApplication1
         public override string ToString()
         {
             return GetRegex();
+        }
+
+        public IEnumerable<string> ToMultilineString()
+        {
+            return _tree.ToMultilineString();
         }
     }
 }

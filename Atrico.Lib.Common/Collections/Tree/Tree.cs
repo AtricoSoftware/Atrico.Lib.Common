@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Atrico.Lib.Common.Collections.Tree
 {
@@ -14,10 +13,12 @@ namespace Atrico.Lib.Common.Collections.Tree
         {
             _rootNode = new RootNode(allowDuplicateNodes);
         }
+
         public INode<T> Add(T data)
         {
-             return _rootNode.Add(data);
+            return _rootNode.Add(data);
         }
+
         public INode<T> Add(IEnumerable<T> path)
         {
             return _rootNode.Add(path);

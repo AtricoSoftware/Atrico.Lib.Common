@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -20,9 +19,12 @@ namespace Atrico.Lib.Common.Collections.Tree
 
         private class Node : INode<T>
         {
+            
+            private readonly Node _parent;
             private readonly T _data;
             private readonly bool _allowDuplicateNodes;
             private readonly IList<Node> _children = new List<Node>();
+            private bool _isRootNode { get { return _parent == null; } }
 
             public T Data
             {
@@ -33,7 +35,7 @@ namespace Atrico.Lib.Common.Collections.Tree
             {
                 var node = _allowDuplicateNodes ? null : _children.FirstOrDefault(n => n.Equals(data));
                 if (node != null) return node;
-                node = new Node(data, _allowDuplicateNodes);
+                node = new Node(data, this, _allowDuplicateNodes);
                 _children.Add(node);
                 return node;
             }
@@ -46,9 +48,15 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return node.Add(pathArray.Skip(1));
             }
 
-            protected Node(T data, bool allowDuplicateNodes)
+            protected Node(bool allowDuplicateNodes)
+                : this(default(T), null, allowDuplicateNodes)
+            {
+            }
+
+            private Node(T data, Node parent, bool allowDuplicateNodes)
             {
                 _data = data;
+                _parent = parent;
                 _allowDuplicateNodes = allowDuplicateNodes;
             }
 
@@ -68,16 +76,16 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             private void GetDepths(int depth, ICollection<Tuple<int, ParentDirection>> depths, ParentDirection parentDirection)
             {
-                var nextDepth = (this is RootNode) ? depth : depth + 1;
+                var nextDepth = _isRootNode ? depth : depth + 1;
                 var child = 0;
                 for (; child < _children.Count() / 2; ++child)
                 {
-                    _children[child].GetDepths(nextDepth, depths, (this is RootNode) ? ParentDirection.None : ParentDirection.Down);
+                    _children[child].GetDepths(nextDepth, depths, _isRootNode ? ParentDirection.None : ParentDirection.Down);
                 }
-                if (!(this is RootNode)) depths.Add(Tuple.Create(depth, parentDirection));
+                if (!_isRootNode) depths.Add(Tuple.Create(depth, parentDirection));
                 for (; child < _children.Count(); ++child)
                 {
-                    _children[child].GetDepths(nextDepth, depths, (this is RootNode) ? ParentDirection.None : ParentDirection.Up);
+                    _children[child].GetDepths(nextDepth, depths, _isRootNode ? ParentDirection.None : ParentDirection.Up);
                 }
             }
 
@@ -100,19 +108,19 @@ namespace Atrico.Lib.Common.Collections.Tree
             private void ToMultilineString(int depth, ICollection<string> lines, IList<Tuple<int, ParentDirection>> depths, NodeType nodeType)
             {
                 var lineNum = lines.Count();
-                var nextDepth = (this is RootNode) ? depth : depth + 1;
+                var nextDepth = _isRootNode ? depth : depth + 1;
                 var child = 0;
                 for (; child < _children.Count() / 2; ++child)
                 {
                     var type = NodeType.Middle;
                     if (child == 0)
                     {
-                        if (this is RootNode && _children.Count() == 2) type = NodeType.FirstOfDoubleRoot;
+                        if (_isRootNode && _children.Count() == 2) type = NodeType.FirstOfDoubleRoot;
                         else type = NodeType.First;
                     }
                     _children[child].ToMultilineString(nextDepth, lines, depths, type);
                 }
-                if (!(this is RootNode))
+                if (!_isRootNode)
                 {
                     var line = new StringBuilder();
                     for (var i = 0; i < depth; ++i)
@@ -126,13 +134,13 @@ namespace Atrico.Lib.Common.Collections.Tree
                             line.Append(FirstChildNode);
                             break;
                         case NodeType.Last:
-                            line.Append(LastChildNode); 
+                            line.Append(LastChildNode);
                             break;
                         case NodeType.SingleRoot:
-                            line.Append(SingleRoot); 
+                            line.Append(SingleRoot);
                             break;
                         case NodeType.FirstOfDoubleRoot:
-                            line.Append(FirstOfDoubleRoot); 
+                            line.Append(FirstOfDoubleRoot);
                             break;
                         default:
                             line.Append(depth == 0 ? MidRoot : MidChildNode);
@@ -147,7 +155,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                     var type = NodeType.Middle;
                     if (child == _children.Count() - 1)
                     {
-                        if (this is RootNode && _children.Count() == 1) type = NodeType.SingleRoot;
+                        if (_isRootNode && _children.Count() == 1) type = NodeType.SingleRoot;
                         else type = NodeType.Last;
                     }
                     _children[child].ToMultilineString(nextDepth, lines, depths, type);
@@ -174,22 +182,23 @@ namespace Atrico.Lib.Common.Collections.Tree
                 }
                 if (above == null || below == null) return false;
                 return (((above.Item1 == depth && above.Item2 != ParentDirection.Up) || above.Item1 == depth - 1)
-                       && ((below.Item1 == depth && below.Item2 != ParentDirection.Down) || below.Item1 == depth - 1))
+                        && ((below.Item1 == depth && below.Item2 != ParentDirection.Down) || below.Item1 == depth - 1))
                        || (above.Item1 == depth && below.Item1 == depth && above.Item2 == below.Item2);
             }
 
             public override string ToString()
             {
-                return string.Format("{0}:{1}", (this is RootNode) ? "" : _data.ToString(), _children.ToCollectionString());
+                return string.Format("{0}:{1}", _isRootNode ? "" : _data.ToString(), _children.ToCollectionString());
             }
         }
 
         private class RootNode : Node
         {
             public RootNode(bool allowDuplicateNodes)
-                : base(default(T), allowDuplicateNodes )
+                : base(allowDuplicateNodes)
             {
             }
-        }
+
+         }
     }
 }
