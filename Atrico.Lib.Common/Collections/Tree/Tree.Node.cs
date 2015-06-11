@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Atrico.Lib.Common.Collections.Tree
@@ -65,9 +66,28 @@ namespace Atrico.Lib.Common.Collections.Tree
                     }
                     return this;
                 }
-                var newNode = CreateNewNode(data, _parent, new []{this});
+                var newNode = CreateNewNode(data, _parent, new[] {this});
                 _parent.ReplaceNode(this, newNode);
                 return newNode;
+            }
+
+            public void DepthFirst(Action<INode> action)
+            {
+                foreach (var child in _children) child.DepthFirst(action);
+                if (!this.IsRoot()) action(this);
+            }
+
+            public void BreadthFirst(Action<INode> action)
+            {
+                var remaining = new Queue<INode>();
+                if (this.IsRoot()) _children.ForEach(remaining.Enqueue);
+                else remaining.Enqueue(this);
+                while (remaining.Any())
+                {
+                    var node = remaining.Dequeue();
+                    action(node);
+                    node.Children.ForEach(remaining.Enqueue);
+                }
             }
 
             private void ReplaceNode(Node oldNode, Node newNode)

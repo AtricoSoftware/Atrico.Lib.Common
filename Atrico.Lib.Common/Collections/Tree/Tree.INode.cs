@@ -17,6 +17,18 @@ namespace Atrico.Lib.Common.Collections.Tree
             INode Add(T data);
             INode Add(IEnumerable<T> path);
             INode Insert(T data);
+
+            /// <summary>
+            ///     Perform action on each node in depth first order
+            /// </summary>
+            /// <param name="action">The action to perform</param>
+            void DepthFirst(Action<INode> action);
+
+            /// <summary>
+            ///     Perform action on each node in breadth first order
+            /// </summary>
+            /// <param name="action">The action to perform</param>
+            void BreadthFirst(Action<INode> action);
         }
     }
 }

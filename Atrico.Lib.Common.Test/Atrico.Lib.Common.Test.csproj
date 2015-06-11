@@ -55,6 +55,8 @@
     <Compile Include="Collections\TestCollectionDifferences.cs" />
     <Compile Include="Collections\TestPartitionByExtension.cs" />
     <Compile Include="Collections\TestForeachExtension.cs" />
+    <Compile Include="Collections\Trees\TestBreadthFirst.cs" />
+    <Compile Include="Collections\Trees\TestDepthFirst.cs" />
     <Compile Include="Collections\Trees\TestInsert.cs" />
     <Compile Include="Collections\Trees\TestNoDuplicatesAdd.cs" />
     <Compile Include="Collections\Trees\TestAllowDuplicatesAdd.cs" />
