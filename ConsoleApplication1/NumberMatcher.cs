@@ -28,7 +28,7 @@ namespace ConsoleApplication1
 
             private string CreateRegex()
             {
-                return Digits.Count() == 10 ? @"\d" : new Simplifier(Digits).ToString();
+                return new Simplifier(Digits).ToString();
             }
 
             public override int GetHashCode()
@@ -137,7 +137,7 @@ namespace ConsoleApplication1
                             _regex.AppendFormat("-{0}]", _last);
                             break;
                     }
-                    return _regex.ToString();
+                    return _regex.ToString().Replace("[0-9]", @"\d");
                 }
             }
         }

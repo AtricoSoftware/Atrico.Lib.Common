@@ -73,8 +73,15 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             public void DepthFirst(Action<INode> action)
             {
-                if (!this.IsRoot()) action(this);
-                foreach (var child in _children) child.DepthFirst(action);
+                var remaining = new Stack<INode>();
+                if (this.IsRoot()) _children.Reverse().ForEach(remaining.Push);
+                else remaining.Push(this);
+                while (remaining.Any())
+                {
+                    var node = remaining.Pop();
+                    action(node);
+                    node.Children.Reverse().ForEach(remaining.Push);
+                }
             }
 
             public void BreadthFirst(Action<INode> action)
