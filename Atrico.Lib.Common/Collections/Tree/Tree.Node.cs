@@ -51,17 +51,33 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             public INode Insert(T data)
             {
-                if (!_children.Any())
+                if (this.IsRoot())
                 {
-                    Add(data);
+                    if (!_children.Any())
+                    {
+                        Add(data);
+                    }
+                    else
+                    {
+                        var node = CreateNewNode(data, this, _children);
+                        _children.Clear();
+                        _children.Add(node);
+                    }
+                    return this;
                 }
-                else
+                var newNode = CreateNewNode(data, _parent, new []{this});
+                _parent.ReplaceNode(this, newNode);
+                return newNode;
+            }
+
+            private void ReplaceNode(Node oldNode, Node newNode)
+            {
+                for (var i = 0; i < _children.Count; ++i)
                 {
-                    var node = CreateNewNode(data, this, _children);
-                    _children.Clear();
-                    _children.Add(node);
+                    if (!ReferenceEquals(_children[i], oldNode)) continue;
+                    _children[i] = newNode;
+                    break;
                 }
-                return this;
             }
 
             protected abstract Node CreateNewNode(T data, Node parent, IEnumerable<Node> children);
@@ -83,7 +99,6 @@ namespace Atrico.Lib.Common.Collections.Tree
                 if (children != null)
                 {
                     _children = new List<Node>(children);
-                    // TODO - update parent
                 }
             }
 
