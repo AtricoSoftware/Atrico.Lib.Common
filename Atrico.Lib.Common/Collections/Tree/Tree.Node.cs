@@ -51,10 +51,20 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             public INode Insert(T data)
             {
-                /*if (!_children.Any())*/ return Add(data);
+                if (!_children.Any())
+                {
+                    Add(data);
+                }
+                else
+                {
+                    var node = CreateNewNode(data, this, _children);
+                    _children.Clear();
+                    _children.Add(node);
+                }
+                return this;
             }
 
-            protected abstract INode CreateNewRootNode(IEnumerable<Node> children);
+            protected abstract Node CreateNewNode(T data, Node parent, IEnumerable<Node> children);
 
             internal static INode CreateNode(bool allowDuplicateNodes)
             {
@@ -73,7 +83,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 if (children != null)
                 {
                     _children = new List<Node>(children);
-                    // TODO
+                    // TODO - update parent
                 }
             }
 
@@ -92,22 +102,17 @@ namespace Atrico.Lib.Common.Collections.Tree
             private class NodeAllowDuplicates : Node
             {
                 public NodeAllowDuplicates()
-                    : this(null)
                 {
                 }
 
-                private NodeAllowDuplicates(IEnumerable<Node> children)
+                private NodeAllowDuplicates(T data, Node parent, IEnumerable<Node> children = null)
+                    : base(data, parent, children)
                 {
                 }
 
-                private NodeAllowDuplicates(T data, Node parent)
-                    : base(data, parent)
+                protected override Node CreateNewNode(T data, Node parent, IEnumerable<Node> children)
                 {
-                }
-
-                protected override INode CreateNewRootNode(IEnumerable<Node> children)
-                {
-                    return new NodeAllowDuplicates(children);
+                    return new NodeAllowDuplicates(data, parent, children);
                 }
 
                 protected override INode AddImpl(T data, IList<Node> children)
@@ -121,22 +126,17 @@ namespace Atrico.Lib.Common.Collections.Tree
             private class NodeMergeDuplicates : Node
             {
                 public NodeMergeDuplicates()
-                    : this(null)
                 {
                 }
 
-                private NodeMergeDuplicates(IEnumerable<Node> children)
+                private NodeMergeDuplicates(T data, Node parent, IEnumerable<Node> children = null)
+                    : base(data, parent, children)
                 {
                 }
 
-                private NodeMergeDuplicates(T data, Node parent)
-                    : base(data, parent)
+                protected override Node CreateNewNode(T data, Node parent, IEnumerable<Node> children)
                 {
-                }
-
-                protected override INode CreateNewRootNode(IEnumerable<Node> children)
-                {
-                    return new NodeMergeDuplicates(children);
+                    return new NodeMergeDuplicates(data, parent, children);
                 }
 
                 protected override INode AddImpl(T data, IList<Node> children)

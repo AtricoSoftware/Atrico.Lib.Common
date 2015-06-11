@@ -24,6 +24,8 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var nodes = newTree.GetNodes().ToArray();
             Assert.That(Value.Of(nodes).Count().Is().EqualTo(1), "Node count");
             Assert.That(Value.Of(nodes[0]).Is().EqualTo(new[] {123}), "Node 123");
+            var lines = newTree.ToMultilineString();
+            Assert.That(Value.Of(lines.First()).Is().EqualTo(ConvertAscii(@"~-123")), "Multiline string");
         }
 
         [Test]
@@ -51,7 +53,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             Assert.That(Value.Of(nodes[3]).Is().EqualTo(new[] {0, 1, 12}), "Node 12");
             Assert.That(Value.Of(nodes[4]).Is().EqualTo(new[] {0, 1, 13}), "Node 13");
             Assert.That(Value.Of(nodes[5]).Is().EqualTo(new[] {0, 1}), "Node 1");
-            Assert.That(Value.Of(nodes[6]).Is().EqualTo(new[] {0, 1}), "Node 0");
+            Assert.That(Value.Of(nodes[6]).Is().EqualTo(new[] {0}), "Node 0");
         }
     }
 }
