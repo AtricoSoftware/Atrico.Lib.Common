@@ -14,7 +14,7 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// <typeparam name="T">Type of node data</typeparam>
         /// <param name="node">The node.</param>
         /// <returns>True if node is root of tree</returns>
-        public static bool IsRoot<T>(this Tree<T>.INode node)
+        public static bool IsRoot<T>(this Tree<T>.INodeReadOnly node)
         {
             return node.Parent == null;
         }
@@ -25,7 +25,7 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// <typeparam name="T">Type of node data</typeparam>
         /// <param name="node">The root of tree</param>
         /// <returns>List of paths (list of data)</returns>
-        public static IEnumerable<IEnumerable<T>> GetNodes<T>(this Tree<T>.INode node)
+        public static IEnumerable<IEnumerable<T>> GetNodes<T>(this Tree<T>.INodeReadOnly node)
         {
             return GetNodesImpl(node, true);
         }
@@ -36,12 +36,12 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// <typeparam name="T">Type of node data</typeparam>
         /// <param name="node">The root of tree</param>
         /// <returns>List of paths (list of data)</returns>
-        public static IEnumerable<IEnumerable<T>> GetLeaves<T>(this Tree<T>.INode node)
+        public static IEnumerable<IEnumerable<T>> GetLeaves<T>(this Tree<T>.INodeReadOnly node)
         {
             return GetNodesImpl(node, false);
         }
 
-        private static IEnumerable<IEnumerable<T>> GetNodesImpl<T>(Tree<T>.INode node, bool includeNonTerminal)
+        private static IEnumerable<IEnumerable<T>> GetNodesImpl<T>(Tree<T>.INodeReadOnly node, bool includeNonTerminal)
         {
             var leaves = new List<IEnumerable<T>>();
             foreach (var childLeaves in node.Children.Select(child => GetNodesImpl(child, includeNonTerminal)))

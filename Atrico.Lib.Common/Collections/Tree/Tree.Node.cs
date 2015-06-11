@@ -32,7 +32,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 get { return _parent; }
             }
 
-            public IEnumerable<INode> Children
+            public IEnumerable<INodeReadOnly> Children
             {
                 get { return _children; }
             }
@@ -71,9 +71,9 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return newNode;
             }
 
-            public void DepthFirst(Action<INode> action)
+            public void DepthFirst(Action<INodeReadOnly> action)
             {
-                var remaining = new Stack<INode>();
+                var remaining = new Stack<INodeReadOnly>();
                 if (this.IsRoot()) _children.Reverse().ForEach(remaining.Push);
                 else remaining.Push(this);
                 while (remaining.Any())
@@ -84,9 +84,9 @@ namespace Atrico.Lib.Common.Collections.Tree
                 }
             }
 
-            public void BreadthFirst(Action<INode> action)
+            public void BreadthFirst(Action<INodeReadOnly> action)
             {
-                var remaining = new Queue<INode>();
+                var remaining = new Queue<INodeReadOnly>();
                 if (this.IsRoot()) _children.ForEach(remaining.Enqueue);
                 else remaining.Enqueue(this);
                 while (remaining.Any())
