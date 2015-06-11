@@ -142,7 +142,7 @@ namespace ConsoleApplication1
             }
         }
 
-        private readonly Tree<RegExDigits>.INode _tree = Tree<RegExDigits>.Create(false);
+        private readonly Tree<RegExDigits>.IModifiableNode _tree = Tree<RegExDigits>.Create(false);
         private readonly ResettableCache<string> _regex;
 
         private string CreateRegEx()

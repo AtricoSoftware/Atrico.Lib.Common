@@ -16,7 +16,7 @@ namespace Atrico.Lib.Common.Collections.Tree
         internal const char VerticalLine = '\u2502'; // '|'
         internal const char Space = ' '; // ' '
 
-        private abstract partial class Node : INode
+        private abstract partial class Node : IModifiableNode
         {
             private readonly Node _parent;
             private readonly T _data;
@@ -27,22 +27,22 @@ namespace Atrico.Lib.Common.Collections.Tree
                 get { return _data; }
             }
 
-            public INode Parent
+            public IModifiableNode Parent
             {
                 get { return _parent; }
             }
 
-            public IEnumerable<INodeReadOnly> Children
+            public IEnumerable<INode> Children
             {
                 get { return _children; }
             }
 
-            public INode Add(T data)
+            public IModifiableNode Add(T data)
             {
                 return AddImpl(data, _children);
             }
 
-            public INode Add(IEnumerable<T> path)
+            public IModifiableNode Add(IEnumerable<T> path)
             {
                 var pathArray = path as T[] ?? path.ToArray();
                 if (pathArray.Length == 0) return this;
@@ -50,7 +50,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return node.Add(pathArray.Skip(1));
             }
 
-            public INode Insert(T data)
+            public IModifiableNode Insert(T data)
             {
                 if (this.IsRoot())
                 {
@@ -71,9 +71,9 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return newNode;
             }
 
-            public void DepthFirst(Action<INodeReadOnly> action)
+            public void DepthFirst(Action<INode> action)
             {
-                var remaining = new Stack<INodeReadOnly>();
+                var remaining = new Stack<INode>();
                 if (this.IsRoot()) _children.Reverse().ForEach(remaining.Push);
                 else remaining.Push(this);
                 while (remaining.Any())
@@ -84,9 +84,9 @@ namespace Atrico.Lib.Common.Collections.Tree
                 }
             }
 
-            public void BreadthFirst(Action<INodeReadOnly> action)
+            public void BreadthFirst(Action<INode> action)
             {
-                var remaining = new Queue<INodeReadOnly>();
+                var remaining = new Queue<INode>();
                 if (this.IsRoot()) _children.ForEach(remaining.Enqueue);
                 else remaining.Enqueue(this);
                 while (remaining.Any())
@@ -109,7 +109,7 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             protected abstract Node CreateNewNode(T data, Node parent, IEnumerable<Node> children);
 
-            internal static INode CreateNode(bool allowDuplicateNodes)
+            internal static IModifiableNode CreateNode(bool allowDuplicateNodes)
             {
                 return allowDuplicateNodes ? new NodeAllowDuplicates() : new NodeMergeDuplicates() as Node;
             }
@@ -134,7 +134,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return _data.Equals(other);
             }
 
-            protected abstract INode AddImpl(T data, IList<Node> children);
+            protected abstract IModifiableNode AddImpl(T data, IList<Node> children);
 
             public override string ToString()
             {
@@ -157,7 +157,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                     return new NodeAllowDuplicates(data, parent, children);
                 }
 
-                protected override INode AddImpl(T data, IList<Node> children)
+                protected override IModifiableNode AddImpl(T data, IList<Node> children)
                 {
                     var node = new NodeAllowDuplicates(data, this);
                     children.Add(node);
@@ -181,7 +181,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                     return new NodeMergeDuplicates(data, parent, children);
                 }
 
-                protected override INode AddImpl(T data, IList<Node> children)
+                protected override IModifiableNode AddImpl(T data, IList<Node> children)
                 {
                     var node = children.FirstOrDefault(n => n.Equals(data));
                     if (node != null) return node;

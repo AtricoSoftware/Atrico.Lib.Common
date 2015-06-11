@@ -8,35 +8,33 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// <summary>
         ///     Interface to node
         /// </summary>
-        public interface INodeReadOnly : IEquatable<T>, IMultilineDisplayable
+        public interface INode : IEquatable<T>, IMultilineDisplayable
         {
             T Data { get; }
-            INode Parent { get; }
-            IEnumerable<INodeReadOnly> Children { get; }
+            IModifiableNode Parent { get; }
+            IEnumerable<INode> Children { get; }
 
-           /// <summary>
+            /// <summary>
             ///     Perform action on each node in depth first order
             /// </summary>
             /// <param name="action">The action to perform</param>
-            void DepthFirst(Action<INodeReadOnly> action);
+            void DepthFirst(Action<INode> action);
 
             /// <summary>
             ///     Perform action on each node in breadth first order
             /// </summary>
             /// <param name="action">The action to perform</param>
-            void BreadthFirst(Action<INodeReadOnly> action);
+            void BreadthFirst(Action<INode> action);
         }
 
         /// <summary>
-        ///     Interface to node
+        ///     Interface to node that can be modified
         /// </summary>
-        public interface INode : INodeReadOnly
+        public interface IModifiableNode : INode
         {
-
-            INode Add(T data);
-            INode Add(IEnumerable<T> path);
-            INode Insert(T data);
-
-         }
+            IModifiableNode Add(T data);
+            IModifiableNode Add(IEnumerable<T> path);
+            IModifiableNode Insert(T data);
+        }
     }
 }

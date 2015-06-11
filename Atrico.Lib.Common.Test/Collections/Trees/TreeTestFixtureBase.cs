@@ -21,7 +21,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
                 .Replace(" ", Tree<string>.Space.ToString());
         }
 
-        protected static void Display<T>(Tree<T>.INode tree)
+        protected static void Display<T>(Tree<T>.IModifiableNode tree)
         {
             var lines = tree.ToMultilineString().ToArray();
             foreach (var line in lines) Debug.WriteLine(line);
