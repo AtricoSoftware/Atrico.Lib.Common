@@ -43,7 +43,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
 
             // Assert
             Display(tree);
-            Assert.That(Value.Of(list).Is().EqualTo(new[] {"11", "121", "122", "12", "13", "1"}), "List has entry per node");
+            Assert.That(Value.Of(list).Is().EqualTo(new[] {"1", "11", "12", "121", "122", "13"}), "List has entry per node");
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
 
             // Assert
             Display(tree);
-            Assert.That(Value.Of(list).Is().EqualTo(new[] {"121", "122", "12"}), "List has entry per node");
+            Assert.That(Value.Of(list).Is().EqualTo(new[] {"12", "121", "122"}), "List has entry per node");
         }
     }
 }
