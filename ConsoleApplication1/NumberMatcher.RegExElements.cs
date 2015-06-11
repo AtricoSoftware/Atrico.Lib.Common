@@ -11,38 +11,20 @@ namespace ConsoleApplication1
     {
         private abstract class RegExElement
         {
-            public static RegExElement None()
+            public static RegExElement Create(Tree<char>.INode node)
             {
-                return new RegExNone();
+                // Root node
+                if (node.IsRoot()) return new RegExOr(node.Children.Select(Create));
+                var thisDigit = new RegExDigits(new[]{node.Data});
+                // Leaf
+                if (!node.Children.Any()) return thisDigit;
+                // Non terminal
+                return new RegExAnd(new RegExElement[] {thisDigit, new RegExOr(node.Children.Select(Create))});
             }
 
-            public static RegExElement And(RegExElement lhs, RegExElement rhs)
+            public virtual RegExElement Simplify()
             {
-                if (lhs is RegExNone) return rhs;
-                if (rhs is RegExNone) return lhs;
-                var lhsA = lhs as RegExAnd;
-                var rhsA = rhs as RegExAnd;
-                if (lhsA == null && rhsA == null) return new RegExAnd(new[] {lhs, rhs});
-                var lhsEl = lhsA != null ? lhsA.Elements : new[] {lhs};
-                var rhsEl = rhsA != null ? rhsA.Elements : new[] {rhs};
-                return new RegExAnd(lhsEl.Concat(rhsEl));
-            }
-
-            public static RegExElement Or(RegExElement lhs, RegExElement rhs)
-            {
-                if (lhs is RegExNone) return rhs;
-                if (rhs is RegExNone) return lhs;
-                var lhsO = lhs as RegExOr;
-                var rhsO = rhs as RegExOr;
-                if (lhsO == null && rhsO == null) return new RegExOr(new[] {lhs, rhs});
-                var lhsEl = lhsO != null ? lhsO.Elements : new[] {lhs};
-                var rhsEl = rhsO != null ? rhsO.Elements : new[] {rhs};
-                return new RegExOr(lhsEl.Concat(rhsEl));
-            }
-
-            public static RegExElement Digits(IEnumerable<char> digits)
-            {
-                return new RegExDigits(digits);
+                return this;
             }
 
             public Tree<string>.INode ToTree()
@@ -57,47 +39,50 @@ namespace ConsoleApplication1
                 return container.Add(ToString());
             }
 
-            private class RegExNone : RegExElement
-            {
-                public override int GetHashCode()
-                {
-                    return 0;
-                }
-
-                public override bool Equals(object obj)
-                {
-                    return obj is RegExNone;
-                }
-
-                public override string ToString()
-                {
-                    return "None";
-                }
-            }
-
             private abstract class RegExComposite : RegExElement
             {
                 internal readonly IEnumerable<RegExElement> Elements;
 
                 protected RegExComposite(IEnumerable<RegExElement> elements)
                 {
-                    Elements = elements;
+                    Elements = elements.Where(el => el != null);
                 }
 
-            protected override Tree<string>.INode AddNodeToTree(Tree<string>.INode container)
-            {
-                var node = container.Add(new EverythingAfter(GetType().Name, "RegEx").ToString());
-                foreach (var element in Elements)
+                protected override Tree<string>.INode AddNodeToTree(Tree<string>.INode container)
                 {
-                    element.AddNodeToTree(node);
+                    var node = container.Add(new EverythingAfter(GetType().Name, "RegEx").ToString());
+                    foreach (var element in Elements)
+                    {
+                        element.AddNodeToTree(node);
+                    }
+                    return node;
                 }
-                return node;
-            }
+
+                public override RegExElement Simplify()
+                {
+                    // Simplify all children
+                    var simplifiedComp = Create(Elements.Select(el => el.Simplify()));
+                    // Merge same operator
+                    var simplified = MergeSameOperator(simplifiedComp);
+                    simplifiedComp = simplified as RegExComposite;
+                    if (simplifiedComp == null) return simplified;
+                    // Remove composite for single child
+                    return simplifiedComp.Elements.Count() == 1 ? simplifiedComp.Elements.First() : simplified;
+                }
+
+                private RegExElement MergeSameOperator(RegExComposite simplified)
+                {
+                    var thisType = simplified.GetType();
+                    if (simplified.Elements.Any(el => el.GetType() != thisType)) return simplified;
+                    return Create(simplified.Elements.Cast<RegExComposite>().SelectMany(comp=>comp.Elements));
+                }
 
                 public override int GetHashCode()
                 {
                     return Elements.Aggregate(0, (current, item) => current ^ item.GetHashCode());
                 }
+
+                protected abstract RegExComposite Create(IEnumerable<RegExElement> elements);
 
                 protected bool EqualsImpl(RegExComposite other)
                 {
@@ -117,17 +102,16 @@ namespace ConsoleApplication1
 
                 public override string ToString()
                 {
-                    var andDigits = this is RegExAnd && Elements.All(el => el is RegExDigits);
                     var text = new StringBuilder();
-                    if (!andDigits) text.Append("(?:");
+                    text.Append("(");
                     var first = true;
-                    foreach (var element in Elements)
+                    foreach (var el in Elements)
                     {
                         if (!first) text.Append(Separator);
                         else first = false;
-                        text.Append(element);
+                        text.Append(el);
                     }
-                    if (!andDigits) text.Append(')');
+                    text.Append(")");
                     return text.ToString();
                 }
 
@@ -139,6 +123,11 @@ namespace ConsoleApplication1
                 public RegExAnd(IEnumerable<RegExElement> elements)
                     : base(elements)
                 {
+                }
+
+                protected override RegExComposite Create(IEnumerable<RegExElement> elements)
+                {
+                    return new RegExAnd(elements);
                 }
 
                 public override int GetHashCode()
@@ -153,7 +142,7 @@ namespace ConsoleApplication1
 
                 protected override string Separator
                 {
-                    get { return ""; }
+                    get { return " & "; }
                 }
             }
 
@@ -162,6 +151,66 @@ namespace ConsoleApplication1
                 public RegExOr(IEnumerable<RegExElement> elements)
                     : base(elements)
                 {
+                }
+
+                public override RegExElement Simplify()
+                {
+                    var simplified = base.Simplify();
+                    var or = simplified as RegExOr;
+                    if (or == null) return simplified;
+                    // Merge digits
+                    var digits = or.Elements.Where(dg => dg is RegExDigits).Cast<RegExDigits>().ToArray();
+                    if (digits.Count() > 1) return new RegExOr(or.Elements.Where(dg => !(dg is RegExDigits)).Concat(new[] {new RegExDigits(digits.SelectMany(dg => dg.Digits))})).Simplify();
+                    // (A & B) | (A & C) => A & (B | C)                   
+                    simplified = MergeOrAnds(or);
+                    return simplified;
+                }
+
+                // (A & B) | (A & C) => A & (B | C)                   
+                private static RegExElement MergeOrAnds(RegExComposite or)
+                {
+                    var elements = or.Elements.ToArray();
+                    var changes = false;
+                    bool changesLoop;
+                    do
+                    {
+                        changesLoop = false;
+                        for (var i = 0;!changesLoop && i < elements.Length; ++i)
+                        {
+                            var and1 = elements[i] as RegExAnd;
+                            if (and1 != null)
+                            {
+                                var elements1 = and1.Elements.ToArray();
+                                for (var j = i + 1; j < elements.Length; ++j)
+                                {
+                                    var and2 = elements[j] as RegExAnd;
+                                    if (and2 != null)
+                                    {
+                                        var elements2 = and2.Elements.ToArray();
+                                        if (elements1.Length == elements2.Length)
+                                        {
+                                            var compare = elements1.Zip(elements2, (el1, el2) => el1.Equals(el2)).ToArray();
+                                            if (compare.Count(v => !v) == 1)
+                                            {
+                                                changes = changesLoop = true;
+                                                var newElements = compare.Select((val, idx) => val ? elements1[idx] : new RegExOr(new[] {elements1[idx], elements2[idx]})).ToArray();
+                                                elements[i] = new RegExAnd(newElements);
+                                                elements[j] = null;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } while (changesLoop);
+
+                    return changes ? new RegExOr(elements).Simplify() : or;
+                }
+
+                protected override RegExComposite Create(IEnumerable<RegExElement> elements)
+                {
+                    return new RegExOr(elements);
                 }
 
                 public override int GetHashCode()
@@ -182,31 +231,31 @@ namespace ConsoleApplication1
 
             private class RegExDigits : RegExElement
             {
-                private readonly IEnumerable<char> _digits;
+                public IEnumerable<char> Digits { get; private set; }
                 private readonly Lazy<string> _regex;
 
                 public RegExDigits(IEnumerable<char> digits)
                 {
-                    _digits = digits.Distinct().OrderBy(ch => ch);
+                    Digits = digits.Distinct().OrderBy(ch => ch);
                     _regex = new Lazy<string>(CreateRegex);
                 }
 
                 private string CreateRegex()
                 {
-                    return _digits.Count() == 10 ? @"\d" : new Simplifier(_digits).ToString();
+                    return Digits.Count() == 10 ? @"\d" : new Simplifier(Digits).ToString();
                 }
 
                 public override int GetHashCode()
                 {
-                    return _digits.Aggregate(0, (current, ch) => current ^ ch.GetHashCode());
+                    return Digits.Aggregate(0, (current, ch) => current ^ ch.GetHashCode());
                 }
 
                 public override bool Equals(object obj)
                 {
                     var other = obj as RegExDigits;
                     if (other == null) return false;
-                    var thisEn = _digits.GetEnumerator();
-                    var otherEn = other._digits.GetEnumerator();
+                    var thisEn = Digits.GetEnumerator();
+                    var otherEn = other.Digits.GetEnumerator();
                     var more = false;
                     do
                     {
@@ -306,6 +355,7 @@ namespace ConsoleApplication1
                     }
                 }
             }
-        }
+
+         }
     }
 }

@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NumberMatcher.DigitMatcher.cs" />
     <Compile Include="NumberMatcher.RegExElements.cs" />
     <Compile Include="NumberMatcher.cs" />
     <Compile Include="Program.cs" />

@@ -14,18 +14,15 @@ namespace ConsoleApplication1
 
         private string CreateRegEx()
         {
-            //var regex = _tree.GetRegex();
-            //var tree = regex.ToTree();
-            //foreach (var line in tree.ToMultilineString())
-            //{
-            //    Console.WriteLine(line);
-            //}
-            //Console.WriteLine();
-            //return regex.ToString();
-            return "";
+            var regex = RegExElement.Create(_tree).Simplify();
+            var tree = regex.ToTree();
+            foreach (var line in tree.ToMultilineString())
+            {
+                Console.WriteLine(line);
+            }
+            Console.WriteLine();
+            return regex.ToString();
         }
-
-        private int _digits = 1;
 
         public NumberMatcher()
         {
@@ -43,18 +40,9 @@ namespace ConsoleApplication1
             return this;
         }
 
-        private IEnumerable<char> GetDigits(uint u)
+        private static IEnumerable<char> GetDigits(uint u)
         {
-            var digits = u.ToString("D").ToCharArray().ToList();
-            // Pad if too small
-            while (digits.Count < _digits) digits.Insert(0, '0');
-            // Pad tree if too big
-            while (digits.Count > _digits)
-            {
-                _tree.Insert('0');
-                ++_digits;
-            }
-            return digits;
+            return u.ToString("D").ToCharArray().ToList();
         }
 
         public string GetRegex()
