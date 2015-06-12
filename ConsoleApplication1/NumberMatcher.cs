@@ -24,7 +24,8 @@ namespace ConsoleApplication1
             }
             Console.WriteLine();
             // TODO - end
-            return TreeToRegex(mergedTree);
+            var regex = RegExElement.Create(mergedTree);
+            return regex.ToString();
         }
 
         private static Tree<RegExDigits>.INode MergeDigits(Tree<RegExDigits>.IModifiableNode node)
@@ -46,25 +47,6 @@ namespace ConsoleApplication1
             }
 
             return node;
-        }
-
-        private static string TreeToRegex(Tree<RegExDigits>.INode node)
-        {
-            var text = new StringBuilder();
-            if (!node.IsRoot()) text.Append(node.Data);
-            if (node.Children.Count() == 1) text.Append(TreeToRegex(node.Children.First()));
-            else if (node.Children.Count() > 1)
-            {
-                var first = true;
-                foreach (var child in node.Children)
-                {
-                    text.Append(first ? "(?:" : " | ");
-                    first = false;
-                    text.Append(TreeToRegex(child));
-                }
-                text.Append(')');
-            }
-            return text.ToString();
         }
 
         public NumberMatcher()
