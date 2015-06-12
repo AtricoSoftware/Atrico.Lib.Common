@@ -91,7 +91,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                             break;
                     }
                     line.Append(Dash);
-                    line.Append(_data);
+                    line.Append(Data);
                     lines.Add(line.ToString());
                 }
                 for (; child < _children.Count(); ++child)

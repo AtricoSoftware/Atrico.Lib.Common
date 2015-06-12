@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EquatableObject.cs" />
     <Compile Include="Collections\CollectionDifferences.cs" />
     <Compile Include="Collections\CollectionDifferencesEqual.cs" />
     <Compile Include="Collections\CollectionDifferencesError.cs" />

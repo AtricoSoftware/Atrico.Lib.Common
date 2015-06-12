@@ -10,14 +10,24 @@ namespace Atrico.Lib.Common.Collections.Tree
     public static class Tree
     {
         /// <summary>
-        ///     Determines whether this instance is root
+        ///     Determines whether this node is root
         /// </summary>
         /// <typeparam name="T">Type of node data</typeparam>
-        /// <param name="node">The node.</param>
+        /// <param name="node">The node</param>
         /// <returns>True if node is root of tree</returns>
         public static bool IsRoot<T>(this Tree<T>.INode node)
         {
             return node.Parent == null;
+        }
+       /// <summary>
+        ///     Determines whether this node is leaf (terminal node)
+        /// </summary>
+        /// <typeparam name="T">Type of node data</typeparam>
+        /// <param name="node">The node</param>
+        /// <returns>True if node is terminal (has no children)</returns>
+        public static bool IsLeaf<T>(this Tree<T>.INode node)
+        {
+            return !node.Children.Any();
         }
 
         /// <summary>
@@ -42,18 +52,7 @@ namespace Atrico.Lib.Common.Collections.Tree
             return GetNodesImpl(node, false);
         }
 
-        /// <summary>
-        /// Transforms the specified node and all children
-        /// </summary>
-        /// <typeparam name="T">Type of node data</typeparam>
-        /// <param name="node">The node to transform</param>
-        /// <param name="transform">The transform</param>
-        /// <returns>New tree</returns>
-        public static Tree<T>.INode Transform<T>(this Tree<T>.INode node, Func<Tree<T>.INode, Tree<T>.INode> transform)
-        {
-            return transform(node.Clone());
-        }
-
+ 
         private static IEnumerable<IEnumerable<T>> GetNodesImpl<T>(Tree<T>.INode node, bool includeNonTerminal)
         {
             var leaves = new List<IEnumerable<T>>();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Atrico.Lib.DomainModel;
 
 namespace Atrico.Lib.Common.Collections.Tree
 {
@@ -17,17 +16,13 @@ namespace Atrico.Lib.Common.Collections.Tree
         internal const char VerticalLine = '\u2502'; // '|'
         internal const char Space = ' '; // ' '
 
-        private partial class Node : ValueObject<Node>, IModifiableNode
+        private partial class Node : EquatableObject<Node>, IModifiableNode
         {
             private readonly bool _allowDuplicateNodes;
             private readonly Node _parent;
-            private readonly T _data;
             private readonly IList<Node> _children;
 
-            public T Data
-            {
-                get { return _data; }
-            }
+            public T Data { get; private set; }
 
             public IModifiableNode Parent
             {
@@ -49,19 +44,23 @@ namespace Atrico.Lib.Common.Collections.Tree
             private Node(bool allowDuplicateNodes, T data, Node parent, IEnumerable<Node> children = null)
             {
                 _allowDuplicateNodes = allowDuplicateNodes;
-                _data = data;
+                Data = data;
                 _parent = parent;
                 _children = new List<Node>(children ?? new Node[] {});
             }
 
-            public IModifiableNode Clone()
+            #endregion
+
+            #region Clone
+
+            IModifiableNode INode.Clone(bool deep)
             {
-                return CloneNode();
+                return CloneNode(newChildren:(deep?null : _children));
             }
 
             private Node CloneNode(Node newParent = null, IEnumerable<Node> newChildren = null)
             {
-                return CloneNode(_data, newParent, newChildren);
+                return CloneNode(Data, newParent, newChildren);
             }
 
             private Node CloneNode(T newData, Node newParent = null, IEnumerable<Node> newChildren = null)
@@ -72,6 +71,12 @@ namespace Atrico.Lib.Common.Collections.Tree
             #endregion
 
             #region Modify
+
+            T IModifiableNode.Data
+            {
+                get { return Data; }
+                set { if (!this.IsRoot()) Data = value; }
+            }
 
             public IModifiableNode Add(T data)
             {
@@ -107,6 +112,12 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return newNode;
             }
 
+            public void Remove(T data)
+            {
+                var found = _children.FirstOrDefault(n => n.Data.Equals(data));
+                if (found != null) _children.Remove(found);
+            }
+
             #endregion
 
             #region Traversal
@@ -137,6 +148,15 @@ namespace Atrico.Lib.Common.Collections.Tree
                 }
             }
 
+            public INode Transform(Func<IModifiableNode, INode> transform)
+            {
+                // Transform children
+                var newChildren = _children.Select(ch => ch.Transform(transform)).Cast<Node>();
+                // Clone this node with new children
+                var newNode = CloneNode(newChildren:newChildren);
+                return transform(newNode);
+            }
+
             #endregion
 
             private void ReplaceNode(Node oldNode, Node newNode)
@@ -153,24 +173,24 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             protected override int GetHashCodeImpl()
             {
-                return _data.GetHashCode() ^ _children.GetHashCode();
+                return Data.GetHashCode() ^ _children.GetHashCode();
             }
 
             protected override bool EqualsImpl(Node other)
             {
-                return Equals(other._data) && _children.SequenceEqual(other._children);
+                return Equals(other.Data) && _children.SequenceEqual(other._children);
             }
 
             public bool Equals(T otherData)
             {
-                return _data.Equals(otherData);
+                return Data.Equals(otherData);
             }
 
             #endregion
 
             public override string ToString()
             {
-                return string.Format("{0}:{1}", this.IsRoot() ? "" : _data.ToString(), _children.ToCollectionString());
+                return string.Format("{0}:{1}", this.IsRoot() ? "" : Data.ToString(), _children.ToCollectionString());
             }
         }
     }
