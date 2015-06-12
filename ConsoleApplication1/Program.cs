@@ -17,8 +17,8 @@ namespace ConsoleApplication1
         {
             var nm = new NumberMatcher();
             //nm.AddRange(9, 11);
-            nm.AddRange(1, 31);
-            //nm.AddRange(123, 321);
+            //nm.AddRange(1, 31);
+            nm.AddRange(123, 321);
             //nm.AddRange(123, 199);
             //nm.AddRange(100, 399);
             Display("Tree", nm.ToMultilineString());

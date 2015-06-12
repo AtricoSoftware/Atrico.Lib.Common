@@ -171,8 +171,10 @@ namespace ConsoleApplication1
 
         private static Tree<RegExDigits>.INode MergeDigits(Tree<RegExDigits>.IModifiableNode node)
         {
-            if (node.IsRoot() || node.IsLeaf()) return node;
-            var leaves = node.GetLeaves().Select(l=>l.Skip(1));
+            if (node.IsLeaf()) return node;
+            var leaves = node.GetLeaves().Where(l=>l.Any());
+            if (!node.IsRoot()) leaves = leaves.Select(l => l.Skip(1));
+           
             var leafGroups = leaves.GroupBy(n => n.Skip(1), n => n.First(), new ListSequenceEqualityComparer<RegExDigits>());
             foreach (var group in leafGroups)
             {
