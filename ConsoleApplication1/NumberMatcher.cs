@@ -8,15 +8,20 @@ using Atrico.Lib.Common.ResettableCache;
 
 namespace ConsoleApplication1
 {
-    public partial class NumberMatcher : IMultilineDisplayable
+    public class NumberMatcher : IMultilineDisplayable
     {
         private class RegExDigits
         {
             public IEnumerable<char> Digits { get; private set; }
             private readonly Lazy<string> _regex;
 
+            public RegExDigits()
+                : this(new char[] {})
+            {
+            }
+
             public RegExDigits(char digit)
-                : this(new[]{digit})
+                : this(new[] {digit})
             {
             }
 
@@ -24,6 +29,11 @@ namespace ConsoleApplication1
             {
                 Digits = digits.Distinct().OrderBy(ch => ch);
                 _regex = new Lazy<string>(CreateRegex);
+            }
+
+            public RegExDigits Merge(RegExDigits rhs)
+            {
+                return new RegExDigits(Digits.Concat(rhs.Digits));
             }
 
             private string CreateRegex()
@@ -147,12 +157,35 @@ namespace ConsoleApplication1
 
         private string CreateRegEx()
         {
-             foreach (var line in _tree.ToMultilineString())
+            var mergeTree = _tree.Transform(MergeDigits);
+            // TODO - start
+            Console.WriteLine("RegEx");
+            foreach (var line in mergeTree.ToMultilineString())
             {
                 Console.WriteLine(line);
             }
             Console.WriteLine();
-            return "";
+            // TODO - end
+            return mergeTree.ToString();
+        }
+
+        private static Tree<RegExDigits>.INode MergeDigits(Tree<RegExDigits>.IModifiableNode node)
+        {
+            if (node.IsRoot() || node.IsLeaf()) return node;
+            var leaves = node.GetLeaves().Select(l=>l.Skip(1));
+            var leafGroups = leaves.GroupBy(n => n.Skip(1), n => n.First(), new ListSequenceEqualityComparer<RegExDigits>());
+            foreach (var group in leafGroups)
+            {
+                var digits = new RegExDigits();
+                foreach (var item in group)
+                {
+                    digits = digits.Merge(item);
+                    node.Remove(item);
+                }
+               node.Add(new[] {digits}.Concat(group.Key));
+            }
+
+            return node;
         }
 
         public NumberMatcher()
@@ -165,7 +198,7 @@ namespace ConsoleApplication1
             for (var i = from; i <= to; ++i)
             {
                 var digits = GetDigits(i);
-                _tree.Add(digits.Select(dg=>new RegExDigits(dg)));
+                _tree.Add(digits.Select(dg => new RegExDigits(dg)));
             }
             _regex.Reset();
             return this;
