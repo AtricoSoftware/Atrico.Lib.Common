@@ -16,8 +16,8 @@ namespace ConsoleApplication1
         private static void Main(string[] args)
         {
             var nm = new NumberMatcher();
-            //nm.AddRange(9, 11);
-            //nm.AddRange(1, 31);
+            nm.AddRange(9, 11);
+            nm.AddRange(1, 31);
             nm.AddRange(123, 321);
             //nm.AddRange(123, 199);
             //nm.AddRange(100, 399);
