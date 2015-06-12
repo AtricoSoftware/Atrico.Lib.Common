@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Atrico.Lib.DomainModel;
 
 namespace Atrico.Lib.Common.Collections.Tree
 {
@@ -16,11 +17,12 @@ namespace Atrico.Lib.Common.Collections.Tree
         internal const char VerticalLine = '\u2502'; // '|'
         internal const char Space = ' '; // ' '
 
-        private abstract partial class Node : IModifiableNode
+        private partial class Node : ValueObject<Node>, IModifiableNode
         {
+            private readonly bool _allowDuplicateNodes;
             private readonly Node _parent;
             private readonly T _data;
-            private readonly IList<Node> _children = new List<Node>();
+            private readonly IList<Node> _children;
 
             public T Data
             {
@@ -37,9 +39,50 @@ namespace Atrico.Lib.Common.Collections.Tree
                 get { return _children; }
             }
 
+            #region Construction
+
+            internal Node(bool allowDuplicateNodes)
+                : this(allowDuplicateNodes, default(T), null)
+            {
+            }
+
+            private Node(bool allowDuplicateNodes, T data, Node parent, IEnumerable<Node> children = null)
+            {
+                _allowDuplicateNodes = allowDuplicateNodes;
+                _data = data;
+                _parent = parent;
+                _children = new List<Node>(children ?? new Node[] {});
+            }
+
+            public IModifiableNode Clone()
+            {
+                return CloneNode();
+            }
+
+            private Node CloneNode(Node newParent = null, IEnumerable<Node> newChildren = null)
+            {
+                return CloneNode(_data, newParent, newChildren);
+            }
+
+            private Node CloneNode(T newData, Node newParent = null, IEnumerable<Node> newChildren = null)
+            {
+                return new Node(_allowDuplicateNodes, newData, newParent ?? _parent, newChildren ?? _children.Select(ch => ch.CloneNode()));
+            }
+
+            #endregion
+
+            #region Modify
+
             public IModifiableNode Add(T data)
             {
-                return AddImpl(data, _children);
+                if (!_allowDuplicateNodes)
+                {
+                    var existing = _children.FirstOrDefault(n => n.Equals(data));
+                    if (existing != null) return existing;
+                }
+                var node = CloneNode(data, this, new Node[] {});
+                _children.Add(node);
+                return node;
             }
 
             public IModifiableNode Add(IEnumerable<T> path)
@@ -54,22 +97,19 @@ namespace Atrico.Lib.Common.Collections.Tree
             {
                 if (this.IsRoot())
                 {
-                    if (!_children.Any())
-                    {
-                        Add(data);
-                    }
-                    else
-                    {
-                        var node = CreateNewNode(data, this, _children);
-                        _children.Clear();
-                        _children.Add(node);
-                    }
+                    var node = CloneNode(data, this);
+                    _children.Clear();
+                    _children.Add(node);
                     return this;
                 }
-                var newNode = CreateNewNode(data, _parent, new[] {this});
+                var newNode = CloneNode(data, newChildren: new[] {this});
                 _parent.ReplaceNode(this, newNode);
                 return newNode;
             }
+
+            #endregion
+
+            #region Traversal
 
             public void DepthFirst(Action<INode> action)
             {
@@ -97,6 +137,8 @@ namespace Atrico.Lib.Common.Collections.Tree
                 }
             }
 
+            #endregion
+
             private void ReplaceNode(Node oldNode, Node newNode)
             {
                 for (var i = 0; i < _children.Count; ++i)
@@ -107,88 +149,28 @@ namespace Atrico.Lib.Common.Collections.Tree
                 }
             }
 
-            protected abstract Node CreateNewNode(T data, Node parent, IEnumerable<Node> children);
+            #region Equality
 
-            internal static IModifiableNode CreateNode(bool allowDuplicateNodes)
+            protected override int GetHashCodeImpl()
             {
-                return allowDuplicateNodes ? new NodeAllowDuplicates() : new NodeMergeDuplicates() as Node;
+                return _data.GetHashCode() ^ _children.GetHashCode();
             }
 
-            protected Node(IEnumerable<Node> children = null)
-                : this(default(T), null, children)
+            protected override bool EqualsImpl(Node other)
             {
+                return Equals(other._data) && _children.SequenceEqual(other._children);
             }
 
-            private Node(T data, Node parent, IEnumerable<Node> children = null)
+            public bool Equals(T otherData)
             {
-                _data = data;
-                _parent = parent;
-                if (children != null)
-                {
-                    _children = new List<Node>(children);
-                }
+                return _data.Equals(otherData);
             }
 
-            public bool Equals(T other)
-            {
-                return _data.Equals(other);
-            }
-
-            protected abstract IModifiableNode AddImpl(T data, IList<Node> children);
+            #endregion
 
             public override string ToString()
             {
                 return string.Format("{0}:{1}", this.IsRoot() ? "" : _data.ToString(), _children.ToCollectionString());
-            }
-
-            private class NodeAllowDuplicates : Node
-            {
-                public NodeAllowDuplicates()
-                {
-                }
-
-                private NodeAllowDuplicates(T data, Node parent, IEnumerable<Node> children = null)
-                    : base(data, parent, children)
-                {
-                }
-
-                protected override Node CreateNewNode(T data, Node parent, IEnumerable<Node> children)
-                {
-                    return new NodeAllowDuplicates(data, parent, children);
-                }
-
-                protected override IModifiableNode AddImpl(T data, IList<Node> children)
-                {
-                    var node = new NodeAllowDuplicates(data, this);
-                    children.Add(node);
-                    return node;
-                }
-            }
-
-            private class NodeMergeDuplicates : Node
-            {
-                public NodeMergeDuplicates()
-                {
-                }
-
-                private NodeMergeDuplicates(T data, Node parent, IEnumerable<Node> children = null)
-                    : base(data, parent, children)
-                {
-                }
-
-                protected override Node CreateNewNode(T data, Node parent, IEnumerable<Node> children)
-                {
-                    return new NodeMergeDuplicates(data, parent, children);
-                }
-
-                protected override IModifiableNode AddImpl(T data, IList<Node> children)
-                {
-                    var node = children.FirstOrDefault(n => n.Equals(data));
-                    if (node != null) return node;
-                    node = new NodeMergeDuplicates(data, this);
-                    children.Add(node);
-                    return node;
-                }
             }
         }
     }

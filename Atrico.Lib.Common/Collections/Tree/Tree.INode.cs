@@ -15,6 +15,12 @@ namespace Atrico.Lib.Common.Collections.Tree
             IEnumerable<INode> Children { get; }
 
             /// <summary>
+            /// Clones this instance and makes modifiable
+            /// </summary>
+            /// <returns>Copy of node</returns>
+            IModifiableNode Clone();
+
+            /// <summary>
             ///     Perform action on each node in depth first order
             /// </summary>
             /// <param name="action">The action to perform</param>

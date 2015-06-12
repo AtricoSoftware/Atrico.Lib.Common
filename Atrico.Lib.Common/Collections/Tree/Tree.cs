@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Atrico.Lib.Common.Collections.Tree
@@ -41,6 +42,18 @@ namespace Atrico.Lib.Common.Collections.Tree
             return GetNodesImpl(node, false);
         }
 
+        /// <summary>
+        /// Transforms the specified node and all children
+        /// </summary>
+        /// <typeparam name="T">Type of node data</typeparam>
+        /// <param name="node">The node to transform</param>
+        /// <param name="transform">The transform</param>
+        /// <returns>New tree</returns>
+        public static Tree<T>.INode Transform<T>(this Tree<T>.INode node, Func<Tree<T>.INode, Tree<T>.INode> transform)
+        {
+            return transform(node.Clone());
+        }
+
         private static IEnumerable<IEnumerable<T>> GetNodesImpl<T>(Tree<T>.INode node, bool includeNonTerminal)
         {
             var leaves = new List<IEnumerable<T>>();
@@ -65,7 +78,7 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// <returns>Rootnode of new tree</returns>
         public static IModifiableNode Create(bool allowDuplicateNodes)
         {
-            return Node.CreateNode(allowDuplicateNodes);
+            return new Node(allowDuplicateNodes);
         }
     }
 }

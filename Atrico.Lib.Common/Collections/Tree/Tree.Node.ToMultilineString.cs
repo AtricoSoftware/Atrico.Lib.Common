@@ -7,7 +7,7 @@ namespace Atrico.Lib.Common.Collections.Tree
 {
     public partial class Tree<T>
     {
-        private abstract partial class Node
+        private partial class Node
         {
             public IEnumerable<string> ToMultilineString()
             {
