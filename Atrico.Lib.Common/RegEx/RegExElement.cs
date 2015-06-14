@@ -12,14 +12,14 @@ namespace Atrico.Lib.Common.RegEx
         /// </summary>
         /// <param name="ch">The character</param>
         /// <returns>New element</returns>
-        public static RegExElement Create(char ch)
+        public static RegExElement Create(params char[] chars)
         {
-            return new RegExChars(ch);
+            return new RegExChars(chars);
         }
 
         private class RegExChars : RegExElement
         {
-            private readonly IEnumerable<char> _digits;
+            private readonly IEnumerable<char> _characters;
             private readonly Lazy<string> _regex;
 
             public RegExChars()
@@ -27,30 +27,30 @@ namespace Atrico.Lib.Common.RegEx
             {
             }
 
-            public RegExChars(char digit)
-                : this(new[] {digit})
+            public RegExChars(char character)
+                : this(new[] {character})
             {
             }
 
-            private RegExChars(IEnumerable<char> digits)
+            public RegExChars(IEnumerable<char> characters)
             {
-                _digits = digits.Distinct().OrderBy(ch => ch);
+                _characters = characters.Distinct().OrderBy(ch => ch);
                 _regex = new Lazy<string>(CreateRegex);
             }
 
             public RegExChars Merge(RegExChars rhs)
             {
-                return new RegExChars(_digits.Concat(rhs._digits));
+                return new RegExChars(_characters.Concat(rhs._characters));
             }
 
             private string CreateRegex()
             {
-                return new Simplifier(_digits).ToString();
+                return new Simplifier(_characters).ToString();
             }
 
             public override int GetHashCode()
             {
-                return _digits.Aggregate(0, (current, ch) => current ^ ch.GetHashCode());
+                return _characters.Aggregate(0, (current, ch) => current ^ ch.GetHashCode());
             }
 
             public override bool Equals(object obj)
@@ -60,8 +60,8 @@ namespace Atrico.Lib.Common.RegEx
                 {
                     return false;
                 }
-                var thisEn = _digits.GetEnumerator();
-                var otherEn = other._digits.GetEnumerator();
+                var thisEn = _characters.GetEnumerator();
+                var otherEn = other._characters.GetEnumerator();
                 var more = false;
                 do
                 {
@@ -170,7 +170,7 @@ namespace Atrico.Lib.Common.RegEx
                             break;
                     }
                     var regex = _regex.ToString();
-                    // Final simplfication
+                    // Final simplfication - TODO other chars, not just digits
                     if (regex == "[0-9]")
                     {
                         return @"\d";

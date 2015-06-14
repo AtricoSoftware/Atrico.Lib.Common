@@ -4,7 +4,6 @@ using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Testing;
 using Atrico.Lib.Testing.NUnitAttributes;
-using Range = NUnit.Framework.RangeAttribute;
 
 namespace Atrico.Lib.Common.Test.RegEx
 {

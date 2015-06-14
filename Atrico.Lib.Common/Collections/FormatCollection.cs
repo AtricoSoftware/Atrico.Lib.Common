@@ -6,6 +6,15 @@ namespace Atrico.Lib.Common.Collections
 {
     public static class FormatCollection
     {
+        public static string ToCollectionString(this IEnumerable collection, string braces, bool bracesIfEmpty = true)
+        {
+            return ToCollectionString(collection, null, braces, bracesIfEmpty);
+        }
+       public static string ToCollectionString(this IEnumerable collection, ISet<object> highlight, string braces, bool bracesIfEmpty = true)
+        {
+            return ToCollectionString(collection, highlight, braces.Substring(0, 1), braces.Substring(1, 1), ",", bracesIfEmpty);
+        }
+
         public static string ToCollectionString(this IEnumerable collection, string openBrace = "[", string closeBrace = "]", string separator = ",", bool bracesIfEmpty = true)
         {
             return ToCollectionString(collection, null, openBrace, closeBrace, separator, bracesIfEmpty);
