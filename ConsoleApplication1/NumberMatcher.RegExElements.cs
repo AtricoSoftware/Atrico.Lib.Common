@@ -1,58 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Atrico.Lib.Common.Collections;
 using Atrico.Lib.Common.Collections.Tree;
 
 namespace ConsoleApplication1
 {
-    public static class FormatCollection2
-    {
-        public static string ToCollectionString(this IEnumerable collection, string openBrace = "[", string closeBrace = "]", string separator = ",", bool bracesIfEmpty = true)
-        {
-            return ToCollectionString(collection, null, openBrace, closeBrace, separator, bracesIfEmpty);
-        }
-
-        public static string ToCollectionString(this IEnumerable collection, ISet<object> highlight, string openBrace = "[", string closeBrace = "]", string separator = ",", bool bracesIfEmpty = true)
-        {
-            var first = true;
-            var text = new StringBuilder();
-            foreach (var item in collection)
-            {
-                if (!first)
-                {
-                    text.Append(separator);
-                }
-                else
-                {
-                    first = false;
-                }
-
-                if (highlight != null && highlight.Contains(item))
-                {
-                    text.AppendFormat("*{0}*", item);
-                }
-                else
-                {
-                    text.Append(item);
-                }
-            }
-            if (bracesIfEmpty || text.Length > 0)
-            {
-                if (!string.IsNullOrEmpty(openBrace))
-                {
-                    text.Insert(0, openBrace);
-                }
-                if (!string.IsNullOrEmpty(closeBrace))
-                {
-                    text.Append(closeBrace);
-                }
-            }
-            return text.ToString();
-        }
-    }
-
     public partial class NumberMatcher
     {
         private abstract class RegExElement
@@ -61,8 +15,14 @@ namespace ConsoleApplication1
             {
                 RegExElement element = null;
                 var children = node.Children.Select(Create).ToArray();
-                if (children.Any()) element = RegExOr.Create(children);
-                if (!node.IsRoot()) element = RegExAnd.Create(node.Data, element);
+                if (children.Any())
+                {
+                    element = RegExOr.Create(children);
+                }
+                if (!node.IsRoot())
+                {
+                    element = RegExAnd.Create(node.Data, element);
+                }
                 return element;
             }
 
@@ -113,16 +73,28 @@ namespace ConsoleApplication1
             public override bool Equals(object obj)
             {
                 var other = obj as RegExDigits;
-                if (other == null) return false;
+                if (other == null)
+                {
+                    return false;
+                }
                 var thisEn = _digits.GetEnumerator();
                 var otherEn = other._digits.GetEnumerator();
                 var more = false;
                 do
                 {
                     more = thisEn.MoveNext();
-                    if (otherEn.MoveNext() != more) return false;
-                    if (!more) continue;
-                    if (thisEn.Current != otherEn.Current) return false;
+                    if (otherEn.MoveNext() != more)
+                    {
+                        return false;
+                    }
+                    if (!more)
+                    {
+                        continue;
+                    }
+                    if (thisEn.Current != otherEn.Current)
+                    {
+                        return false;
+                    }
                 } while (more);
                 return true;
             }
@@ -149,7 +121,10 @@ namespace ConsoleApplication1
 
                 public Simplifier(IEnumerable<char> chars)
                 {
-                    foreach (var ch in chars) AddChar(ch);
+                    foreach (var ch in chars)
+                    {
+                        AddChar(ch);
+                    }
                 }
 
                 private void AddChar(char ch)
@@ -213,8 +188,14 @@ namespace ConsoleApplication1
                     }
                     var regex = _regex.ToString();
                     // Final simplfication
-                    if (regex == "[0-9]") return @"\d";
-                    if (regex.Length == 3) return regex[1].ToString();
+                    if (regex == "[0-9]")
+                    {
+                        return @"\d";
+                    }
+                    if (regex.Length == 3)
+                    {
+                        return regex[1].ToString();
+                    }
                     return regex;
                 }
             }
@@ -231,7 +212,10 @@ namespace ConsoleApplication1
 
             protected static RegExElement Create<T>(IEnumerable<RegExElement> elements, Func<IEnumerable<RegExElement>, T> creator) where T : RegExComposite
             {
-                if (elements == null) return null;
+                if (elements == null)
+                {
+                    return null;
+                }
                 var nonNull = elements.Where(el => el != null).ToArray();
                 return nonNull.Count() > 1 ? creator(nonNull) : nonNull.FirstOrDefault();
             }

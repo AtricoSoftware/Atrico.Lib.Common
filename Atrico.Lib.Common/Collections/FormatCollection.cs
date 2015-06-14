@@ -6,12 +6,12 @@ namespace Atrico.Lib.Common.Collections
 {
     public static class FormatCollection
     {
-        public static string ToCollectionString(this IEnumerable collection, string braces = "[]", bool bracesIfEmpty = true)
+        public static string ToCollectionString(this IEnumerable collection, string openBrace = "[", string closeBrace = "]", string separator = ",", bool bracesIfEmpty = true)
         {
-            return ToCollectionString(collection, null, braces, bracesIfEmpty);
+            return ToCollectionString(collection, null, openBrace, closeBrace, separator, bracesIfEmpty);
         }
 
-        public static string ToCollectionString(this IEnumerable collection, ISet<object> highlight, string braces = "[]", bool bracesIfEmpty = true)
+        public static string ToCollectionString(this IEnumerable collection, ISet<object> highlight, string openBrace = "[", string closeBrace = "]", string separator = ",", bool bracesIfEmpty = true)
         {
             var first = true;
             var text = new StringBuilder();
@@ -19,7 +19,7 @@ namespace Atrico.Lib.Common.Collections
             {
                 if (!first)
                 {
-                    text.Append(',');
+                    text.Append(separator);
                 }
                 else
                 {
@@ -37,13 +37,13 @@ namespace Atrico.Lib.Common.Collections
             }
             if (bracesIfEmpty || text.Length > 0)
             {
-                if (!string.IsNullOrEmpty(braces))
+                if (!string.IsNullOrEmpty(openBrace))
                 {
-                    text.Insert(0, braces[0]);
+                    text.Insert(0, openBrace);
                 }
-                if (braces != null && braces.Length > 1)
+                if (!string.IsNullOrEmpty(closeBrace))
                 {
-                    text.Append(braces[1]);
+                    text.Append(closeBrace);
                 }
             }
             return text.ToString();
