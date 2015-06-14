@@ -8,7 +8,7 @@ using Range = NUnit.Framework.RangeAttribute;
 
 namespace Atrico.Lib.Common.Test.RegEx
 {
-    [TestFixture]
+    [TestFixture, Ignore]
     public class TestNumberRange : TestFixtureBase
     {
         [Test]

@@ -78,6 +78,7 @@
     <Compile Include="Properties\CommonAssemblyInfo.cs" />
     <Compile Include="Reflection\ReflectionHelper.cs" />
     <Compile Include="RegEx.cs" />
+    <Compile Include="RegEx\RegExElement.cs" />
     <Compile Include="ResettableCache\ResettableCache.cs" />
     <Compile Include="ResettableCache\IResettable.cs" />
   </ItemGroup>
@@ -85,9 +86,7 @@
     <None Include="Atrico.Lib.Common.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RegEx\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
