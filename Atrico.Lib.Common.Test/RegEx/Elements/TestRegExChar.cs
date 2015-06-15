@@ -5,9 +5,10 @@ using Atrico.Lib.Assertions;
 using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.RegEx;
+using Atrico.Lib.Common.RegEx.Elements;
 using Atrico.Lib.Testing.NUnitAttributes;
 
-namespace Atrico.Lib.Common.Test.RegEx
+namespace Atrico.Lib.Common.Test.RegEx.Elements
 {
     [TestFixture]
     public class TestRegExChar
@@ -53,7 +54,7 @@ namespace Atrico.Lib.Common.Test.RegEx
         }
 
         [Test]
-        public void TestRangeOfDigit([Range('0', '4')] int digitI)
+        public void TestRangeOfDigits([Range('0', '4')] int digitI)
         {
             // Arrange
             var digit = (char) digitI;
@@ -76,6 +77,25 @@ namespace Atrico.Lib.Common.Test.RegEx
             {
                 Assert.That(Value.Of(result.Success).Is().False(), "Regex match ({0})", digit);
             }
+        }
+
+        [Test]
+        public void TestAllDigits([Range('0', '9')] int digitI)
+        {
+            // Arrange
+            var digit = (char) digitI;
+            const string regex = @"\d";
+
+            // Act
+            var element = RegExElement.Create('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+
+            // Assert
+            Debug.WriteLine(element);
+            Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
+            var result = new Regex(element.ToString()).Match(digit.ToString());
+            Assert.That(Value.Of(result.Success).Is().True(), "Regex match ({0})", digit);
+            Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), "Single group ({0})", digit);
+            Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(digit.ToString()), "Matches whole input ({0})", digit);
         }
     }
 }

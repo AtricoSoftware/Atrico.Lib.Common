@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,11 +7,14 @@ namespace Atrico.Lib.Common.Collections
 {
     public static class FormatCollection
     {
+        [Obsolete("Remove when referneces updated")]
         public static string ToCollectionString(this IEnumerable collection, string braces, bool bracesIfEmpty = true)
         {
             return ToCollectionString(collection, null, braces, bracesIfEmpty);
         }
-       public static string ToCollectionString(this IEnumerable collection, ISet<object> highlight, string braces, bool bracesIfEmpty = true)
+
+        [Obsolete("Remove when referneces updated")]
+        public static string ToCollectionString(this IEnumerable collection, ISet<object> highlight, string braces, bool bracesIfEmpty = true)
         {
             return ToCollectionString(collection, highlight, braces.Substring(0, 1), braces.Substring(1, 1), ",", bracesIfEmpty);
         }

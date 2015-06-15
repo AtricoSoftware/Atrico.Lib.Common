@@ -3,20 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Atrico.Lib.Common.RegEx
+namespace Atrico.Lib.Common.RegEx.Elements
 {
-    public abstract class RegExElement
+    public abstract partial class RegExElement
     {
-        /// <summary>
-        /// Creates an element from a character
-        /// </summary>
-        /// <param name="ch">The character</param>
-        /// <returns>New element</returns>
-        public static RegExElement Create(params char[] chars)
-        {
-            return new RegExChars(chars);
-        }
-
         private class RegExChars : RegExElement
         {
             private readonly IEnumerable<char> _characters;
