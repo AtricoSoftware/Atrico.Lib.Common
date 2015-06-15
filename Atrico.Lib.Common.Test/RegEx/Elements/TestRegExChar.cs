@@ -54,10 +54,9 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
         }
 
         [Test]
-        public void TestRangeOfDigits([Range('0', '4')] int digitI)
+        public void TestRangeOfDigits([Range('0', '4')] char digit)
         {
             // Arrange
-            var digit = (char) digitI;
             const string regex = "[1-3]";
 
             // Act
@@ -80,10 +79,9 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
         }
 
         [Test]
-        public void TestAllDigits([Range('0', '9')] int digitI)
+        public void TestAllDigits([Range('0', '9')] char digit)
         {
             // Arrange
-            var digit = (char) digitI;
             const string regex = @"\d";
 
             // Act
