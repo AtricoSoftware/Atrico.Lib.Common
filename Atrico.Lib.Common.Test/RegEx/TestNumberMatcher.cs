@@ -4,13 +4,12 @@ using Atrico.Lib.Assertions;
 using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.RegEx;
-using Atrico.Lib.Testing;
 using Atrico.Lib.Testing.NUnitAttributes;
 
 namespace Atrico.Lib.Common.Test.RegEx
 {
     [TestFixture]
-    public class TestNumberMatcher : TestFixtureBase
+    public class TestNumberMatcher : RegExTestFixtureBase
     {
         [Test]
         public void TestSingleDigitValid([Range(3, 8)] int value)
@@ -25,7 +24,7 @@ namespace Atrico.Lib.Common.Test.RegEx
             var result = regex.Match(text);
 
             // Assert
-            Debug.WriteLine(number.ToString());
+            DisplayElement(number.Element);
             Assert.That(Value.Of(result.Success).Is().True(), string.Format("{0} - Success", text));
             Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), string.Format("{0} - Group count", text));
             Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(text), string.Format("{0} - Full match", text));
@@ -43,7 +42,7 @@ namespace Atrico.Lib.Common.Test.RegEx
             var result = regex.Match(text);
 
             // Assert
-            Debug.WriteLine(number.ToString());
+            DisplayElement(number.Element);
             Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure", text));
         }
 
@@ -59,7 +58,7 @@ namespace Atrico.Lib.Common.Test.RegEx
             var result = regex.Match(text);
 
             // Assert
-            Debug.WriteLine(number.ToString());
+            DisplayElement(number.Element);
             Assert.That(Value.Of(result.Success).Is().True(), string.Format("{0} - Success", text));
             Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), string.Format("{0} - Group count", text));
             Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(text), string.Format("{0} - Full match", text));
@@ -77,12 +76,12 @@ namespace Atrico.Lib.Common.Test.RegEx
             var result = regex.Match(text);
 
             // Assert
-            Debug.WriteLine(number.ToString());
+            DisplayElement(number.Element);
             Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure", text));
         }
 
         [Test]
-        public void TestMultipleRangesValid([Range('0', '9')] char value)
+        public void TestMultipleRanges1([Range('0', '9')] char value)
         {
             // Arrange
             var text = value.ToString();
@@ -96,7 +95,35 @@ namespace Atrico.Lib.Common.Test.RegEx
             var result = regex.Match(text);
 
             // Assert
-            Debug.WriteLine(number.ToString());
+            DisplayElement(number.Element);
+            if (expectedMatch)
+            {
+                Assert.That(Value.Of(result.Success).Is().True(), string.Format("{0} - Success", text));
+                Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), string.Format("{0} - Group count", text));
+                Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(text), string.Format("{0} - Full match", text));
+            }
+            else
+            {
+                Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure", text));
+            }
+        }
+
+        [Test]
+        public void TestMultipleRanges2([Range(0, 1002, 2)] int value)
+        {
+            // Arrange
+            var text = value.ToString();
+            var expectedMatch = (12 <= value && value <= 20) || (999 <= value && value <= 1001);
+            var number = new RegExHelpers.NumberMatcher()
+                .AddRange(12, 20)
+                .AddRange(999, 1001);
+            var regex = new Regex(number.ToString());
+
+            // Act
+            var result = regex.Match(text);
+
+            // Assert
+            DisplayElement(number.Element);
             if (expectedMatch)
             {
                 Assert.That(Value.Of(result.Success).Is().True(), string.Format("{0} - Success", text));

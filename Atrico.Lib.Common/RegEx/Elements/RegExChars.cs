@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Atrico.Lib.Common.Collections.Tree;
 
 namespace Atrico.Lib.Common.RegEx.Elements
 {
@@ -171,6 +172,11 @@ namespace Atrico.Lib.Common.RegEx.Elements
                     }
                     return regex;
                 }
+            }
+
+            protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
+            {
+                root.Add(ToString());
             }
         }
     }

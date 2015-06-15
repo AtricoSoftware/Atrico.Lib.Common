@@ -56,6 +56,7 @@
     <Compile Include="RegEx\Elements\TestRegExSequence.cs" />
     <Compile Include="RegEx\Elements\TestRegExAlternation.cs" />
     <Compile Include="RegEx\Elements\TestRegExChar.cs" />
+    <Compile Include="RegEx\RegExTestFixtureBase.cs" />
     <Compile Include="TestEquatableObject.cs" />
     <Compile Include="Collections\TestCollectionDifferences.cs" />
     <Compile Include="Collections\TestPartitionByExtension.cs" />

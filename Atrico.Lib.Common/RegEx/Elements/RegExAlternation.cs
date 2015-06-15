@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Atrico.Lib.Common.Collections.Tree;
 
 namespace Atrico.Lib.Common.RegEx.Elements
 {
@@ -34,6 +35,12 @@ namespace Atrico.Lib.Common.RegEx.Elements
             public override string EndGroup
             {
                 get { return ")"; }
+            }
+
+            protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
+            {
+                var thisNode = root.Add("OR");
+                base.AddNodeToTree(thisNode);
             }
         }
     }

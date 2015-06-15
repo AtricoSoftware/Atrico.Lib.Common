@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Atrico.Lib.Common.Collections;
+using Atrico.Lib.Common.Collections.Tree;
 
 namespace Atrico.Lib.Common.RegEx.Elements
 {
@@ -35,6 +36,14 @@ namespace Atrico.Lib.Common.RegEx.Elements
             public abstract string Separator { get; }
             public abstract string StartGroup { get; }
             public abstract string EndGroup { get; }
+
+            protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
+            {
+                foreach (var element in _elements)
+                {
+                    element.AddNodeToTree(root);
+                }
+            }
         }
     }
 }

@@ -4,14 +4,13 @@ using System.Text.RegularExpressions;
 using Atrico.Lib.Assertions;
 using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
-using Atrico.Lib.Common.RegEx;
 using Atrico.Lib.Common.RegEx.Elements;
 using Atrico.Lib.Testing.NUnitAttributes;
 
 namespace Atrico.Lib.Common.Test.RegEx.Elements
 {
     [TestFixture]
-    public class TestRegExChar
+    public class TestRegExChar : RegExTestFixtureBase
     {
         [Test]
         public void TestSingleDigit([Values('0', '5', '9')] char digit)
@@ -23,7 +22,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             var element = RegExElement.Create(digit);
 
             // Assert
-            Debug.WriteLine(element);
+            DisplayElement(element);
             Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
             var result = new Regex(element.ToString()).Match(digit.ToString());
             Assert.That(Value.Of(result.Success).Is().True(), "Regex match");
@@ -41,7 +40,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             var element = RegExElement.Create(digit1, digit2);
 
             // Assert
-            Debug.WriteLine(element);
+            DisplayElement(element);
             Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
             var result1 = new Regex(element.ToString()).Match(digit1.ToString());
             Assert.That(Value.Of(result1.Success).Is().True(), "Regex match (digit1)");
@@ -63,7 +62,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             var element = RegExElement.Create('1', '2', '3');
 
             // Assert
-            Debug.WriteLine(element);
+            DisplayElement(element);
             Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
             var result = new Regex(element.ToString()).Match(digit.ToString());
             if ('1' <= digit && digit <= '3')
@@ -88,7 +87,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             var element = RegExElement.Create('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 
             // Assert
-            Debug.WriteLine(element);
+            DisplayElement(element);
             Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
             var result = new Regex(element.ToString()).Match(digit.ToString());
             Assert.That(Value.Of(result.Success).Is().True(), "Regex match ({0})", digit);

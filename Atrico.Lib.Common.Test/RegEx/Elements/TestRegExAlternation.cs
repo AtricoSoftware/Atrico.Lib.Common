@@ -3,14 +3,13 @@ using System.Text.RegularExpressions;
 using Atrico.Lib.Assertions;
 using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
-using Atrico.Lib.Common.RegEx;
 using Atrico.Lib.Common.RegEx.Elements;
 using Atrico.Lib.Testing.NUnitAttributes;
 
 namespace Atrico.Lib.Common.Test.RegEx.Elements
 {
     [TestFixture]
-    public class TestRegExAlternation
+    public class TestRegExAlternation : RegExTestFixtureBase
     {
         [Test]
         public void TestMultipleDigit([Values('0', '5', '9')] char digit1, [Values('2', '7')] char digit2)
@@ -22,7 +21,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             var element = RegExElement.CreateOr(RegExElement.Create(digit1), RegExElement.Create(digit2));
 
             // Assert
-            Debug.WriteLine(element);
+            DisplayElement(element);
             Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
             var result1 = new Regex(element.ToString()).Match(digit1.ToString());
             Assert.That(Value.Of(result1.Success).Is().True(), "Regex match (digit1)");

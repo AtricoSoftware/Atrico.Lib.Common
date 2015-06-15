@@ -56,5 +56,19 @@ namespace Atrico.Lib.Common.RegEx.Elements
         {
             return RegExSequence.Create(elements);
         }
+
+        /// <summary>
+        ///     Convert to text tree
+        ///     For debugging purposes
+        /// </summary>
+        /// <returns>Text tree</returns>
+        internal Tree<string>.INode ToTree()
+        {
+            var tree = Tree<string>.Create(true);
+            AddNodeToTree(tree);
+            return tree;
+        }
+
+        protected abstract void AddNodeToTree(Tree<string>.IModifiableNode root);
     }
 }
