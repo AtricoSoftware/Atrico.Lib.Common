@@ -14,7 +14,13 @@ namespace Atrico.Lib.Common.RegEx.Elements
             private readonly IEnumerable<char> _characters;
             private readonly Lazy<string> _regex;
 
-            public RegExChars(IEnumerable<char> characters)
+            public RegExChars()
+                : this(new char[]{})
+            {
+                
+            }
+            
+           public RegExChars(IEnumerable<char> characters)
             {
                 _characters = characters.Distinct().OrderBy(ch => ch);
                 _regex = new Lazy<string>(CreateRegex);

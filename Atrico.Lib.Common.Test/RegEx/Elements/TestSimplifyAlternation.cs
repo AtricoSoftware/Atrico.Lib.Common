@@ -26,5 +26,23 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
             Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(?:test1|test2|test3|test4|test5)"), "Removed composite");
         }
+
+        [Test]
+        public void TestMultipleChars()
+        {
+            // Arrange
+            var char12 = RegExElement.CreateAlternation(RegExElement.Create('1'), RegExElement.Create('2'));
+            var char34 = RegExElement.CreateAlternation(RegExElement.Create('3'), RegExElement.Create('4'));
+            var element = RegExElement.CreateAlternation(char12, new TestElement(5), char34);
+
+            // Act
+            var simpleElement = element.Simplify();
+
+            // Assert
+            DisplayElement(element);
+            DisplayElement(simpleElement);
+            Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(?:[1-4]|test5)"), "Merged chars");
+        }
     }
 }

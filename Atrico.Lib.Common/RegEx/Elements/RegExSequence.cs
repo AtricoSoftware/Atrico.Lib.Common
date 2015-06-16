@@ -16,10 +16,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
 
             public override RegExElement Simplify()
             {
-                // Simplify children
-                var elements = SimplifyChildren();
-                // Merge equivalent composites
-                elements = MergeComposites<RegExSequence>(elements);
+                var elements = SimplifyComposite();
                 return Create(elements);
             }
 

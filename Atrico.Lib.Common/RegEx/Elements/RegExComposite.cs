@@ -34,25 +34,38 @@ namespace Atrico.Lib.Common.RegEx.Elements
                 }
             }
 
-            protected IEnumerable<RegExElement> SimplifyChildren()
+            #region Simplify
+
+            protected IEnumerable<RegExElement> SimplifyComposite()
+            {
+                // Simplify children
+                var elements = SimplifyChildren();
+                // Merge equivalent composites
+                elements = MergeComposites(elements);
+                return elements;
+            }
+
+            private IEnumerable<RegExElement> SimplifyChildren()
             {
                 // Simplify children
                 return Elements.Select(el => el.Simplify());
             }
 
-            protected static IEnumerable<RegExElement> MergeComposites<T>(IEnumerable<RegExElement> originalElements) where T : RegExComposite
+            private IEnumerable<RegExElement> MergeComposites(IEnumerable<RegExElement> originalElements)
             {
                 var elements = new Stack<RegExElement>(originalElements.Reverse());
                 var newElements = new List<RegExElement>();
                 while (elements.Any())
                 {
                     var element = elements.Pop();
-                    var elAlt = element as T;
-                    if (ReferenceEquals(elAlt, null)) newElements.Add(element);
+                    var elAlt = element as RegExComposite;
+                    if (ReferenceEquals(elAlt, null) || GetType() != elAlt.GetType()) newElements.Add(element);
                     else elAlt.Elements.Reverse().ForEach(elements.Push);
                 }
                 return newElements;
             }
+
+            #endregion
 
             #region Comparison
 

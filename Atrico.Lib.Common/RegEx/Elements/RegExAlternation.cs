@@ -23,13 +23,17 @@ namespace Atrico.Lib.Common.RegEx.Elements
 
             public override RegExElement Simplify()
             {
-                // Simplify children
-                var elements = SimplifyChildren();
-                // Merge equivalent composites
-                elements = MergeComposites<RegExAlternation>(elements);
+                var elements = SimplifyComposite();
+                elements = MergeChars(elements);
                 return Create(elements);
             }
 
+            private static IEnumerable<RegExElement> MergeChars(IEnumerable<RegExElement> elements)
+            {
+                var elementsA = elements as RegExElement[] ?? elements.ToArray();
+                var chars = elementsA.OfType<RegExChars>().ToArray();
+                return chars.Count() < 2 ? elementsA : elementsA.Except(chars).Concat(new []{chars.Aggregate(new RegExChars(), (current, next)=>current.Merge(next))});
+            }
             #endregion
 
             protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
