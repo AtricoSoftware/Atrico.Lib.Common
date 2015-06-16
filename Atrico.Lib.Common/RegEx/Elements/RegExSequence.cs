@@ -12,6 +12,13 @@ namespace Atrico.Lib.Common.RegEx.Elements
                 return Create(elements, CreateImpl);
             }
 
+            public override RegExElement Simplify()
+            {
+                // TODO
+                return this;
+            }
+
+
             private static RegExSequence CreateImpl(IEnumerable<RegExElement> elements)
             {
                 // Check for sequences

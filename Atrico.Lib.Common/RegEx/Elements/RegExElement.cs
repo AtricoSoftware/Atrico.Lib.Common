@@ -58,6 +58,12 @@ namespace Atrico.Lib.Common.RegEx.Elements
         }
 
         /// <summary>
+        /// Simplifies this element (merge nodes, etc)
+        /// </summary>
+        /// <returns>New element</returns>
+        public abstract RegExElement Simplify();
+
+        /// <summary>
         ///     Convert to text tree
         ///     For debugging purposes
         /// </summary>

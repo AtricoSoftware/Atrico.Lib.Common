@@ -109,14 +109,14 @@ namespace Atrico.Lib.Common.Test.RegEx
         }
 
         [Test]
-        public void TestMultipleRanges2([Range(0, 1002, 2)] int value)
+        public void TestMultipleRanges2([Range(0, 102)] int value)
         {
             // Arrange
             var text = value.ToString();
-            var expectedMatch = (12 <= value && value <= 20) || (999 <= value && value <= 1001);
+            var expectedMatch = (12 <= value && value <= 20) || (99 <= value && value <= 101);
             var number = new RegExHelpers.NumberMatcher()
                 .AddRange(12, 20)
-                .AddRange(999, 1001);
+                .AddRange(99, 101);
             var regex = new Regex(number.ToString());
 
             // Act
@@ -132,7 +132,7 @@ namespace Atrico.Lib.Common.Test.RegEx
             }
             else
             {
-                Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure", text));
+                Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure ({1})", text, result));
             }
         }
     }

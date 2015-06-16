@@ -37,6 +37,12 @@ namespace Atrico.Lib.Common.RegEx.Elements
                 get { return ")"; }
             }
 
+            public override RegExElement Simplify()
+            {
+                // TODO
+                return this;
+            }
+
             protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
             {
                 var thisNode = root.Add("OR");
