@@ -3,7 +3,7 @@ using Atrico.Lib.Common.Collections.Tree;
 
 namespace Atrico.Lib.Common.RegEx.Elements
 {
-    public abstract partial class RegExElement
+    public abstract partial class RegExElement : ComparableObject<RegExElement>
     {
         /// <summary>
         ///     Creates an element from a tree of characters
@@ -42,7 +42,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
         /// </summary>
         /// <param name="elements">The reg ex elements</param>
         /// <returns>New element</returns>
-        public static RegExElement CreateOr(params RegExElement[] elements)
+        public static RegExElement CreateAlternation(params RegExElement[] elements)
         {
             return RegExAlternation.Create(elements);
         }
@@ -58,7 +58,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
         }
 
         /// <summary>
-        /// Simplifies this element (merge nodes, etc)
+        ///     Simplifies this element (merge nodes, etc)
         /// </summary>
         /// <returns>New element</returns>
         public abstract RegExElement Simplify();

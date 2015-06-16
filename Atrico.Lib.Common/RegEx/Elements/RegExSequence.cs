@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Atrico.Lib.Common.Collections;
 using Atrico.Lib.Common.Collections.Tree;
 
 namespace Atrico.Lib.Common.RegEx.Elements
@@ -9,21 +11,16 @@ namespace Atrico.Lib.Common.RegEx.Elements
         {
             public static RegExElement Create(IEnumerable<RegExElement> elements)
             {
-                return Create(elements, CreateImpl);
+                return Create(elements, els => new RegExSequence(els));
             }
 
             public override RegExElement Simplify()
             {
-                // TODO
-                return this;
-            }
-
-
-            private static RegExSequence CreateImpl(IEnumerable<RegExElement> elements)
-            {
-                // Check for sequences
-                //var groups = nonNull.PartitionBy(el => el);
-                return new RegExSequence(elements);
+                // Simplify children
+                var elements = SimplifyChildren();
+                // Merge equivalent composites
+                elements = MergeComposites<RegExSequence>(elements);
+                return Create(elements);
             }
 
             private RegExSequence(IEnumerable<RegExElement> elements)
@@ -31,24 +28,15 @@ namespace Atrico.Lib.Common.RegEx.Elements
             {
             }
 
-            public override string Separator
-            {
-                get { return ""; }
-            }
-
-            public override string StartGroup
-            {
-                get { return ""; }
-            }
-
-            public override string EndGroup
-            {
-                get { return ""; }
-            }
             protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
             {
-                var thisNode = root.Add("AND");
-                base.AddNodeToTree(thisNode);
+                AddNodeToTree(root, "AND");
+            }
+
+            public override string ToString()
+            {
+                var braces = Elements.Count() > 1;
+                return Elements.ToCollectionString("", "", "", false);
             }
         }
     }

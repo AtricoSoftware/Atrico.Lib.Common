@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System;
 using System.Text.RegularExpressions;
 using Atrico.Lib.Assertions;
 using Atrico.Lib.Assertions.Constraints;
@@ -15,10 +15,10 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
         public void TestMultipleDigit([Values('0', '5', '9')] char digit1, [Values('2', '7')] char digit2)
         {
             // Arrange
-            var regex = string.Format("(?:{0}|{1})", digit1, digit2);
+            var regex = string.Format("(?:{0}|{1})", (char) Math.Min(digit1, digit2), (char) Math.Max(digit1, digit2));
 
             // Act
-            var element = RegExElement.CreateOr(RegExElement.Create(digit1), RegExElement.Create(digit2));
+            var element = RegExElement.CreateAlternation(RegExElement.Create(digit1), RegExElement.Create(digit2));
 
             // Assert
             DisplayElement(element);

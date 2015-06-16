@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Atrico.Lib.Common.Collections;
 using Atrico.Lib.Common.Collections.Tree;
 
 namespace Atrico.Lib.Common.RegEx.Elements
@@ -12,16 +13,6 @@ namespace Atrico.Lib.Common.RegEx.Elements
         {
             private readonly IEnumerable<char> _characters;
             private readonly Lazy<string> _regex;
-
-            public RegExChars()
-                : this(new char[] {})
-            {
-            }
-
-            public RegExChars(char character)
-                : this(new[] {character})
-            {
-            }
 
             public RegExChars(IEnumerable<char> characters)
             {
@@ -40,45 +31,32 @@ namespace Atrico.Lib.Common.RegEx.Elements
                 return this;
             }
 
-
             private string CreateRegex()
             {
                 return new Simplifier(_characters).ToString();
             }
 
-            public override int GetHashCode()
+            #region Comparison
+
+            protected override int GetHashCodeImpl()
             {
                 return _characters.Aggregate(0, (current, ch) => current ^ ch.GetHashCode());
             }
 
-            public override bool Equals(object obj)
+            protected override bool EqualsImpl(RegExElement obj)
             {
                 var other = obj as RegExChars;
-                if (other == null)
-                {
-                    return false;
-                }
-                var thisEn = _characters.GetEnumerator();
-                var otherEn = other._characters.GetEnumerator();
-                var more = false;
-                do
-                {
-                    more = thisEn.MoveNext();
-                    if (otherEn.MoveNext() != more)
-                    {
-                        return false;
-                    }
-                    if (!more)
-                    {
-                        continue;
-                    }
-                    if (thisEn.Current != otherEn.Current)
-                    {
-                        return false;
-                    }
-                } while (more);
-                return true;
+                return other != null && _characters.SequenceEqual(other._characters);
             }
+
+            protected override int CompareToImpl(RegExElement obj)
+            {
+                var other = obj as RegExChars;
+                // Other types always smaller, otherwise Compare characters
+                return ReferenceEquals(other, null) ? 1 : _characters.SequenceCompare(other._characters);
+            }
+
+            #endregion
 
             public override string ToString()
             {

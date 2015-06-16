@@ -16,7 +16,7 @@ namespace Atrico.Lib.Common.Collections
             return list;
         }
 
-        public static IEnumerable<IGrouping<TKey, TSource>> PartitionBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+       public static IEnumerable<IGrouping<TKey, TSource>> PartitionBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             var result = new List<IGrouping<TKey, TSource>>();
             Grouping<TKey, TSource> current = null;
@@ -31,6 +31,27 @@ namespace Atrico.Lib.Common.Collections
                 current.Add(item);
             }
             return result;
+        }
+
+        public static int SequenceCompare<T>(this IEnumerable<T> list1, IEnumerable<T> list2) where T : IComparable
+        {
+            var enum1 = list1.GetEnumerator();
+            var enum2 = list2.GetEnumerator();
+            do
+            {
+                var more1 = enum1.MoveNext();
+                var more2 = enum2.MoveNext();
+                // both empty, must be equal
+                if (!more1 && !more2) return 0;
+                // 1 is shorter (1 lt 2)
+                if (!more1) return -1;
+                // 2 is shorter (1 gt 2)
+                if (!more2) return 1;
+                // Compare this element
+                var comp = enum1.Current.CompareTo(enum2.Current);
+                // Return if not equal, otherwise next element
+                if (comp != 0) return comp;
+            } while (true);
         }
 
         private class Grouping<TKey, TSource> : IGrouping<TKey, TSource>

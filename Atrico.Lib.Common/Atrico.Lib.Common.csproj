@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComparableObject.cs" />
     <Compile Include="ListSequenceEqualityComparer.cs" />
     <Compile Include="EquatableObject.cs" />
     <Compile Include="Collections\CollectionDifferences.cs" />
@@ -77,9 +78,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\CommonAssemblyInfo.cs" />
     <Compile Include="Reflection\ReflectionHelper.cs" />
+    <Compile Include="RegEx\Elements\RegExComposite.cs" />
     <Compile Include="RegEx\NumberMatcher.cs" />
     <Compile Include="RegEx\Elements\RegExSequence.cs" />
-    <Compile Include="RegEx\Elements\RegExCompositeBase.cs" />
     <Compile Include="RegEx\Elements\RegExAlternation.cs" />
     <Compile Include="RegEx\Elements\RegExChars.cs" />
     <Compile Include="RegEx\Elements\RegExElement.cs" />

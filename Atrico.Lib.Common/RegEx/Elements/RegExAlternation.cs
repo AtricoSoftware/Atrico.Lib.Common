@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Atrico.Lib.Common.Collections;
 using Atrico.Lib.Common.Collections.Tree;
 
 namespace Atrico.Lib.Common.RegEx.Elements
@@ -9,44 +11,36 @@ namespace Atrico.Lib.Common.RegEx.Elements
         {
             public static RegExElement Create(IEnumerable<RegExElement> elements)
             {
-                return Create(elements, CreateImpl);
-            }
-
-            private static RegExAlternation CreateImpl(IEnumerable<RegExElement> elements)
-            {
-                return new RegExAlternation(elements);
+                return Create(elements, els => new RegExAlternation(els));
             }
 
             private RegExAlternation(IEnumerable<RegExElement> elements)
-                : base(elements)
+                : base(new SortedSet<RegExElement>(elements))
             {
             }
 
-            public override string Separator
-            {
-                get { return "|"; }
-            }
-
-            public override string StartGroup
-            {
-                get { return "(?:"; }
-            }
-
-            public override string EndGroup
-            {
-                get { return ")"; }
-            }
+            #region Simplify
 
             public override RegExElement Simplify()
             {
-                // TODO
-                return this;
+                // Simplify children
+                var elements = SimplifyChildren();
+                // Merge equivalent composites
+                elements = MergeComposites<RegExAlternation>(elements);
+                return Create(elements);
             }
+
+            #endregion
 
             protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
             {
-                var thisNode = root.Add("OR");
-                base.AddNodeToTree(thisNode);
+                AddNodeToTree(root, "OR");
+            }
+
+            public override string ToString()
+            {
+                var braces = Elements.Count() > 1;
+                return Elements.ToCollectionString(braces ? "(?:" : "", braces ? ")" : "", "|", false);
             }
         }
     }
