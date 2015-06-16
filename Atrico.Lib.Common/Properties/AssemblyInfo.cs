@@ -5,3 +5,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyProduct("Atrico.Lib.Common")]
 [assembly: AssemblyDescription("Common utilities")]
 [assembly: InternalsVisibleTo("Atrico.Lib.Common.Test")]
+[assembly: InternalsVisibleTo("Atrico.Lib.Common.Test.ConsoleApp")]

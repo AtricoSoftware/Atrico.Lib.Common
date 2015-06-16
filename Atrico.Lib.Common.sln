@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atrico.Lib.Common", "Atrico
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atrico.Lib.Common.Test", "Atrico.Lib.Common.Test\Atrico.Lib.Common.Test.csproj", "{CB825E69-206F-4A9F-A2A5-C3017C871F21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{A4D5A5BF-5266-4086-8A76-0077C7FA059C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atrico.Lib.Common.Test.ConsoleApp", "ConsoleApplication1\Atrico.Lib.Common.Test.ConsoleApp.csproj", "{A4D5A5BF-5266-4086-8A76-0077C7FA059C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
