@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Atrico.Lib.Common.Collections;
 using Atrico.Lib.Common.Collections.Tree;
 
@@ -42,62 +41,63 @@ namespace Atrico.Lib.Common.RegEx.Elements
 
             private class AlternateElementData : EquatableObject<AlternateElementData>
             {
-                public RegExElement Element;
-                public int Position;
+                public IEnumerable<RegExElement> ElementsBefore = new RegExElement[] {};
+                public IEnumerable<RegExElement> ElementsAfter = new RegExElement[] {};
 
                 protected override int GetHashCodeImpl()
                 {
-                    return Element.GetHashCode();
+                    return (ElementsBefore.FirstOrDefault() ?? ElementsAfter.FirstOrDefault() ?? new RegExChars()).GetHashCode();
                 }
 
                 protected override bool EqualsImpl(AlternateElementData other)
                 {
-                    return Position.Equals(other.Position) && Element.Equals(other.Element);
+                    return ElementsBefore.SequenceEqual(other.ElementsBefore) && ElementsAfter.SequenceEqual(other.ElementsAfter);
                 }
             }
-           private struct EqualElementData
+
+            private struct EqualElementData
             {
                 public RegExElement Element;
                 public RegExSequence Parent;
             }
+
             private static IEnumerable<RegExElement> FactoriseAnds(IEnumerable<RegExElement> elements)
             {
-                // (A & B) | (A & C) => A & (B | C)
+                // (X & A) | (X & B) => X & (A | B)
+                // (A & X) | (B & X) => (A | B) & X
+                // (X & Y & A) | (X & Y & B) => X & Y & (A | B)
+                // (A & X & Y) | (B & X & Y) => (A | B) & X & Y
+
                 var elementsL = elements.ToList();
                 var ands = elementsL.OfType<RegExSequence>().ToArray();
-                if( ands.Count() < 2) return  elementsL;
+                if (ands.Count() < 2) return elementsL;
                 var groups = new Dictionary<AlternateElementData, IList<EqualElementData>>();
                 foreach (var and in ands)
                 {
-                    var first = and.Elements.First();
-                    var second = and.Elements.Skip(1).Single();
-                    IList<EqualElementData> list;
-                    // First fixed
-                    var key = new AlternateElementData {Element = first, Position = 0};
-                    if (!groups.TryGetValue(key, out list))
+                    for (var i = 0; i < and.Elements.Count(); ++i)
                     {
-                        list = new List<EqualElementData>();
-                        groups.Add(key, list);
+                        var before = and.Elements.Take(i);
+                        var option = and.Elements.ElementAt(i);
+                        var after = and.Elements.Skip(i + 1);
+                        IList<EqualElementData> list;
+                        var key = new AlternateElementData {ElementsBefore = before, ElementsAfter = after};
+                        if (!groups.TryGetValue(key, out list))
+                        {
+                            list = new List<EqualElementData>();
+                            groups.Add(key, list);
+                        }
+                        list.Add(new EqualElementData {Element = option, Parent = and});
                     }
-                    list.Add(new EqualElementData{Element = second, Parent = and});
-                    // Second fixed
-                    key = new AlternateElementData {Element = second, Position = 1};
-                    if (!groups.TryGetValue(key, out list))
-                    {
-                        list = new List<EqualElementData>();
-                        groups.Add(key, list);
-                    }
-                    list.Add(new EqualElementData{Element = first, Parent = and});
                 }
                 foreach (var entry in groups.Where(entry => entry.Value.Count > 1))
                 {
-                    var or = CreateAlternation(entry.Value.Select(ent=>ent.Element).ToArray());
-                    
-                    var and = entry.Key.Position == 0 ? CreateSequence(entry.Key.Element, or) : CreateSequence(or, entry.Key.Element);
+                    var or = CreateAlternation(entry.Value.Select(ent => ent.Element).ToArray()).Simplify();
+
+                    var and = CreateSequence(entry.Key.ElementsBefore.Concat(new[] {or}).Concat(entry.Key.ElementsAfter).ToArray()).Simplify();
                     elementsL.RemoveAll(el => entry.Value.Select(dat => dat.Parent).Contains(el));
                     elementsL.Add(and);
                 }
-                 return  elementsL;
+                return elementsL;
             }
 
             #endregion

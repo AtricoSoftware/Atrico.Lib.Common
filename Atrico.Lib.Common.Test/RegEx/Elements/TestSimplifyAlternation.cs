@@ -64,6 +64,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
             Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"testX(testA|testB)"), "And Or inversion");
         }
+
         [Test]
         public void TestFactoriseAnds2of1()
         {
@@ -84,7 +85,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(testA|testB)testX"), "And Or inversion");
         }
 
-        [Test, Ignore] // TODO
+        [Test]
         public void TestFactoriseAnds1and2of3()
         {
             // (X & Y & A) | (X & Y & B) => X & Y & (A | B)
@@ -103,14 +104,15 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
             Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"testXtestY(testA|testB)"), "And Or inversion");
         }
-        [Test, Ignore] // TODO
+
+        [Test]
         public void TestFactoriseAnds2and3of3()
         {
             // (A & X & Y) | (B & X & Y) => (A | B) & X & Y
 
             // Arrange
-            var seq1 = RegExElement.CreateSequence(new TestElement('A'), new TestElement('X'));
-            var seq2 = RegExElement.CreateSequence(new TestElement('B'), new TestElement('X'));
+            var seq1 = RegExElement.CreateSequence(new TestElement('A'), new TestElement('X'), new TestElement('Y'));
+            var seq2 = RegExElement.CreateSequence(new TestElement('B'), new TestElement('X'), new TestElement('Y'));
             var element = RegExElement.CreateAlternation(seq1, seq2);
 
             // Act
@@ -120,7 +122,27 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(testA|testB)testX"), "And Or inversion");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(testA|testB)testXtestY"), "And Or inversion");
+        }
+
+        [Test]
+        public void TestFactoriseAnds2of3()
+        {
+            // (X & A & Y) | (X & B & Y) => X & (A | B) & Y
+
+            // Arrange
+            var seq1 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('A'), new TestElement('Y'));
+            var seq2 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('B'), new TestElement('Y'));
+            var element = RegExElement.CreateAlternation(seq1, seq2);
+
+            // Act
+            var simpleElement = element.Simplify();
+
+            // Assert
+            DisplayElement(element);
+            DisplayElement(simpleElement);
+            Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"testX(testA|testB)testY"), "And Or inversion");
         }
 
         // TODO mid optional
