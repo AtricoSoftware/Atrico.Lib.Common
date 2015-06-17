@@ -59,10 +59,25 @@ namespace Atrico.Lib.Common.RegEx.Elements
         }
 
         /// <summary>
+        ///     Creates a Repeat element
+        /// </summary>
+        /// <param name="element">The reg ex element</param>
+        /// <param name="repeats">Number of repeats</param>
+        /// <returns>New element</returns>
+        public static RegExElement CreateRepeat(RegExElement element, int repeats)
+        {
+            return RegExRepeat.Create(element, repeats);
+        }
+
+        /// <summary>
         ///     Simplifies this element (merge nodes, etc)
         /// </summary>
         /// <returns>New element</returns>
-        public abstract RegExElement Simplify();
+        public virtual RegExElement Simplify()
+        {
+            // No simplification
+            return this;
+        }
 
         /// <summary>
         ///     Convert to text tree

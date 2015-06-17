@@ -31,13 +31,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
                 return new RegExChars(_characters.Concat(rhs._characters));
             }
 
-            public override RegExElement Simplify()
-            {
-                // Nothing to do with this!
-                return this;
-            }
-
-            private string CreateRegex()
+             private string CreateRegex()
             {
                 return new Simplifier(_characters).ToString();
             }

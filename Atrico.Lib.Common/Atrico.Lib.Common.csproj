@@ -79,6 +79,7 @@
     <Compile Include="Properties\CommonAssemblyInfo.cs" />
     <Compile Include="Reflection\ReflectionHelper.cs" />
     <Compile Include="RegEx\Elements\RegExComposite.cs" />
+    <Compile Include="RegEx\Elements\RegExRepeat.cs" />
     <Compile Include="RegEx\NumberMatcher.cs" />
     <Compile Include="RegEx\Elements\RegExSequence.cs" />
     <Compile Include="RegEx\Elements\RegExAlternation.cs" />
@@ -91,7 +92,9 @@
     <None Include="Atrico.Lib.Common.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="_TODO.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

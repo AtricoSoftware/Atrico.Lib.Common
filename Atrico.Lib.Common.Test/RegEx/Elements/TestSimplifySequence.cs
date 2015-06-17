@@ -13,9 +13,9 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
         public void TestMultipleSequences()
         {
             // Arrange
-            var seq12 = RegExElement.CreateSequence(new TestElement(1), new TestElement(2));
-            var seq34 = RegExElement.CreateSequence(new TestElement(3), new TestElement(4));
-            var element = RegExElement.CreateSequence(seq12, new TestElement(5), seq34);
+            var seq1 = RegExElement.CreateSequence(new TestElement('A'), new TestElement('B'));
+            var seq2 = RegExElement.CreateSequence(new TestElement('C'), new TestElement('D'));
+            var element = RegExElement.CreateSequence(seq1, new TestElement('E'), seq2);
 
             // Act
             var simpleElement = element.Simplify();
@@ -24,7 +24,39 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"test1test2test5test3test4"), "Removed composite");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"testAtestBtestEtestCtestD"), "Removed composite");
+        }
+
+        [Test]
+        public void TestRepeatElement2()
+        {
+            // Arrange
+            var element = RegExElement.CreateSequence(new TestElement('A'), new TestElement('A'), new TestElement('B'), new TestElement('C'), new TestElement('C'));
+
+            // Act
+            var simpleElement = element.Simplify();
+
+            // Assert
+            DisplayElement(element);
+            DisplayElement(simpleElement);
+            Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"testAtestAtestBtestCtestC"), "No change");
+        }
+
+        [Test]
+        public void TestRepeatElement3plus()
+        {
+            // Arrange
+            var element = RegExElement.CreateSequence(new TestElement('A'), new TestElement('A'), new TestElement('A'), new TestElement('B'), new TestElement('C'), new TestElement('C'), new TestElement('C'), new TestElement('C'));
+
+            // Act
+            var simpleElement = element.Simplify();
+
+            // Assert
+            DisplayElement(element);
+            DisplayElement(simpleElement);
+            Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"{testA}3testB{testC}4"), "Repeats");
         }
     }
 }

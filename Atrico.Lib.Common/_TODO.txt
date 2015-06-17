@@ -1,0 +1,4 @@
+﻿TODO
+~~~~
+Simplify repeat (repeat of repeat)
+create repeat if shorter than/equal to alternative e.g. AA = no change, AAA = no change, AAAA = {A}4, [1-2][1-2] = {[1-2]}2
