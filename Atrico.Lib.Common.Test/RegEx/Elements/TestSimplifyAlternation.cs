@@ -46,14 +46,14 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
         }
 
         [Test]
-        public void TestFactoriseAnds1()
+        public void TestFactoriseAnds1of2()
         {
-            // (A & B) | (A & C) => A & (B | C)
+            // (X & A) | (X & B) => X & (A | B)
 
             // Arrange
-            var seq12 = RegExElement.CreateSequence(new TestElement(1), new TestElement(2));
-            var seq13 = RegExElement.CreateSequence(new TestElement(1), new TestElement(3));
-            var element = RegExElement.CreateAlternation(seq12, seq13);
+            var seq1 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('A'));
+            var seq2 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('B'));
+            var element = RegExElement.CreateAlternation(seq1, seq2);
 
             // Act
             var simpleElement = element.Simplify();
@@ -62,10 +62,69 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"test1(test2|test3)"), "And Or inversion");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"testX(testA|testB)"), "And Or inversion");
+        }
+        [Test]
+        public void TestFactoriseAnds2of1()
+        {
+            // (A & X) | (B & X) => (A | B) & X
+
+            // Arrange
+            var seq1 = RegExElement.CreateSequence(new TestElement('A'), new TestElement('X'));
+            var seq2 = RegExElement.CreateSequence(new TestElement('B'), new TestElement('X'));
+            var element = RegExElement.CreateAlternation(seq1, seq2);
+
+            // Act
+            var simpleElement = element.Simplify();
+
+            // Assert
+            DisplayElement(element);
+            DisplayElement(simpleElement);
+            Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(testA|testB)testX"), "And Or inversion");
         }
 
-        // TODO different orders (A & B) | (C & B) => (B | C) & A
-        // TODO different numbers of elements (A & B & X) | (C & B & X) => (B | C) & A & X
+        [Test, Ignore] // TODO
+        public void TestFactoriseAnds1and2of3()
+        {
+            // (X & Y & A) | (X & Y & B) => X & Y & (A | B)
+
+            // Arrange
+            var seq1 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('Y'), new TestElement('A'));
+            var seq2 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('Y'), new TestElement('B'));
+            var element = RegExElement.CreateAlternation(seq1, seq2);
+
+            // Act
+            var simpleElement = element.Simplify();
+
+            // Assert
+            DisplayElement(element);
+            DisplayElement(simpleElement);
+            Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"testXtestY(testA|testB)"), "And Or inversion");
+        }
+        [Test, Ignore] // TODO
+        public void TestFactoriseAnds2and3of3()
+        {
+            // (A & X & Y) | (B & X & Y) => (A | B) & X & Y
+
+            // Arrange
+            var seq1 = RegExElement.CreateSequence(new TestElement('A'), new TestElement('X'));
+            var seq2 = RegExElement.CreateSequence(new TestElement('B'), new TestElement('X'));
+            var element = RegExElement.CreateAlternation(seq1, seq2);
+
+            // Act
+            var simpleElement = element.Simplify();
+
+            // Assert
+            DisplayElement(element);
+            DisplayElement(simpleElement);
+            Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(testA|testB)testX"), "And Or inversion");
+        }
+
+        // TODO mid optional
+        // optimize, best match
+        // multiple matches - 
     }
 }

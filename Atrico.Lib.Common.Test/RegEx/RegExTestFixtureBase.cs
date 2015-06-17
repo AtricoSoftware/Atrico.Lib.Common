@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Atrico.Lib.Common.Collections.Tree;
 using Atrico.Lib.Common.RegEx.Elements;
@@ -9,9 +10,13 @@ namespace Atrico.Lib.Common.Test.RegEx
     {
         protected class TestElement : RegExElement
         {
-            private readonly int _value;
+            private readonly IComparable _value;
 
             public TestElement(int value = 0)
+            {
+                _value = value;
+            }
+            public TestElement(char value)
             {
                 _value = value;
             }

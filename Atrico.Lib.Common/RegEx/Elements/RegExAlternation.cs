@@ -40,7 +40,22 @@ namespace Atrico.Lib.Common.RegEx.Elements
                 return chars.Count() < 2 ? elementsA : elementsA.Except(chars).Concat(new[] {chars.Aggregate(new RegExChars(), (current, next) => current.Merge(next))});
             }
 
-            private struct ElementData
+            private class AlternateElementData : EquatableObject<AlternateElementData>
+            {
+                public RegExElement Element;
+                public int Position;
+
+                protected override int GetHashCodeImpl()
+                {
+                    return Element.GetHashCode();
+                }
+
+                protected override bool EqualsImpl(AlternateElementData other)
+                {
+                    return Position.Equals(other.Position) && Element.Equals(other.Element);
+                }
+            }
+           private struct EqualElementData
             {
                 public RegExElement Element;
                 public RegExSequence Parent;
@@ -51,23 +66,34 @@ namespace Atrico.Lib.Common.RegEx.Elements
                 var elementsL = elements.ToList();
                 var ands = elementsL.OfType<RegExSequence>().ToArray();
                 if( ands.Count() < 2) return  elementsL;
-                var groups = new Dictionary<RegExElement, IList<ElementData>>();
+                var groups = new Dictionary<AlternateElementData, IList<EqualElementData>>();
                 foreach (var and in ands)
                 {
-                    var same = and.Elements.First();
-                    var or = and.Elements.Skip(1).Single();
-                    IList<ElementData> list;
-                    if (!groups.TryGetValue(same, out list))
+                    var first = and.Elements.First();
+                    var second = and.Elements.Skip(1).Single();
+                    IList<EqualElementData> list;
+                    // First fixed
+                    var key = new AlternateElementData {Element = first, Position = 0};
+                    if (!groups.TryGetValue(key, out list))
                     {
-                        list = new List<ElementData>();
-                        groups.Add(same, list);
+                        list = new List<EqualElementData>();
+                        groups.Add(key, list);
                     }
-                    list.Add(new ElementData{Element = or, Parent = and});
+                    list.Add(new EqualElementData{Element = second, Parent = and});
+                    // Second fixed
+                    key = new AlternateElementData {Element = second, Position = 1};
+                    if (!groups.TryGetValue(key, out list))
+                    {
+                        list = new List<EqualElementData>();
+                        groups.Add(key, list);
+                    }
+                    list.Add(new EqualElementData{Element = first, Parent = and});
                 }
                 foreach (var entry in groups.Where(entry => entry.Value.Count > 1))
                 {
                     var or = CreateAlternation(entry.Value.Select(ent=>ent.Element).ToArray());
-                    var and = CreateSequence(entry.Key, or);
+                    
+                    var and = entry.Key.Position == 0 ? CreateSequence(entry.Key.Element, or) : CreateSequence(or, entry.Key.Element);
                     elementsL.RemoveAll(el => entry.Value.Select(dat => dat.Parent).Contains(el));
                     elementsL.Add(and);
                 }
