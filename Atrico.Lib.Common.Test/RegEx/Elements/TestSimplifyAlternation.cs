@@ -46,7 +46,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
         }
 
         [Test]
-        public void TestMergeOrAnds()
+        public void TestFactoriseAnds1()
         {
             // (A & B) | (A & C) => A & (B | C)
 
@@ -62,7 +62,10 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(test1(test2|test3))"), "And Or inversion");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"test1(test2|test3)"), "And Or inversion");
         }
+
+        // TODO different orders (A & B) | (C & B) => (B | C) & A
+        // TODO different numbers of elements (A & B & X) | (C & B & X) => (B | C) & A & X
     }
 }

@@ -10,7 +10,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
     {
         private abstract class RegExComposite : RegExElement
         {
-            protected readonly IEnumerable<RegExElement> Elements;
+            public readonly IEnumerable<RegExElement> Elements;
 
             protected RegExComposite(IEnumerable<RegExElement> elements)
             {
