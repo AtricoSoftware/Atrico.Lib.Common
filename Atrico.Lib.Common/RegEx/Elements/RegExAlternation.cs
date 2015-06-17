@@ -9,6 +9,9 @@ namespace Atrico.Lib.Common.RegEx.Elements
     {
         private class RegExAlternation : RegExComposite
         {
+            // TODO - Make parameterisable
+            private const bool _explicitCapture = true;
+
             public static RegExElement Create(IEnumerable<RegExElement> elements)
             {
                 return Create(elements, els => new RegExAlternation(els));
@@ -32,8 +35,9 @@ namespace Atrico.Lib.Common.RegEx.Elements
             {
                 var elementsA = elements as RegExElement[] ?? elements.ToArray();
                 var chars = elementsA.OfType<RegExChars>().ToArray();
-                return chars.Count() < 2 ? elementsA : elementsA.Except(chars).Concat(new []{chars.Aggregate(new RegExChars(), (current, next)=>current.Merge(next))});
+                return chars.Count() < 2 ? elementsA : elementsA.Except(chars).Concat(new[] {chars.Aggregate(new RegExChars(), (current, next) => current.Merge(next))});
             }
+
             #endregion
 
             protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
@@ -44,7 +48,9 @@ namespace Atrico.Lib.Common.RegEx.Elements
             public override string ToString()
             {
                 var braces = Elements.Count() > 1;
-                return Elements.ToCollectionString(braces ? "(?:" : "", braces ? ")" : "", "|", false);
+                var openBrace = braces ? (_explicitCapture ? "(" : "(?:") : "";
+                var closeBrace = braces ? ")" : "";
+                return Elements.ToCollectionString(openBrace, closeBrace, "|", false);
             }
         }
     }

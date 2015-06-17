@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Atrico.Lib.Common.Collections.Tree;
 
 namespace Atrico.Lib.Common.RegEx.Elements

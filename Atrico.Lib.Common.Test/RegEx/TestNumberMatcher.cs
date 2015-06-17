@@ -1,10 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Atrico.Lib.Assertions;
 using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.RegEx;
-using Atrico.Lib.Testing.NUnitAttributes;
+using Atrico.Lib.Testing.TestAttributes;
+using Atrico.Lib.Testing.TestAttributes.NUnit;
 
 namespace Atrico.Lib.Common.Test.RegEx
 {
@@ -18,7 +19,7 @@ namespace Atrico.Lib.Common.Test.RegEx
             var text = value.ToString("D");
             var number = new RegExHelpers.NumberMatcher()
                 .AddRange(3, 8);
-            var regex = new Regex(number.ToString());
+            var regex = new Regex(number.ToString(), RegexOptions.ExplicitCapture);
 
             // Act
             var result = regex.Match(text);
@@ -36,7 +37,7 @@ namespace Atrico.Lib.Common.Test.RegEx
             // Arrange
             var number = new RegExHelpers.NumberMatcher()
                 .AddRange(3, 8);
-            var regex = new Regex(number.ToString());
+            var regex = new Regex(number.ToString(), RegexOptions.ExplicitCapture);
 
             // Act
             var result = regex.Match(text);
@@ -52,7 +53,7 @@ namespace Atrico.Lib.Common.Test.RegEx
             // Arrange
             var number = new RegExHelpers.NumberMatcher()
                 .AddRange(63, 81);
-            var regex = new Regex(number.ToString());
+            var regex = new Regex(number.ToString(), RegexOptions.ExplicitCapture);
 
             // Act
             var result = regex.Match(text);
@@ -70,7 +71,7 @@ namespace Atrico.Lib.Common.Test.RegEx
             // Arrange
             var number = new RegExHelpers.NumberMatcher()
                 .AddRange(63, 81);
-            var regex = new Regex(number.ToString());
+            var regex = new Regex(number.ToString(), RegexOptions.ExplicitCapture);
 
             // Act
             var result = regex.Match(text);
@@ -89,7 +90,7 @@ namespace Atrico.Lib.Common.Test.RegEx
             var number = new RegExHelpers.NumberMatcher()
                 .AddRange(1, 3)
                 .AddRange(6, 7);
-            var regex = new Regex(number.ToString());
+            var regex = new Regex(number.ToString(), RegexOptions.ExplicitCapture);
 
             // Act
             var result = regex.Match(text);
@@ -117,7 +118,46 @@ namespace Atrico.Lib.Common.Test.RegEx
             var number = new RegExHelpers.NumberMatcher()
                 .AddRange(12, 20)
                 .AddRange(99, 101);
-            var regex = new Regex(number.ToString());
+            var regex = new Regex(number.ToString(), RegexOptions.ExplicitCapture);
+
+            // Act
+            var result = regex.Match(text);
+
+            // Assert
+            DisplayElement(number.Element);
+            if (expectedMatch)
+            {
+                Assert.That(Value.Of(result.Success).Is().True(), string.Format("{0} - Success", text));
+                Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), string.Format("{0} - Group count", text));
+                Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(text), string.Format("{0} - Full match", text));
+            }
+            else
+            {
+                Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure ({1})", text, result));
+            }
+        }
+
+        private static IEnumerable<int> _testMultipleRanges3Values
+        {
+            get
+            {
+                var values = new List<int>();
+                for (var i = 122; i <= 323; ++i) values.Add(i);
+                for (var i = 9999; i <= 10002; ++i) values.Add(i);
+                return values;
+            }
+        }
+
+        [Test]
+        public void TestMultipleRanges3([ValueSource("_testMultipleRanges3Values")] int value)
+        {
+            // Arrange
+            var text = value.ToString();
+            var expectedMatch = (123 <= value && value <= 321) || (10000 <= value && value <= 10001);
+            var number = new RegExHelpers.NumberMatcher()
+                .AddRange(123, 321)
+                .AddRange(10000, 10001);
+            var regex = new Regex(number.ToString(), RegexOptions.ExplicitCapture);
 
             // Act
             var result = regex.Match(text);

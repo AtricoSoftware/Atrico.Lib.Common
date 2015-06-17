@@ -2,7 +2,7 @@
 using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.RegEx.Elements;
-using Atrico.Lib.Testing.NUnitAttributes;
+using Atrico.Lib.Testing.TestAttributes.NUnit;
 
 namespace Atrico.Lib.Common.Test.RegEx.Elements
 {
@@ -24,7 +24,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(?:test1|test2|test3|test4|test5)"), "Removed composite");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(test1|test2|test3|test4|test5)"), "Removed composite");
         }
 
         [Test]
@@ -42,7 +42,27 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(?:[1-4]|test5)"), "Merged chars");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"([1-4]|test5)"), "Merged chars");
+        }
+
+        [Test]
+        public void TestMergeOrAnds()
+        {
+            // (A & B) | (A & C) => A & (B | C)
+
+            // Arrange
+            var seq12 = RegExElement.CreateSequence(new TestElement(1), new TestElement(2));
+            var seq13 = RegExElement.CreateSequence(new TestElement(1), new TestElement(3));
+            var element = RegExElement.CreateAlternation(seq12, seq13);
+
+            // Act
+            var simpleElement = element.Simplify();
+
+            // Assert
+            DisplayElement(element);
+            DisplayElement(simpleElement);
+            Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(test1(test2|test3))"), "And Or inversion");
         }
     }
 }

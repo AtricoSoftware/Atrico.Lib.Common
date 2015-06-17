@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Atrico.Lib.Common.Collections;
 using Atrico.Lib.Common.Collections.Tree;
 
@@ -32,7 +31,6 @@ namespace Atrico.Lib.Common.RegEx.Elements
 
             public override string ToString()
             {
-                var braces = Elements.Count() > 1;
                 return Elements.ToCollectionString("", "", "", false);
             }
         }

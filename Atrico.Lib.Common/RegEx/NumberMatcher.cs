@@ -23,8 +23,8 @@ namespace Atrico.Lib.Common.RegEx
 
             public NumberMatcher()
             {
-                _regex = new ResettableCache<string>(()=>_element.Value.ToString());
-                _element = new ResettableCache<RegExElement>(()=>RegExElement.Create(_tree).Simplify(), _regex);
+                _regex = new ResettableCache<string>(CreateRegex);
+                _element = new ResettableCache<RegExElement>(() => RegExElement.Create(_tree).Simplify(), _regex);
             }
 
             public NumberMatcher AddRange(uint from, uint to)
@@ -38,7 +38,12 @@ namespace Atrico.Lib.Common.RegEx
                 return this;
             }
 
-             private static IEnumerable<char> GetDigits(uint u)
+            private string CreateRegex()
+            {
+                return _element.Value.ToString();
+            }
+
+            private static IEnumerable<char> GetDigits(uint u)
             {
                 return u.ToString("D").ToCharArray().ToList();
             }
@@ -54,8 +59,15 @@ namespace Atrico.Lib.Common.RegEx
                 return regex.ToString();
             }
 
-            internal Tree<char>.INode CharacterTree { get { return _tree; } }
-            internal RegExElement Element { get { return _element.Value; } }
+            internal Tree<char>.INode CharacterTree
+            {
+                get { return _tree; }
+            }
+
+            internal RegExElement Element
+            {
+                get { return _element.Value; }
+            }
         }
     }
 }

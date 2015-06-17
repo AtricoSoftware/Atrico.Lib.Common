@@ -5,7 +5,8 @@ using Atrico.Lib.Assertions;
 using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.RegEx.Elements;
-using Atrico.Lib.Testing.NUnitAttributes;
+using Atrico.Lib.Testing.TestAttributes;
+using Atrico.Lib.Testing.TestAttributes.NUnit;
 
 namespace Atrico.Lib.Common.Test.RegEx.Elements
 {
@@ -24,7 +25,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // Assert
             DisplayElement(element);
             Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
-            var result = new Regex(element.ToString()).Match(digit.ToString());
+            var result = new Regex(element.ToString(), RegexOptions.ExplicitCapture).Match(digit.ToString());
             Assert.That(Value.Of(result.Success).Is().True(), "Regex match");
             Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), "Single group");
             Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(digit.ToString()), "Matches whole input");
@@ -42,11 +43,11 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // Assert
             DisplayElement(element);
             Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
-            var result1 = new Regex(element.ToString()).Match(digit1.ToString());
+            var result1 = new Regex(element.ToString(), RegexOptions.ExplicitCapture).Match(digit1.ToString());
             Assert.That(Value.Of(result1.Success).Is().True(), "Regex match (digit1)");
             Assert.That(Value.Of(result1.Groups.Count).Is().EqualTo(1), "Single group (digit1)");
             Assert.That(Value.Of(result1.Groups[0].Value).Is().EqualTo(digit1.ToString()), "Matches whole input (digit1)");
-            var result2 = new Regex(element.ToString()).Match(digit2.ToString());
+            var result2 = new Regex(element.ToString(), RegexOptions.ExplicitCapture).Match(digit2.ToString());
             Assert.That(Value.Of(result2.Success).Is().True(), "Regex match (digit2)");
             Assert.That(Value.Of(result2.Groups.Count).Is().EqualTo(1), "Single group (digit2)");
             Assert.That(Value.Of(result2.Groups[0].Value).Is().EqualTo(digit2.ToString()), "Matches whole input (digit2)");
@@ -64,7 +65,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // Assert
             DisplayElement(element);
             Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
-            var result = new Regex(element.ToString()).Match(digit.ToString());
+            var result = new Regex(element.ToString(), RegexOptions.ExplicitCapture).Match(digit.ToString());
             if ('1' <= digit && digit <= '3')
             {
                 Assert.That(Value.Of(result.Success).Is().True(), "Regex match ({0})", digit);
@@ -89,7 +90,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // Assert
             DisplayElement(element);
             Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
-            var result = new Regex(element.ToString()).Match(digit.ToString());
+            var result = new Regex(element.ToString(), RegexOptions.ExplicitCapture).Match(digit.ToString());
             Assert.That(Value.Of(result.Success).Is().True(), "Regex match ({0})", digit);
             Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), "Single group ({0})", digit);
             Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(digit.ToString()), "Matches whole input ({0})", digit);

@@ -4,7 +4,7 @@ using Atrico.Lib.Assertions;
 using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.RegEx.Elements;
-using Atrico.Lib.Testing.NUnitAttributes;
+using Atrico.Lib.Testing.TestAttributes.NUnit;
 
 namespace Atrico.Lib.Common.Test.RegEx.Elements
 {
@@ -23,17 +23,17 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // Assert
             DisplayElement(element);
             Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string");
-            var result1 = new Regex(element.ToString()).Match(digit1.ToString());
+            var result1 = new Regex(element.ToString(), RegexOptions.ExplicitCapture).Match(digit1.ToString());
             Assert.That(Value.Of(result1.Success).Is().False(), "Regex match (digit1)");
-            var result2 = new Regex(element.ToString()).Match(digit2.ToString());
+            var result2 = new Regex(element.ToString(), RegexOptions.ExplicitCapture).Match(digit2.ToString());
             Assert.That(Value.Of(result2.Success).Is().False(), "Regex match (digit2)");
             var textBoth = string.Format("{0}{1}", digit1, digit2);
-            var resultBoth = new Regex(element.ToString()).Match(textBoth);
+            var resultBoth = new Regex(element.ToString(), RegexOptions.ExplicitCapture).Match(textBoth);
             Assert.That(Value.Of(resultBoth.Success).Is().True(), "Regex match (both)");
             Assert.That(Value.Of(resultBoth.Groups.Count).Is().EqualTo(1), "Single group (both)");
             Assert.That(Value.Of(resultBoth.Groups[0].Value).Is().EqualTo(textBoth), "Matches whole input (both)");
             var textBothWrongOrder = string.Format("{0}{1}", digit2, digit1);
-            var resultBothWrongOrder = new Regex(element.ToString()).Match(textBothWrongOrder);
+            var resultBothWrongOrder = new Regex(element.ToString(), RegexOptions.ExplicitCapture).Match(textBothWrongOrder);
             Assert.That(Value.Of(resultBothWrongOrder.Success).Is().False(), "Regex match ( wrong order)");
         }
     }
