@@ -45,7 +45,9 @@ namespace Atrico.Lib.Common.RegEx
 
             private static IEnumerable<char> GetDigits(uint u)
             {
-                return u.ToString("D").ToCharArray().ToList();
+                var digits = u.ToString("D").ToCharArray().ToList();
+                digits.Add('$');
+                return digits;
             }
 
             public override string ToString()

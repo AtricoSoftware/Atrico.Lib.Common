@@ -53,13 +53,17 @@ namespace Atrico.Lib.Common.Test.RegEx
         protected static void DisplayElement(RegExElement element)
         {
             // As tree
-            var tree = element.ToTree();
+            DisplayTree(element.ToTree());
+            // Regex
+            Debug.WriteLine(element);
+        }
+
+        protected static void DisplayTree<T>(Tree<T>.INode tree)
+        {
             foreach (var line in tree.ToMultilineString())
             {
                 Debug.WriteLine(line);
             }
-            // Regex
-            Debug.WriteLine(element);
         }
     }
 }

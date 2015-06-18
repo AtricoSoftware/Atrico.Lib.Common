@@ -80,6 +80,7 @@
     <Compile Include="Reflection\ReflectionHelper.cs" />
     <Compile Include="RegEx\Elements\RegExComposite.cs" />
     <Compile Include="RegEx\Elements\RegExRepeat.cs" />
+    <Compile Include="RegEx\Elements\RegExTerminator.cs" />
     <Compile Include="RegEx\NumberMatcher.cs" />
     <Compile Include="RegEx\Elements\RegExSequence.cs" />
     <Compile Include="RegEx\Elements\RegExAlternation.cs" />

@@ -175,5 +175,53 @@ namespace Atrico.Lib.Common.Test.RegEx
                 Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure ({1})", text, result));
             }
         }
+
+        private static IEnumerable<int> _testRepeatsValues
+        {
+            get
+            {
+                var values = new List<int>();
+                for (var i = 99; i <= 102; ++i) values.Add(i);
+                for (var i = 999; i <= 1002; ++i) values.Add(i);
+                for (var i = 9999; i <= 10002; ++i) values.Add(i);
+                for (var i = 99999; i <= 100002; ++i) values.Add(i);
+                return values;
+            }
+        }
+
+        [Test]
+        public void TestRepeats([ValueSource("_testRepeatsValues")] int value)
+        {
+            // Arrange
+            var text = value.ToString();
+            var expectedMatch = 
+                (100 <= value && value <= 101) || 
+                (1000 <= value && value <= 1001) || 
+                (10000 <= value && value <= 10001) ||
+                (100000 <= value && value <= 100001);
+            var number = new RegExHelpers.NumberMatcher()
+                .AddRange(100, 101)
+                .AddRange(1000, 1001)
+                .AddRange(10000, 10001)
+                .AddRange(100000, 100001);
+            var regex = new Regex(number.ToString(), RegexOptions.ExplicitCapture);
+
+            // Act
+            var result = regex.Match(text);
+
+            // Assert
+            DisplayTree(number.CharacterTree);
+            DisplayElement(number.Element);
+            if (expectedMatch)
+            {
+                Assert.That(Value.Of(result.Success).Is().True(), string.Format("{0} - Success", text));
+                Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), string.Format("{0} - Group count", text));
+                Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(text), string.Format("{0} - Full match", text));
+            }
+            else
+            {
+                Assert.That(Value.Of(result.Success).Is().False(), string.Format("{0} - Failure ({1})", text, result));
+            }
+        }
     }
 }

@@ -6,6 +6,8 @@ namespace Atrico.Lib.Common.RegEx.Elements
 {
     public abstract partial class RegExElement : ComparableObject<RegExElement>
     {
+        public const char Terminator = '\0';
+
         /// <summary>
         ///     Creates an element from a tree of characters
         /// </summary>
