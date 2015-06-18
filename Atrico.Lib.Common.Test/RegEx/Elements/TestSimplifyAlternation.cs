@@ -144,6 +144,5 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
             Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"X(A|B)Y"), "And Or inversion");
         }
-
     }
 }

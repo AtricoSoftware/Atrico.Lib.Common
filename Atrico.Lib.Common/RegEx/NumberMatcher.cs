@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Atrico.Lib.Common.Collections;
 using Atrico.Lib.Common.Collections.Tree;
 using Atrico.Lib.Common.RegEx.Elements;
 using Atrico.Lib.Common.ResettableCache;
@@ -14,7 +16,8 @@ namespace Atrico.Lib.Common.RegEx
     {
         public class NumberMatcher
         {
-            private readonly Tree<char>.IModifiableNode _tree = Tree<char>.Create(false);
+
+            private readonly Tree<RegExElement.CharNode>.IModifiableNode _tree = Tree<RegExElement.CharNode>.Create(false);
             private readonly ResettableCache<RegExElement> _element;
             private readonly ResettableCache<string> _regex;
 
@@ -43,10 +46,10 @@ namespace Atrico.Lib.Common.RegEx
                 return _element.Value.ToString();
             }
 
-            private static IEnumerable<char> GetDigits(uint u)
+            private static IEnumerable<RegExElement.CharNode> GetDigits(uint u)
             {
-                var digits = u.ToString("D").ToCharArray().ToList();
-                digits.Add('$');
+                var digits = u.ToString("D").ToCharArray().Select(ch=>new RegExElement.CharNode(ch)).ToArray();
+                digits.Last().IsTerminator = true;
                 return digits;
             }
 
@@ -61,7 +64,7 @@ namespace Atrico.Lib.Common.RegEx
                 return regex.ToString();
             }
 
-            internal Tree<char>.INode CharacterTree
+            internal Tree<RegExElement.CharNode>.INode CharacterTree
             {
                 get { return _tree; }
             }

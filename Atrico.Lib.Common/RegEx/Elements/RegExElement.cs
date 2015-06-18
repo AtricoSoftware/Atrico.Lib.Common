@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Atrico.Lib.Common.Collections.Tree;
 
 namespace Atrico.Lib.Common.RegEx.Elements
@@ -13,7 +12,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
         /// </summary>
         /// <param name="node">The root node of the tree</param>
         /// <returns>New element</returns>
-        public static RegExElement Create(Tree<char>.INode node)
+        public static RegExElement Create(Tree<CharNode>.INode node)
         {
             RegExElement element = null;
             var children = node.Children.Select(Create).ToArray();
@@ -22,10 +21,13 @@ namespace Atrico.Lib.Common.RegEx.Elements
                 // Alternation of all children
                 element = RegExAlternation.Create(children);
             }
-            if (!node.IsRoot())
+            if (node.IsRoot()) return element;
+            // Sequence of data + children
+            element = RegExSequence.Create(new[] {Create(node.Data.Char), element});
+            if (node.Data.IsTerminator)
             {
-                // Sequence of data + children
-                element = RegExSequence.Create(new[] {Create(node.Data), element});
+                // Split here
+                element = RegExAlternation.Create(new[] {Create(node.Data.Char), element});
             }
             return element;
         }
