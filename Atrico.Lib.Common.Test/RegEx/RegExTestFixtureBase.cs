@@ -10,32 +10,28 @@ namespace Atrico.Lib.Common.Test.RegEx
     {
         protected class TestElement : RegExElement
         {
-            private readonly IComparable _value;
+            private readonly string _text;
 
-            public TestElement(int value = 0)
+            public TestElement(string text = "test")
             {
-                _value = value;
-            }
-            public TestElement(char value)
-            {
-                _value = value;
+                _text = text;
             }
 
             protected override int GetHashCodeImpl()
             {
-                return _value.GetHashCode();
+                return _text.GetHashCode();
             }
 
             protected override bool EqualsImpl(RegExElement obj)
             {
                 var other = obj as TestElement;
-                return !ReferenceEquals(other, null) && _value.Equals(other._value);
+                return !ReferenceEquals(other, null) && _text.Equals(other._text);
             }
 
             protected override int CompareToImpl(RegExElement obj)
             {
                 var other = obj as TestElement;
-                return ReferenceEquals(other, null) ? 1 : _value.CompareTo(other._value);
+                return ReferenceEquals(other, null) ? 1 : String.Compare(_text, other._text, StringComparison.Ordinal);
             }
 
             public override RegExElement Simplify()
@@ -50,7 +46,7 @@ namespace Atrico.Lib.Common.Test.RegEx
 
             public override string ToString()
             {
-                return string.Format("test{0}", _value);
+                return _text;
             }
         }
 

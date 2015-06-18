@@ -27,7 +27,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
             {
                 var elementsA = elements as RegExElement[] ?? elements.ToArray();
                 var groups = elementsA.PartitionBy(el => el).ToArray();
-                return !groups.Any(gr => gr.Count() > 2) ? elementsA : groups.Select(@group => @group.Count() < 3 ? @group.Key : CreateRepeat(@group.Key, @group.Count()));
+                return groups.Any(gr => gr.Count() > 1) ? groups.Select(@group => @group.Count() < 2 ? @group.Key : CreateRepeat(@group.Key, @group.Count())) : elementsA;
             }
 
             #endregion

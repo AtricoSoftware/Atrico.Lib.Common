@@ -13,9 +13,9 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
         public void TestMultipleAlternations()
         {
             // Arrange
-            var alt12 = RegExElement.CreateAlternation(new TestElement(1), new TestElement(2));
-            var alt34 = RegExElement.CreateAlternation(new TestElement(3), new TestElement(4));
-            var element = RegExElement.CreateAlternation(alt12, new TestElement(5), alt34);
+            var alt12 = RegExElement.CreateAlternation(new TestElement("1"), new TestElement("2"));
+            var alt34 = RegExElement.CreateAlternation(new TestElement("3"), new TestElement("4"));
+            var element = RegExElement.CreateAlternation(alt12, new TestElement("5"), alt34);
 
             // Act
             var simpleElement = element.Simplify();
@@ -24,7 +24,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(test1|test2|test3|test4|test5)"), "Removed composite");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(1|2|3|4|5)"), "Removed composite");
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // Arrange
             var char12 = RegExElement.CreateAlternation(RegExElement.Create('1'), RegExElement.Create('2'));
             var char34 = RegExElement.CreateAlternation(RegExElement.Create('3'), RegExElement.Create('4'));
-            var element = RegExElement.CreateAlternation(char12, new TestElement(5), char34);
+            var element = RegExElement.CreateAlternation(char12, new TestElement("X"), char34);
 
             // Act
             var simpleElement = element.Simplify();
@@ -42,7 +42,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"([1-4]|test5)"), "Merged chars");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"([1-4]|X)"), "Merged chars");
         }
 
         [Test]
@@ -51,8 +51,8 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // (X & A) | (X & B) => X & (A | B)
 
             // Arrange
-            var seq1 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('A'));
-            var seq2 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('B'));
+            var seq1 = RegExElement.CreateSequence(new TestElement("X"), new TestElement("A"));
+            var seq2 = RegExElement.CreateSequence(new TestElement("X"), new TestElement("B"));
             var element = RegExElement.CreateAlternation(seq1, seq2);
 
             // Act
@@ -62,7 +62,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"testX(testA|testB)"), "And Or inversion");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"X(A|B)"), "And Or inversion");
         }
 
         [Test]
@@ -71,8 +71,8 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // (A & X) | (B & X) => (A | B) & X
 
             // Arrange
-            var seq1 = RegExElement.CreateSequence(new TestElement('A'), new TestElement('X'));
-            var seq2 = RegExElement.CreateSequence(new TestElement('B'), new TestElement('X'));
+            var seq1 = RegExElement.CreateSequence(new TestElement("A"), new TestElement("X"));
+            var seq2 = RegExElement.CreateSequence(new TestElement("B"), new TestElement("X"));
             var element = RegExElement.CreateAlternation(seq1, seq2);
 
             // Act
@@ -82,7 +82,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(testA|testB)testX"), "And Or inversion");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(A|B)X"), "And Or inversion");
         }
 
         [Test]
@@ -91,8 +91,8 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // (X & Y & A) | (X & Y & B) => X & Y & (A | B)
 
             // Arrange
-            var seq1 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('Y'), new TestElement('A'));
-            var seq2 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('Y'), new TestElement('B'));
+            var seq1 = RegExElement.CreateSequence(new TestElement("X"), new TestElement("Y"), new TestElement("A"));
+            var seq2 = RegExElement.CreateSequence(new TestElement("X"), new TestElement("Y"), new TestElement("B"));
             var element = RegExElement.CreateAlternation(seq1, seq2);
 
             // Act
@@ -102,7 +102,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"testXtestY(testA|testB)"), "And Or inversion");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"XY(A|B)"), "And Or inversion");
         }
 
         [Test]
@@ -111,8 +111,8 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // (A & X & Y) | (B & X & Y) => (A | B) & X & Y
 
             // Arrange
-            var seq1 = RegExElement.CreateSequence(new TestElement('A'), new TestElement('X'), new TestElement('Y'));
-            var seq2 = RegExElement.CreateSequence(new TestElement('B'), new TestElement('X'), new TestElement('Y'));
+            var seq1 = RegExElement.CreateSequence(new TestElement("A"), new TestElement("X"), new TestElement("Y"));
+            var seq2 = RegExElement.CreateSequence(new TestElement("B"), new TestElement("X"), new TestElement("Y"));
             var element = RegExElement.CreateAlternation(seq1, seq2);
 
             // Act
@@ -122,7 +122,7 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(testA|testB)testXtestY"), "And Or inversion");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"(A|B)XY"), "And Or inversion");
         }
 
         [Test]
@@ -131,8 +131,8 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             // (X & A & Y) | (X & B & Y) => X & (A | B) & Y
 
             // Arrange
-            var seq1 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('A'), new TestElement('Y'));
-            var seq2 = RegExElement.CreateSequence(new TestElement('X'), new TestElement('B'), new TestElement('Y'));
+            var seq1 = RegExElement.CreateSequence(new TestElement("X"), new TestElement("A"), new TestElement("Y"));
+            var seq2 = RegExElement.CreateSequence(new TestElement("X"), new TestElement("B"), new TestElement("Y"));
             var element = RegExElement.CreateAlternation(seq1, seq2);
 
             // Act
@@ -142,11 +142,8 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
             DisplayElement(element);
             DisplayElement(simpleElement);
             Assert.That(Value.Of(simpleElement).Is().Not().ReferenceEqualTo(element), "New element");
-            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"testX(testA|testB)testY"), "And Or inversion");
+            Assert.That(Value.Of(simpleElement.ToString()).Is().EqualTo(@"X(A|B)Y"), "And Or inversion");
         }
 
-        // TODO mid optional
-        // optimize, best match
-        // multiple matches - 
     }
 }

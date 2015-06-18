@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using Atrico.Lib.Common.Collections.Tree;
 
 namespace Atrico.Lib.Common.RegEx.Elements
@@ -52,7 +54,9 @@ namespace Atrico.Lib.Common.RegEx.Elements
 
             public override string ToString()
             {
-                return string.Format("{{{0}}}{1}", _element, _repeats);
+                // Ensure resulting regex is smaller than non repeat alternative
+                var len = _element.ToString().Length;
+                return (len * _repeats) < len + 3 ? Enumerable.Repeat(_element.ToString(), _repeats).Aggregate(new StringBuilder(), (current, next)=>current.Append(next)).ToString() : string.Format("{0}{{{1}}}", _element, _repeats);
             }
         }
     }
