@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\Trees\TestRemove.cs" />
+    <Compile Include="RegEx\Elements\TestRegExRepeats.cs" />
     <Compile Include="RegEx\Elements\TestSimplifySequence.cs" />
     <Compile Include="RegEx\Elements\TestSimplifyAlternation.cs" />
     <Compile Include="RegEx\Elements\TestRegExSequence.cs" />

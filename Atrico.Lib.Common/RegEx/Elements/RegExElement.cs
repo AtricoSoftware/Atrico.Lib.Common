@@ -70,7 +70,19 @@ namespace Atrico.Lib.Common.RegEx.Elements
         /// <returns>New element</returns>
         public static RegExElement CreateRepeat(RegExElement element, int repeats)
         {
-            return RegExRepeat.Create(element, repeats);
+            return CreateRepeat(element, repeats, repeats);
+        }
+
+        /// <summary>
+        ///     Creates a Repeat element
+        /// </summary>
+        /// <param name="element">The reg ex element</param>
+        /// <param name="min">Minimum number of repeats</param>
+        /// <param name="max">Maximum number of repeats</param>
+        /// <returns>New element</returns>
+        public static RegExElement CreateRepeat(RegExElement element, int min, int? max)
+        {
+            return RegExRepeat.Create(element, min, max);
         }
 
         /// <summary>

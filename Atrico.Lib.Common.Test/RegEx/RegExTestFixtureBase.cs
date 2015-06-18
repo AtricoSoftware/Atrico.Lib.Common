@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Atrico.Lib.Common.Collections.Tree;
 using Atrico.Lib.Common.RegEx.Elements;
 using Atrico.Lib.Testing;
@@ -64,6 +65,11 @@ namespace Atrico.Lib.Common.Test.RegEx
             {
                 Debug.WriteLine(line);
             }
+        }
+
+        protected Regex CreateRegex(RegExElement element)
+        {
+            return new Regex("^" + element + "$", RegexOptions.ExplicitCapture);
         }
     }
 }

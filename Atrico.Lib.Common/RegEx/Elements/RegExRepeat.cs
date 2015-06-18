@@ -9,30 +9,34 @@ namespace Atrico.Lib.Common.RegEx.Elements
         private class RegExRepeat : RegExElement
         {
             private readonly RegExElement _element;
-            private readonly int _repeats;
+            private readonly int _min;
+            private readonly int? _max;
 
-            public static RegExElement Create(RegExElement element, int repeats)
+            public static RegExElement Create(RegExElement element, int min, int? max)
             {
-                return repeats < 1 ? null : repeats == 1 ? element : new RegExRepeat(element, repeats);
+                if (min < 1 || max < 1 || max < min) return null;
+                if (min == 1 && (max ?? 0) == 1) return element;
+                return new RegExRepeat(element, min, max);
             }
 
-            private RegExRepeat(RegExElement element, int repeats)
+            private RegExRepeat(RegExElement element, int min, int? max)
             {
                 _element = element;
-                _repeats = repeats;
+                _min = min;
+                _max = max;
             }
 
             #region Comparison
 
             protected override int GetHashCodeImpl()
             {
-                return _repeats.GetHashCode();
+                return _min.GetHashCode() ^ _max.GetHashCode();
             }
 
             protected override bool EqualsImpl(RegExElement obj)
             {
                 var other = obj as RegExRepeat;
-                return !ReferenceEquals(other, null) && _repeats.Equals(other._repeats) && _element.Equals(other._element);
+                return !ReferenceEquals(other, null) && _min.Equals(other._min) && _max.Equals(other._max) && _element.Equals(other._element);
             }
 
             protected override int CompareToImpl(RegExElement obj)
