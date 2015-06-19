@@ -43,23 +43,25 @@ namespace Atrico.Lib.Common.RegEx.Elements
             {
                 var other = obj as RegExRepeat;
                 if (ReferenceEquals(other, null)) return 1;
-                var comp = _repeats.CompareTo(other._repeats);
-                return comp != 0 ? comp : _element.CompareTo(other._element);
+                var comp = _min.CompareTo(other._min);
+                if (comp != 0) return comp;
+                 comp = (_max ?? 0).CompareTo((other._max ??0));
+               return comp != 0 ? comp : _element.CompareTo(other._element);
             }
 
             #endregion
 
             protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
             {
-                var thisNode = root.Add(string.Format("{0}x", _repeats));
+                var thisNode = root.Add(string.Format("{0}x", _min)); // TODO
                 _element.AddNodeToTree(thisNode);
             }
 
             public override string ToString()
             {
-                // Ensure resulting regex is smaller than non repeat alternative
+                // Ensure resulting regex is smaller than non repeat alternative TODO - use min & max
                 var len = _element.ToString().Length;
-                return (len * _repeats) < len + 3 ? Enumerable.Repeat(_element.ToString(), _repeats).Aggregate(new StringBuilder(), (current, next) => current.Append(next)).ToString() : string.Format("{0}{{{1}}}", _element, _repeats);
+                return (len * _min) < len + 3 ? Enumerable.Repeat(_element.ToString(), _min).Aggregate(new StringBuilder(), (current, next) => current.Append(next)).ToString() : string.Format("{0}{{{1}}}", _element, _min);
             }
         }
     }

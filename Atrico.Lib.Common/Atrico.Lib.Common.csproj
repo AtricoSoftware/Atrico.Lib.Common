@@ -31,11 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Atrico.Lib.DomainModel">
-      <HintPath>..\packages\Atrico.Lib.DomainModel.2.0.0.0\lib\net452\Atrico.Lib.DomainModel.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComparableObject.cs" />
+    <Compile Include="Console\ConsoleUtils.cs" />
     <Compile Include="ListSequenceEqualityComparer.cs" />
     <Compile Include="EquatableObject.cs" />
     <Compile Include="Collections\CollectionDifferences.cs" />
@@ -88,6 +88,8 @@
     <Compile Include="RegEx\Elements\RegExElement.cs" />
     <Compile Include="ResettableCache\ResettableCache.cs" />
     <Compile Include="ResettableCache\IResettable.cs" />
+    <Compile Include="Security\CredentialLocker.cs" />
+    <Compile Include="Security\DataProtectionExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Atrico.Lib.Common.nuspec" />

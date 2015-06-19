@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Atrico.Lib.DomainModel">
-      <HintPath>..\packages\Atrico.Lib.DomainModel.2.0.0.0\lib\net452\Atrico.Lib.DomainModel.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
