@@ -56,6 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Atrico.Lib.Common\Properties\AssemblyVersion.cs">
+      <Link>Properties\AssemblyVersion.cs</Link>
+    </Compile>
+    <Compile Include="..\Atrico.Lib.Common\Properties\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Collections\Trees\TestRemove.cs" />
     <Compile Include="RegEx\Elements\TestRegExRepeats.cs" />
     <Compile Include="RegEx\Elements\TestSimplifySequence.cs" />
