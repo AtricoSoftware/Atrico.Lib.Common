@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Text;
 using Atrico.Lib.Common.Collections.Tree;
 
@@ -53,7 +54,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
 
             protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
             {
-                var thisNode = root.Add(string.Format("{0}x", _min)); // TODO
+                var thisNode = root.Add(string.Format("{0}x", CreateRepeatPart()));
                 _element.AddNodeToTree(thisNode);
             }
 
@@ -61,7 +62,21 @@ namespace Atrico.Lib.Common.RegEx.Elements
             {
                 // Ensure resulting regex is smaller than non repeat alternative TODO - use min & max
                 var len = _element.ToString().Length;
-                return (len * _min) < len + 3 ? Enumerable.Repeat(_element.ToString(), _min).Aggregate(new StringBuilder(), (current, next) => current.Append(next)).ToString() : string.Format("{0}{{{1}}}", _element, _min);
+                var repeatPart = CreateRepeatPart();
+                var canSimplify = _min == (_max ?? 0) && (len * _min) < len + repeatPart.Length;
+                return canSimplify ? Enumerable.Repeat(_element.ToString(), _min).Aggregate(new StringBuilder(), (current, next) => current.Append(next)).ToString() : string.Format("{0}{1}", _element, repeatPart) ;
+            }
+
+            private string CreateRepeatPart()
+            {
+                var text = new StringBuilder();
+                text.AppendFormat("{{{0}", _min);
+                if (!_max.HasValue || _min != _max.Value)
+                {
+                    text.AppendFormat(",{0}", _max.HasValue ? _max.Value.ToString(CultureInfo.InvariantCulture) : "");
+                }
+                text.Append('}');
+                return text.ToString();
             }
         }
     }

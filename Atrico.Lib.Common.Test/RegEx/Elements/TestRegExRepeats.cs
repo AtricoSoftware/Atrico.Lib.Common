@@ -121,18 +121,47 @@ namespace Atrico.Lib.Common.Test.RegEx.Elements
                 Assert.That(Value.Of(result.Success).Is().False(), "Regex fail ({0})", text);
             }
         }
+
         [Test]
         public void Test1to3([Range(0, 4)] int len)
         {
             // Arrange
             const int min = 1;
             const int max = 3;
-            const string regex = "A";
+            const string regex = "A{1,3}";
             var expected = min <= len && len <= max;
             var text = new string('A', len);
 
             // Act
             var element = RegExElement.CreateRepeat(RegExElement.Create('A'), min, max);
+
+            // Assert
+            DisplayElement(element);
+            Assert.That(Value.Of(element.ToString()).Is().EqualTo(regex), "Regex string ({0})", text);
+            var result = CreateRegex(element).Match(text);
+            if (expected)
+            {
+                Assert.That(Value.Of(result.Success).Is().True(), "Regex match ({0})", text);
+                Assert.That(Value.Of(result.Groups.Count).Is().EqualTo(1), "Single group ({0})", text);
+                Assert.That(Value.Of(result.Groups[0].Value).Is().EqualTo(text), "Matches whole input ({0})", text);
+            }
+            else
+            {
+                Assert.That(Value.Of(result.Success).Is().False(), "Regex fail ({0})", text);
+            }
+        }
+
+        [Test]
+        public void Test2toX([Range(0, 6)] int len)
+        {
+            // Arrange
+            const int min = 2;
+            const string regex = "A{2,}";
+            var expected = min <= len;
+            var text = new string('A', len);
+
+            // Act
+            var element = RegExElement.CreateRepeat(RegExElement.Create('A'), min, null);
 
             // Assert
             DisplayElement(element);
