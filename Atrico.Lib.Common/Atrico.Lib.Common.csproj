@@ -42,7 +42,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\Tree\IModifiableTreeNodeContainer.cs" />
+    <Compile Include="Collections\Tree\ITreeNode.cs" />
+    <Compile Include="Collections\Tree\ITreeNodeContainer.cs" />
     <Compile Include="Collections\Tree\Tree.cs" />
+    <Compile Include="Collections\Tree\TreeT.cs" />
+    <Compile Include="Collections\Tree\IModifiableTreeNode.cs" />
+    <Compile Include="Collections\Tree\Tree.Node.cs" />
+    <Compile Include="Collections\Tree\Tree.Node.ToMultilineString.cs" />
+    <Compile Include="Collections\Tree\TreeTUtilities.cs" />
     <Compile Include="ComparableObject.cs" />
     <Compile Include="Console\ConsoleUtils.cs" />
     <Compile Include="ListSequenceEqualityComparer.cs" />
@@ -53,9 +61,9 @@
     <Compile Include="Collections\CollectionDifferencesWrongItems.cs" />
     <Compile Include="Collections\CollectionDifferencesWrongOrder.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
-    <Compile Include="Collections\Tree\Tree.INode.cs" />
-    <Compile Include="Collections\Tree\Tree.Node.ToMultilineString.cs" />
-    <Compile Include="Collections\Tree\Tree.Node.cs" />
+    <Compile Include="Collections\Tree\TreeT.INode.cs" />
+    <Compile Include="Collections\Tree\TreeT.Node.ToMultilineString.cs" />
+    <Compile Include="Collections\Tree\TreeT.Node.cs" />
     <Compile Include="Collections\Tree\TreeUtilities.cs" />
     <Compile Include="Console\Table.cs" />
     <Compile Include="DateAndTime\DateTimeHelper.cs" />

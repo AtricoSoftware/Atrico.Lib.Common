@@ -3,14 +3,14 @@
     /// <summary>
     ///     Typed tree
     /// </summary>
-    public static partial class Tree
+    public static partial class TreeT<T>
     {
         /// <summary>
         ///     Creates the tree
         /// </summary>
         /// <param name="allowDuplicateNodes">if set to <c>true</c> allow duplicate nodes</param>
         /// <returns>Rootnode of new tree</returns>
-        public static IModifiableTreeNode Create(bool allowDuplicateNodes)
+        public static IModifiableNode Create(bool allowDuplicateNodes)
         {
             return new Node(allowDuplicateNodes);
         }

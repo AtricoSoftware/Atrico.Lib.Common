@@ -17,7 +17,7 @@ namespace Atrico.Lib.Common.RegEx
         public class NumberMatcher
         {
 
-            private readonly Tree<RegExElement.CharNode>.IModifiableNode _tree = Tree<RegExElement.CharNode>.Create(false);
+            private readonly TreeT<RegExElement.CharNode>.IModifiableNode _tree = TreeT<RegExElement.CharNode>.Create(false);
             private readonly ResettableCache<RegExElement> _element;
             private readonly ResettableCache<string> _regex;
 
@@ -64,7 +64,7 @@ namespace Atrico.Lib.Common.RegEx
                 return regex.ToString();
             }
 
-            internal Tree<RegExElement.CharNode>.INode CharacterTree
+            internal TreeT<RegExElement.CharNode>.INode CharacterTree
             {
                 get { return _tree; }
             }

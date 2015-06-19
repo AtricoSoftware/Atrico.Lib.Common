@@ -10,24 +10,28 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
     [TestFixture]
     public class TestTransform : TreeTestFixtureBase
     {
-        private static Tree<int>.INode Identity(Tree<int>.IModifiableNode node)
+        private static ITreeNode Identity(IModifiableTreeNode node)
         {
             return node;
         }
 
-        private static Tree<int>.INode IncreaseData(Tree<int>.IModifiableNode node)
+        private static ITreeNode ReverseString(IModifiableTreeNode node)
         {
-            node.Data = node.Data * 10;
+            if (!ReferenceEquals(node.Data, null)) node.Data = (int)node.Data * 10;
             return node;
         }
-        private static Tree<int>.INode MergeChildren(Tree<int>.IModifiableNode node)
+        private static ITreeNode MergeChildren(IModifiableTreeNode node)
         {
+            if (!node.IsRoot())
+            {
             var leafData = node.Children.Where(ch => ch.IsLeaf()).Select(n=>n.Data).ToArray();
             if (leafData.Count() > 1)
             {
                 node.Remove(leafData[0]);
                 node.Remove(leafData[1]);
-                node.Add(leafData[0]+leafData[1]);
+                node.Add((int)leafData[0]+(int)leafData[1]);
+            }
+                
             }
             return node;
         }
@@ -36,7 +40,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestIdentityEmpty()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
 
             // Act
             var newTree = tree.Transform(Identity);
@@ -51,7 +55,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestIdentityFromRoot()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
             var node1 = tree.Add(1);
             var node11 = node1.Add(11);
             var node12 = node1.Add(12);
@@ -72,7 +76,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestIdentityFromMid()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
             var node1 = tree.Add(1);
             var node11 = node1.Add(11);
             var node12 = node1.Add(12);
@@ -93,10 +97,10 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestChangeDataEmpty()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
 
             // Act
-            var newTree = tree.Transform(IncreaseData);
+            var newTree = tree.Transform(ReverseString);
 
             // Assert
             Display(tree);
@@ -108,7 +112,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestChangeDataFromRoot()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
             var node1 = tree.Add(1);
             var node11 = node1.Add(11);
             var node12 = node1.Add(12);
@@ -117,7 +121,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var node122 = node12.Add(122);
 
             // Act
-            var newTree = tree.Transform(IncreaseData);
+            var newTree = tree.Transform(ReverseString);
 
             // Assert
             Display(newTree);
@@ -135,7 +139,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestChangeDataFromMid()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
             var node1 = tree.Add(1);
             var node11 = node1.Add(11);
             var node12 = node1.Add(12);
@@ -144,7 +148,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var node122 = node12.Add(122);
 
             // Act
-            var newNode = node12.Transform(IncreaseData);
+            var newNode = node12.Transform(ReverseString);
 
             // Assert
             Display(newNode);
@@ -158,7 +162,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestChangeNodesEmpty()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
 
             // Act
             var newTree = tree.Transform(MergeChildren);
@@ -173,7 +177,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestChangeNodesFromRoot()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
             var node1 = tree.Add(1);
             var node11 = node1.Add(11);
             var node12 = node1.Add(12);
@@ -198,7 +202,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestChangeNodesFromMid()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
             var node1 = tree.Add(1);
             var node11 = node1.Add(11);
             var node12 = node1.Add(12);

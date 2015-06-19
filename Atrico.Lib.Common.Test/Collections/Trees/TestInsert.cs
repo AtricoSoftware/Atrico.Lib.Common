@@ -14,7 +14,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestEmpty()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
 
             // Act
             var newTree = tree.Insert(123);
@@ -32,7 +32,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestMultipleAtRoot()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
             var node1 = tree.Add(1);
             var node11 = node1.Add(11);
             var node12 = node1.Add(12);
@@ -60,7 +60,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestMultipleWithinTree()
         {
             // Arrange
-            var tree = Tree<int>.Create(true);
+            var tree = Tree.Create(true);
             var node1 = tree.Add(1);
             var node11 = node1.Add(11);
             var node12 = node1.Add(12);

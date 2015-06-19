@@ -7,23 +7,25 @@ namespace Atrico.Lib.Common.Collections.Tree
     /// <summary>
     ///     Tree utilities
     /// </summary>
-    public static class TreeUtilities
+    public static class TreeTUtilities
     {
         /// <summary>
         ///     Determines whether this node is root
         /// </summary>
+        /// <typeparam name="T">Type of node data</typeparam>
         /// <param name="node">The node</param>
         /// <returns>True if node is root of tree</returns>
-        public static bool IsRoot(this ITreeNode node)
+        public static bool IsRoot<T>(this TreeT<T>.INode node)
         {
             return node.Parent == null;
         }
        /// <summary>
         ///     Determines whether this node is leaf (terminal node)
         /// </summary>
+        /// <typeparam name="T">Type of node data</typeparam>
         /// <param name="node">The node</param>
         /// <returns>True if node is terminal (has no children)</returns>
-        public static bool IsLeaf(this ITreeNode node)
+        public static bool IsLeaf<T>(this TreeT<T>.INode node)
         {
             return !node.Children.Any();
         }
@@ -31,9 +33,10 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// <summary>
         ///     Get all the nodes as paths
         /// </summary>
+        /// <typeparam name="T">Type of node data</typeparam>
         /// <param name="node">The root of tree</param>
         /// <returns>List of paths (list of data)</returns>
-        public static IEnumerable<IEnumerable<object>> GetNodes(this ITreeNode node)
+        public static IEnumerable<IEnumerable<T>> GetNodes<T>(this TreeT<T>.INode node)
         {
             return GetNodesImpl(node, true);
         }
@@ -41,17 +44,18 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// <summary>
         ///     Get all the leaves (terminal nodes) as paths
         /// </summary>
+        /// <typeparam name="T">Type of node data</typeparam>
         /// <param name="node">The root of tree</param>
         /// <returns>List of paths (list of data)</returns>
-        public static IEnumerable<IEnumerable<object>> GetLeaves(this ITreeNode node)
+        public static IEnumerable<IEnumerable<T>> GetLeaves<T>(this TreeT<T>.INode node)
         {
             return GetNodesImpl(node, false);
         }
 
  
-        private static IEnumerable<IEnumerable<object>> GetNodesImpl(ITreeNode node, bool includeNonTerminal)
+        private static IEnumerable<IEnumerable<T>> GetNodesImpl<T>(TreeT<T>.INode node, bool includeNonTerminal)
         {
-            var leaves = new List<IEnumerable<object>>();
+            var leaves = new List<IEnumerable<T>>();
             foreach (var childLeaves in node.Children.Select(child => GetNodesImpl(child, includeNonTerminal)))
             {
                 leaves.AddRange(childLeaves.Select(leaf => node.IsRoot() ? leaf : new[] {node.Data}.Concat(leaf)));

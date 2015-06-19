@@ -52,7 +52,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
 
             #endregion
 
-            protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
+            protected override void AddNodeToTree(TreeT<string>.IModifiableNode root)
             {
                 var thisNode = root.Add(string.Format("{0}x", CreateRepeatPart()));
                 _element.AddNodeToTree(thisNode);

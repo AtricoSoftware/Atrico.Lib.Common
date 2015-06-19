@@ -15,7 +15,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestSingleNode()
         {
             // Arrange
-            var tree = Tree<string>.Create(false);
+            var tree = Tree.Create(false);
             tree.Add("root");
 
             // Act
@@ -31,7 +31,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestOneNodeSingleBranch()
         {
             // Arrange
-            var tree = Tree<string>.Create(false);
+            var tree = Tree.Create(false);
             var root = tree.Add("root");
             root.Add("branch");
 
@@ -49,7 +49,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestMultipleSingleBranches()
         {
             // Arrange
-            var tree = Tree<string>.Create(false);
+            var tree = Tree.Create(false);
             var root = tree.Add("root");
             var one = root.Add("one");
             var two = one.Add("two");
@@ -71,7 +71,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestOneNodeDoubleBranch()
         {
             // Arrange
-            var tree = Tree<string>.Create(false);
+            var tree = Tree.Create(false);
             var root = tree.Add("root");
             root.Add("one");
             root.Add("two");
@@ -91,7 +91,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestMultipleBranches()
         {
             // Arrange
-            var tree = Tree<string>.Create(false);
+            var tree = Tree.Create(false);
             var root = tree.Add("root");
             var one = root.Add("one");
             one.Add("one1");
@@ -119,7 +119,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestMultipleRoots()
         {
             // Arrange
-            var tree = Tree<string>.Create(false);
+            var tree = Tree.Create(false);
             var root1 = tree.Add("root1");
             var one1 = root1.Add("one1");
             var two1 = one1.Add("two1");
@@ -149,7 +149,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestAllOverThePlace()
         {
             // Arrange
-            var tree = Tree<string>.Create(false);
+            var tree = Tree.Create(false);
             var root1 = tree.Add("root1");
             var root2 = tree.Add("root2");
             var one1 = root2.Add("one1");
@@ -183,7 +183,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestAllOverThePlace2()
         {
             // Arrange
-            var tree = Tree<string>.Create(false);
+            var tree = Tree.Create(false);
             var root = tree.Add("0");
             var one1 = root.Add("1");
             var one2 = root.Add("2");

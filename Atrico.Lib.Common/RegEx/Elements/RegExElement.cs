@@ -12,7 +12,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
         /// </summary>
         /// <param name="node">The root node of the tree</param>
         /// <returns>New element</returns>
-        public static RegExElement Create(Tree<CharNode>.INode node)
+        public static RegExElement Create(TreeT<CharNode>.INode node)
         {
             RegExElement element = null;
             var children = node.Children.Select(Create).ToArray();
@@ -100,13 +100,13 @@ namespace Atrico.Lib.Common.RegEx.Elements
         ///     For debugging purposes
         /// </summary>
         /// <returns>Text tree</returns>
-        internal Tree<string>.INode ToTree()
+        internal TreeT<string>.INode ToTree()
         {
-            var tree = Tree<string>.Create(true);
+            var tree = TreeT<string>.Create(true);
             AddNodeToTree(tree);
             return tree;
         }
 
-        protected abstract void AddNodeToTree(Tree<string>.IModifiableNode root);
+        protected abstract void AddNodeToTree(TreeT<string>.IModifiableNode root);
     }
 }

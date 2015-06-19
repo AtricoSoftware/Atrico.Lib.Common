@@ -25,7 +25,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
                 return nonNull.Count() > 1 ? creator(elementsA) : nonNull.FirstOrDefault();
             }
 
-            protected void AddNodeToTree(Tree<string>.IModifiableNode root, string nodeName)
+            protected void AddNodeToTree(TreeT<string>.IModifiableNode root, string nodeName)
             {
                 var thisNode = root.Add(nodeName);
                 foreach (var element in Elements)

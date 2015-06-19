@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Atrico.Lib.Common.Collections.Tree
 {
-    public partial class Tree
+    public partial class TreeT<T>
     {
         internal const char FirstChildNode = '\u250C'; // '/'
         internal const char MidChildNode = '\u251c'; // '|-'
@@ -16,20 +16,20 @@ namespace Atrico.Lib.Common.Collections.Tree
         internal const char VerticalLine = '\u2502'; // '|'
         internal const char Space = ' '; // ' '
 
-        private partial class Node : EquatableObject<Node>, IModifiableTreeNode
+        private partial class Node : EquatableObject<Node>, IModifiableNode
         {
             private readonly bool _allowDuplicateNodes;
             private readonly Node _parent;
             private readonly IList<Node> _children;
 
-            public object Data { get; private set; }
+            public T Data { get; private set; }
 
-            public IModifiableTreeNode Parent
+            public IModifiableNode Parent
             {
                 get { return _parent; }
             }
 
-            public IEnumerable<ITreeNode> Children
+            public IEnumerable<INode> Children
             {
                 get { return _children; }
             }
@@ -37,11 +37,11 @@ namespace Atrico.Lib.Common.Collections.Tree
             #region Construction
 
             internal Node(bool allowDuplicateNodes)
-                : this(allowDuplicateNodes, default(object), null)
+                : this(allowDuplicateNodes, default(T), null)
             {
             }
 
-            private Node(bool allowDuplicateNodes, object data, Node parent, IEnumerable<Node> children = null)
+            private Node(bool allowDuplicateNodes, T data, Node parent, IEnumerable<Node> children = null)
             {
                 _allowDuplicateNodes = allowDuplicateNodes;
                 Data = data;
@@ -53,7 +53,7 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             #region Clone
 
-            IModifiableTreeNode ITreeNodeContainer.Clone(bool deep)
+            IModifiableNode INode.Clone(bool deep)
             {
                 return CloneNode(newChildren:(deep?null : _children));
             }
@@ -63,7 +63,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return CloneNode(Data, newParent, newChildren);
             }
 
-            private Node CloneNode(object newData, Node newParent = null, IEnumerable<Node> newChildren = null)
+            private Node CloneNode(T newData, Node newParent = null, IEnumerable<Node> newChildren = null)
             {
                 return new Node(_allowDuplicateNodes, newData, newParent ?? _parent, newChildren ?? _children.Select(ch => ch.CloneNode()));
             }
@@ -72,17 +72,17 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             #region Modify
 
-            object IModifiableTreeNode.Data
+            T IModifiableNode.Data
             {
                 get { return Data; }
                 set { if (!this.IsRoot()) Data = value; }
             }
 
-            public IModifiableTreeNode Add(object data)
+            public IModifiableNode Add(T data)
             {
                 if (!_allowDuplicateNodes)
                 {
-                    var existing = _children.FirstOrDefault(n => n.Data.Equals(data));
+                    var existing = _children.FirstOrDefault(n => n.Equals(data));
                     if (existing != null) return existing;
                 }
                 var node = CloneNode(data, this, new Node[] {});
@@ -90,15 +90,15 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return node;
             }
 
-            public IModifiableTreeNode Add(IEnumerable<object> path)
+            public IModifiableNode Add(IEnumerable<T> path)
             {
-                var pathArray = path as object[] ?? path.ToArray();
+                var pathArray = path as T[] ?? path.ToArray();
                 if (pathArray.Length == 0) return this;
                 var node = Add(pathArray[0]);
                 return node.Add(pathArray.Skip(1));
             }
 
-            public IModifiableTreeNode Insert(object data)
+            public IModifiableNode Insert(T data)
             {
                 if (this.IsRoot())
                 {
@@ -112,7 +112,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return newNode;
             }
 
-            public void Remove(object data)
+            public void Remove(T data)
             {
                 var found = _children.FirstOrDefault(n => n.Data.Equals(data));
                 if (found != null) _children.Remove(found);
@@ -122,9 +122,9 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             #region Traversal
 
-            public void DepthFirst(Action<ITreeNode> action)
+            public void DepthFirst(Action<INode> action)
             {
-                var remaining = new Stack<ITreeNode>();
+                var remaining = new Stack<INode>();
                 if (this.IsRoot()) _children.Reverse().ForEach(remaining.Push);
                 else remaining.Push(this);
                 while (remaining.Any())
@@ -135,9 +135,9 @@ namespace Atrico.Lib.Common.Collections.Tree
                 }
             }
 
-            public void BreadthFirst(Action<ITreeNode> action)
+            public void BreadthFirst(Action<INode> action)
             {
-                var remaining = new Queue<ITreeNode>();
+                var remaining = new Queue<INode>();
                 if (this.IsRoot()) _children.ForEach(remaining.Enqueue);
                 else remaining.Enqueue(this);
                 while (remaining.Any())
@@ -148,7 +148,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 }
             }
 
-            public ITreeNode Transform(Func<IModifiableTreeNode, ITreeNode> transform)
+            public INode Transform(Func<IModifiableNode, INode> transform)
             {
                 // Transform children
                 var newChildren = _children.Select(ch => ch.Transform(transform)).Cast<Node>();
@@ -178,7 +178,12 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             protected override bool EqualsImpl(Node other)
             {
-                return ReferenceEquals(Data, other.Data) || Data.Equals(other.Data) && _children.SequenceEqual(other._children);
+                return Equals(other.Data) && _children.SequenceEqual(other._children);
+            }
+
+            public bool Equals(T otherData)
+            {
+                return Data.Equals(otherData);
             }
 
             #endregion

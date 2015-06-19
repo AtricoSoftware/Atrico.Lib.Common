@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Atrico.Lib.Common.Collections.Tree
 {
-    public partial class Tree<T>
+    public partial class TreeT<T>
     {
         /// <summary>
         ///     Interface to node

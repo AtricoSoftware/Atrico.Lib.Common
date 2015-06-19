@@ -10,18 +10,18 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         protected static string ConvertAscii(string ascii)
         {
             return ascii
-                .Replace("+", Tree<string>.MidChildNode.ToString())
-                .Replace("-", Tree<string>.Dash.ToString())
-                .Replace("/", Tree<string>.FirstChildNode.ToString())
-                .Replace("\\", Tree<string>.LastChildNode.ToString())
-                .Replace("~", Tree<string>.SingleRoot.ToString())
-                .Replace(">", Tree<string>.FirstOfDoubleRoot.ToString())
-                .Replace("#", Tree<string>.MidRoot.ToString())
-                .Replace("|", Tree<string>.VerticalLine.ToString())
-                .Replace(" ", Tree<string>.Space.ToString());
+                .Replace("+", Tree.MidChildNode.ToString())
+                .Replace("-", Tree.Dash.ToString())
+                .Replace("/", Tree.FirstChildNode.ToString())
+                .Replace("\\", Tree.LastChildNode.ToString())
+                .Replace("~", Tree.SingleRoot.ToString())
+                .Replace(">", Tree.FirstOfDoubleRoot.ToString())
+                .Replace("#", Tree.MidRoot.ToString())
+                .Replace("|", Tree.VerticalLine.ToString())
+                .Replace(" ", Tree.Space.ToString());
         }
 
-        protected static void Display<T>(Tree<T>.INode tree)
+        protected static void Display(ITreeNode tree)
         {
             var lines = tree.ToMultilineString().ToArray();
             foreach (var line in lines) Debug.WriteLine(line);

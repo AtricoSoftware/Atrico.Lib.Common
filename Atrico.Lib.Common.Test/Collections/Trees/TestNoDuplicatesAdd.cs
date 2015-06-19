@@ -16,7 +16,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             // Arrange
 
             // Act
-            var tree = Tree<string>.Create(false);
+            var tree = Tree.Create(false);
 
             // Assert
             Display(tree);
@@ -28,7 +28,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestAddSingle()
         {
             // Arrange
-            var tree = Tree<int>.Create(false);
+            var tree = Tree.Create(false);
 
             // Act
             var node = tree.Add(1);
@@ -46,7 +46,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestAddMultipleUnique()
         {
             // Arrange
-            var tree = Tree<int>.Create(false);
+            var tree = Tree.Create(false);
 
             // Act
             var node1 = tree.Add(1);
@@ -72,7 +72,7 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         public void TestAddMultipleDuplicate()
         {
             // Arrange
-            var tree = Tree<int>.Create(false);
+            var tree = Tree.Create(false);
 
             // Act
             var node1 = tree.Add(1);

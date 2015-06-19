@@ -37,7 +37,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
             {
             }
 
-            protected override void AddNodeToTree(Tree<string>.IModifiableNode root)
+            protected override void AddNodeToTree(TreeT<string>.IModifiableNode root)
             {
                 AddNodeToTree(root, "AND");
             }

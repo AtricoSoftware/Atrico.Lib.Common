@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Atrico.Lib.Common.Collections.Tree
 {
-    public partial class Tree
+    public partial class TreeT<T>
     {
         private partial class Node
         {
