@@ -69,11 +69,11 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
         public void DepthFirst(Action<ITreeNode> action)
         {
             var remaining = new Stack<ITreeNode>();
-            GetNodes().Reverse().ForEach(remaining.Push);
+            GetNodesFromHere().Reverse().ForEach(remaining.Push);
             while (remaining.Any())
             {
                 var container = remaining.Pop();
-                var node = container as ITreeNode;
+                var node = container;
                 if (node != null) action(node);
                 container.Children.Reverse().ForEach(remaining.Push);
             }
@@ -82,7 +82,7 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
         public void BreadthFirst(Action<ITreeNode> action)
         {
             var remaining = new Queue<ITreeNodeContainer>();
-            GetNodes().ForEach(remaining.Enqueue);
+            GetNodesFromHere().ForEach(remaining.Enqueue);
             while (remaining.Any())
             {
                 var container = remaining.Dequeue();
@@ -92,11 +92,32 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
             }
         }
 
-        protected virtual IEnumerable<ITreeNode> GetNodes()
+        public IEnumerable<IEnumerable<object>> GetNodes()
+        {
+            return GetNodes(true);
+        }
+
+        public IEnumerable<IEnumerable<object>> GetLeaves()
+        {
+            return GetNodes(false);
+        }
+
+        protected virtual IEnumerable<ITreeNode> GetNodesFromHere()
         {
             // Add children
             return Children;
         }
+
+        protected virtual IEnumerable<IEnumerable<object>> GetNodes(bool includeNonTerminal)
+        {
+            var leaves = new List<IEnumerable<object>>();
+            foreach (var childLeaves in Children.Select(child => child.GetNodes(includeNonTerminal)))
+            {
+                leaves.AddRange(childLeaves);
+            }
+            return leaves;
+        }
+
         #endregion
 
         public void ReplaceNode(Node oldNode, Node newNode)

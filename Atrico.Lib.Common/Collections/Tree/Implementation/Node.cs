@@ -56,9 +56,21 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
 
         #region Traversal
 
-        protected override IEnumerable<ITreeNode> GetNodes()
+        protected override IEnumerable<ITreeNode> GetNodesFromHere()
         {
             return new[] {this};
+        }
+
+        protected override IEnumerable<IEnumerable<object>> GetNodes(bool includeNonTerminal)
+        {
+            var nodeData = new[] {Data};
+            var leaves = new List<IEnumerable<object>>();
+            foreach (var childLeaves in Children.Select(child => child.GetNodes(includeNonTerminal)))
+            {
+                leaves.AddRange(childLeaves.Select(nodeData.Concat));
+            }
+            if (includeNonTerminal || !leaves.Any()) leaves.Add(nodeData);
+            return leaves;
         }
 
         #endregion
@@ -85,6 +97,7 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
                 Children[child].GetDepths(depth + 1, depths, ParentDirection.Up);
             }
         }
+
         protected override void ToMultilineString(int depth, ICollection<string> lines, IList<Tuple<int, ParentDirection>> depths, NodeType nodeType)
         {
             var lineNum = lines.Count();
@@ -95,34 +108,34 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
                 if (child == 0) type = NodeType.First;
                 Children[child].ToMultilineString(depth + 1, lines, depths, type);
             }
-                var line = new StringBuilder();
-                for (var i = 0; i < depth; ++i)
-                {
-                    line.Append(IsBranchAtThisDepth(i, lineNum, depths) ? VerticalLine : Space);
-                    line.Append(Space);
-                }
-                switch (nodeType)
-                {
-                    case NodeType.First:
-                        line.Append(FirstChildNode);
-                        break;
-                    case NodeType.Last:
-                        line.Append(LastChildNode);
-                        break;
-                    case NodeType.SingleRoot:
-                        line.Append(SingleRoot);
-                        break;
-                    case NodeType.FirstOfDoubleRoot:
-                        line.Append(FirstOfDoubleRoot);
-                        break;
-                    default:
-                        line.Append(depth == 0 ? MidRoot : MidChildNode);
-                        break;
-                }
-                line.Append(Dash);
-                line.Append(Data);
-                lines.Add(line.ToString());
-            
+            var line = new StringBuilder();
+            for (var i = 0; i < depth; ++i)
+            {
+                line.Append(IsBranchAtThisDepth(i, lineNum, depths) ? VerticalLine : Space);
+                line.Append(Space);
+            }
+            switch (nodeType)
+            {
+                case NodeType.First:
+                    line.Append(FirstChildNode);
+                    break;
+                case NodeType.Last:
+                    line.Append(LastChildNode);
+                    break;
+                case NodeType.SingleRoot:
+                    line.Append(SingleRoot);
+                    break;
+                case NodeType.FirstOfDoubleRoot:
+                    line.Append(FirstOfDoubleRoot);
+                    break;
+                default:
+                    line.Append(depth == 0 ? MidRoot : MidChildNode);
+                    break;
+            }
+            line.Append(Dash);
+            line.Append(Data);
+            lines.Add(line.ToString());
+
             for (; child < Children.Count(); ++child)
             {
                 var type = NodeType.Middle;

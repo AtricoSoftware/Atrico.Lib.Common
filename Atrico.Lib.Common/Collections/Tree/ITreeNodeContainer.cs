@@ -26,6 +26,18 @@ namespace Atrico.Lib.Common.Collections.Tree
         void BreadthFirst(Action<ITreeNode> action);
 
         /// <summary>
+        ///     Get all the nodes as paths
+        /// </summary>
+        /// <returns>List of paths (list of data)</returns>
+        IEnumerable<IEnumerable<object>> GetNodes();
+
+        /// <summary>
+        ///     Get all the leaves (terminal nodes) as paths
+        /// </summary>
+        /// <returns>List of paths (list of data)</returns>
+        IEnumerable<IEnumerable<object>> GetLeaves();
+
+        /// <summary>
         ///     Add a child node with the specified data
         /// </summary>
         /// <param name="data">The node data</param>
