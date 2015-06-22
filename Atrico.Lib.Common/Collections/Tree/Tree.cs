@@ -14,7 +14,7 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// <returns>Rootnode of new tree</returns>
         public static ITreeNodeContainer Create(bool allowDuplicateNodes)
         {
-            return new Node(allowDuplicateNodes, null, null);
+            return new NodeContainer(allowDuplicateNodes);
         }
     }
 }

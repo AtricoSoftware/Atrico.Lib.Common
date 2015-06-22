@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Atrico.Lib.Common.Collections.Tree.Implementation
 {
-    internal class Node : NodeContainer, ITreeNode
+    internal sealed class Node : NodeContainer, ITreeNode
     {
         private readonly NodeContainer _parent;
 
@@ -25,17 +27,17 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
 
         public ITreeNode Clone(bool deep)
         {
-            return CloneNode(newChildren: (deep ? null : _children));
+            return CloneNode(newChildren: (deep ? null : Children));
         }
 
-        private Node CloneNode(Node newParent = null, IEnumerable<Node> newChildren = null)
+        private Node CloneNode(NodeContainer newParent = null, IEnumerable<Node> newChildren = null)
         {
             return CloneNode(Data, newParent, newChildren);
         }
 
-        private Node CloneNode(object newData, Node newParent = null, IEnumerable<Node> newChildren = null)
+        private Node CloneNode(object newData, NodeContainer newParent = null, IEnumerable<Node> newChildren = null)
         {
-            return new Node(_allowDuplicateNodes, newData, newParent ?? _parent, newChildren ?? _children.Select(ch => ch.CloneNode()));
+            return new Node(AllowDuplicateNodes, newData, newParent ?? _parent, newChildren ?? Children.Select(ch => ch.CloneNode()));
         }
 
         #endregion
@@ -52,23 +54,88 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
 
         #endregion
 
+        #region Traversal
+
+        protected override IEnumerable<ITreeNode> GetNodes()
+        {
+            return new[] {this};
+        }
+
+        #endregion
+
         public ITreeNode Insert(object data)
         {
-            if (this.IsRoot())
-            {
-                var node = CloneNode(data, this);
-                _children.Clear();
-                _children.Add(node);
-                return this;
-            }
             var newNode = CloneNode(data, newChildren: new[] {this});
             _parent.ReplaceNode(this, newNode);
             return newNode;
         }
 
+        #region ToMultiline
+
+        protected override void GetDepths(int depth, ICollection<Tuple<int, ParentDirection>> depths, ParentDirection parentDirection)
+        {
+            var child = 0;
+            for (; child < Children.Count() / 2; ++child)
+            {
+                Children[child].GetDepths(depth + 1, depths, ParentDirection.Down);
+            }
+            depths.Add(Tuple.Create(depth, parentDirection));
+            for (; child < Children.Count(); ++child)
+            {
+                Children[child].GetDepths(depth + 1, depths, ParentDirection.Up);
+            }
+        }
+        protected override void ToMultilineString(int depth, ICollection<string> lines, IList<Tuple<int, ParentDirection>> depths, NodeType nodeType)
+        {
+            var lineNum = lines.Count();
+            var child = 0;
+            for (; child < Children.Count() / 2; ++child)
+            {
+                var type = NodeType.Middle;
+                if (child == 0) type = NodeType.First;
+                Children[child].ToMultilineString(depth + 1, lines, depths, type);
+            }
+                var line = new StringBuilder();
+                for (var i = 0; i < depth; ++i)
+                {
+                    line.Append(IsBranchAtThisDepth(i, lineNum, depths) ? VerticalLine : Space);
+                    line.Append(Space);
+                }
+                switch (nodeType)
+                {
+                    case NodeType.First:
+                        line.Append(FirstChildNode);
+                        break;
+                    case NodeType.Last:
+                        line.Append(LastChildNode);
+                        break;
+                    case NodeType.SingleRoot:
+                        line.Append(SingleRoot);
+                        break;
+                    case NodeType.FirstOfDoubleRoot:
+                        line.Append(FirstOfDoubleRoot);
+                        break;
+                    default:
+                        line.Append(depth == 0 ? MidRoot : MidChildNode);
+                        break;
+                }
+                line.Append(Dash);
+                line.Append(Data);
+                lines.Add(line.ToString());
+            
+            for (; child < Children.Count(); ++child)
+            {
+                var type = NodeType.Middle;
+                if (child == Children.Count() - 1) type = NodeType.Last;
+                Children[child].ToMultilineString(depth + 1, lines, depths, type);
+            }
+        }
+
+        #endregion
+
         public override string ToString()
         {
-            return string.Format("{0}:{1}", this.IsRoot() ? "" : Data.ToString(), _children.ToCollectionString());
+            return string.Format("{0}:{1}", Data, Children.ToCollectionString());
         }
     }
 }

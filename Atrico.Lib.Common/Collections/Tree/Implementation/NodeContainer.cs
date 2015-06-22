@@ -16,20 +16,20 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
         internal const char VerticalLine = '\u2502'; // '|'
         internal const char Space = ' '; // ' '
 
-        protected readonly bool _allowDuplicateNodes;
-        protected readonly IList<Node> _children;
+        protected readonly bool AllowDuplicateNodes;
+        protected readonly IList<Node> Children;
 
-        public IEnumerable<ITreeNode> Children
+        IEnumerable<ITreeNode> ITreeNodeContainer.Children
         {
-            get { return _children; }
+            get { return Children; }
         }
 
         #region Construction
 
         public NodeContainer(bool allowDuplicateNodes, IEnumerable<Node> children = null)
         {
-            _allowDuplicateNodes = allowDuplicateNodes;
-            _children = new List<Node>(children ?? new Node[] {});
+            AllowDuplicateNodes = allowDuplicateNodes;
+            Children = new List<Node>(children ?? new Node[] {});
         }
 
         #endregion
@@ -38,13 +38,13 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
 
         public ITreeNode Add(object data)
         {
-            if (!_allowDuplicateNodes)
+            if (!AllowDuplicateNodes)
             {
-                var existing = _children.FirstOrDefault(n => n.Data.Equals(data));
+                var existing = Children.FirstOrDefault(n => n.Data.Equals(data));
                 if (existing != null) return existing;
             }
-            var node = new Node(_allowDuplicateNodes, data, this);
-            _children.Add(node);
+            var node = new Node(AllowDuplicateNodes, data, this);
+            Children.Add(node);
             return node;
         }
 
@@ -58,8 +58,8 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
 
         public void Remove(object data)
         {
-            var found = _children.FirstOrDefault(n => n.Data.Equals(data));
-            if (found != null) _children.Remove(found);
+            var found = Children.FirstOrDefault(n => n.Data.Equals(data));
+            if (found != null) Children.Remove(found);
         }
 
         #endregion
@@ -68,9 +68,8 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
 
         public void DepthFirst(Action<ITreeNode> action)
         {
-            var remaining = new Stack<ITreeNodeContainer>();
-            if (this.IsRoot()) _children.Reverse().ForEach(remaining.Push);
-            else remaining.Push(this);
+            var remaining = new Stack<ITreeNode>();
+            GetNodes().Reverse().ForEach(remaining.Push);
             while (remaining.Any())
             {
                 var container = remaining.Pop();
@@ -83,8 +82,7 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
         public void BreadthFirst(Action<ITreeNode> action)
         {
             var remaining = new Queue<ITreeNodeContainer>();
-            if (this.IsRoot()) _children.ForEach(remaining.Enqueue);
-            else remaining.Enqueue(this);
+            GetNodes().ForEach(remaining.Enqueue);
             while (remaining.Any())
             {
                 var container = remaining.Dequeue();
@@ -94,14 +92,19 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
             }
         }
 
+        protected virtual IEnumerable<ITreeNode> GetNodes()
+        {
+            // Add children
+            return Children;
+        }
         #endregion
 
         public void ReplaceNode(Node oldNode, Node newNode)
         {
-            for (var i = 0; i < _children.Count; ++i)
+            for (var i = 0; i < Children.Count; ++i)
             {
-                if (!ReferenceEquals(_children[i], oldNode)) continue;
-                _children[i] = newNode;
+                if (!ReferenceEquals(Children[i], oldNode)) continue;
+                Children[i] = newNode;
                 break;
             }
         }
@@ -110,12 +113,12 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
 
         protected override int GetHashCodeImpl()
         {
-            return _children.GetHashCode();
+            return Children.GetHashCode();
         }
 
         protected override bool EqualsImpl(NodeContainer other)
         {
-            return _children.SequenceEqual(other._children);
+            return Children.SequenceEqual(other.Children);
         }
 
         #endregion

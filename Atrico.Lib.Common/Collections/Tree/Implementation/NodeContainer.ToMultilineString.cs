@@ -16,22 +16,15 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
             return lines;
         }
 
-        private void GetDepths(int depth, ICollection<Tuple<int, ParentDirection>> depths, ParentDirection parentDirection)
+        protected virtual void GetDepths(int depth, ICollection<Tuple<int, ParentDirection>> depths, ParentDirection parentDirection)
         {
-            var nextDepth = this.IsRoot() ? depth : depth + 1;
-            var child = 0;
-            for (; child < _children.Count() / 2; ++child)
+            foreach (var child in Children)
             {
-                _children[child].GetDepths(nextDepth, depths, this.IsRoot() ? ParentDirection.None : ParentDirection.Down);
-            }
-            if (!this.IsRoot()) depths.Add(Tuple.Create(depth, parentDirection));
-            for (; child < _children.Count(); ++child)
-            {
-                _children[child].GetDepths(nextDepth, depths, this.IsRoot() ? ParentDirection.None : ParentDirection.Up);
+                child.GetDepths(depth, depths, ParentDirection.None);
             }
         }
 
-        private enum NodeType
+        protected enum NodeType
         {
             First,
             Middle,
@@ -40,71 +33,35 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
             FirstOfDoubleRoot
         }
 
-        private enum ParentDirection
+        protected enum ParentDirection
         {
             None,
             Up,
             Down
         }
 
-        private void ToMultilineString(int depth, ICollection<string> lines, IList<Tuple<int, ParentDirection>> depths, NodeType nodeType)
+        protected virtual void ToMultilineString(int depth, ICollection<string> lines, IList<Tuple<int, ParentDirection>> depths, NodeType nodeType)
         {
-            var lineNum = lines.Count();
-            var nextDepth = this.IsRoot() ? depth : depth + 1;
-            var child = 0;
-            for (; child < _children.Count() / 2; ++child)
+            for (var child = 0; child < Children.Count(); ++child)
             {
                 var type = NodeType.Middle;
-                if (child == 0)
+                if (Children.Count() == 1)
                 {
-                    if (this.IsRoot() && _children.Count() == 2) type = NodeType.FirstOfDoubleRoot;
-                    else type = NodeType.First;
+                    type = NodeType.SingleRoot;
                 }
-                _children[child].ToMultilineString(nextDepth, lines, depths, type);
-            }
-            if (!this.IsRoot())
-            {
-                var line = new StringBuilder();
-                for (var i = 0; i < depth; ++i)
+                else if (child == Children.Count() - 1)
                 {
-                    line.Append(IsBranchAtThisDepth(i, lineNum, depths) ? VerticalLine : Space);
-                    line.Append(Space);
+                    type = NodeType.Last;
                 }
-                switch (nodeType)
+                else if (child == 0)
                 {
-                    case NodeType.First:
-                        line.Append(FirstChildNode);
-                        break;
-                    case NodeType.Last:
-                        line.Append(LastChildNode);
-                        break;
-                    case NodeType.SingleRoot:
-                        line.Append(SingleRoot);
-                        break;
-                    case NodeType.FirstOfDoubleRoot:
-                        line.Append(FirstOfDoubleRoot);
-                        break;
-                    default:
-                        line.Append(depth == 0 ? MidRoot : MidChildNode);
-                        break;
+                    type = Children.Count() == 2 ? NodeType.FirstOfDoubleRoot : NodeType.First;
                 }
-                line.Append(Dash);
-                line.Append((this as ITreeNode).Data); // TODO
-                lines.Add(line.ToString());
-            }
-            for (; child < _children.Count(); ++child)
-            {
-                var type = NodeType.Middle;
-                if (child == _children.Count() - 1)
-                {
-                    if (this.IsRoot() && _children.Count() == 1) type = NodeType.SingleRoot;
-                    else type = NodeType.Last;
-                }
-                _children[child].ToMultilineString(nextDepth, lines, depths, type);
+                 Children[child].ToMultilineString(depth, lines, depths, type);
             }
         }
 
-        private static bool IsBranchAtThisDepth(int depth, int lineNum, IList<Tuple<int, ParentDirection>> depths)
+        protected static bool IsBranchAtThisDepth(int depth, int lineNum, IList<Tuple<int, ParentDirection>> depths)
         {
             Tuple<int, ParentDirection> above = null;
             for (var i = lineNum - 1; i >= 0; --i)
