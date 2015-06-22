@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Atrico.Lib.Common.Collections.Tree
 {
     /// <summary>
-    ///     Interface to node
+    ///     Interface to typed node
     /// </summary>
     public interface ITreeNodeContainer : IEquatable<object>, IMultilineDisplayable
     {

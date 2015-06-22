@@ -63,7 +63,6 @@
     <Compile Include="Collections\Tree\TreeT.INode.cs" />
     <Compile Include="Collections\Tree\TreeT.Node.ToMultilineString.cs" />
     <Compile Include="Collections\Tree\TreeT.Node.cs" />
-    <Compile Include="Collections\Tree\TreeUtilities.cs" />
     <Compile Include="Console\Table.cs" />
     <Compile Include="DateAndTime\DateTimeHelper.cs" />
     <Compile Include="DateAndTime\IDateTime.cs" />

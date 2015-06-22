@@ -3,12 +3,12 @@
 namespace Atrico.Lib.Common.Collections.Tree
 {
     /// <summary>
-    ///     Typed tree
+    ///     Tree
     /// </summary>
     public static class Tree
     {
         /// <summary>
-        ///     Creates the tree
+        ///     Creates a tree
         /// </summary>
         /// <param name="allowDuplicateNodes">if set to <c>true</c> allow duplicate nodes</param>
         /// <returns>Rootnode of new tree</returns>
