@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="allowDuplicateNodes">if set to <c>true</c> allow duplicate nodes</param>
         /// <returns>Rootnode of new tree</returns>
-        public static IModifiableTreeNode Create(bool allowDuplicateNodes)
+        public static ITreeNode Create(bool allowDuplicateNodes)
         {
             return new Node(allowDuplicateNodes);
         }

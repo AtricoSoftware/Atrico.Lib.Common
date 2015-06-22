@@ -5,7 +5,15 @@ namespace Atrico.Lib.Common.Collections.Tree
     /// </summary>
     public interface ITreeNode : ITreeNodeContainer
     {
-        object Data { get; }
-        IModifiableTreeNode Parent { get; }
+        /// <summary>
+        ///     The Node data
+        /// </summary>
+        object Data { get; set; }
+
+        /// <summary>
+        ///     Parent node
+        ///     null if root node
+        /// </summary>
+        ITreeNode Parent { get; }
     }
 }

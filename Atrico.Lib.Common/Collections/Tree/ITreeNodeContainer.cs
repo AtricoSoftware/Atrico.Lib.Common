@@ -18,7 +18,7 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// </summary>
         /// <param name="deep">If true, clone children</param>
         /// <returns>Copy of node</returns>
-        IModifiableTreeNode Clone(bool deep = false);
+        ITreeNode Clone(bool deep = false);
 
         /// <summary>
         ///     Perform action on each node in depth first order
@@ -37,6 +37,33 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// </summary>
         /// <param name="transform">The transform</param>
         /// <returns>New node</returns>
-        ITreeNode Transform(Func<IModifiableTreeNode, ITreeNode> transform);
+        ITreeNode Transform(Func<ITreeNode, ITreeNode> transform);
+
+        /// <summary>
+        /// Add a child node with the specified data
+        /// </summary>
+        /// <param name="data">The node data</param>
+        /// <returns>New node</returns>
+        ITreeNode Add(object data);
+
+        /// <summary>
+        /// Adds the specified path of nodes
+        /// </summary>
+        /// <param name="path">The path</param>
+        /// <returns>New leaf node</returns>
+        ITreeNode Add(IEnumerable<object> path);
+
+        /// <summary>
+        /// Inserts a node with the specified data
+        /// </summary>
+        /// <param name="data">Node data</param>
+        /// <returns>New node</returns>
+        ITreeNode Insert(object data);
+
+        /// <summary>
+        /// Removes the specified child node
+        /// </summary>
+        /// <param name="data">The data by which to identify the node</param>
+        void Remove(object data);
     }
 }

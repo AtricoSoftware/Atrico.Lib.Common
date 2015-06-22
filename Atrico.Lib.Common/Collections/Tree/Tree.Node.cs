@@ -16,15 +16,15 @@ namespace Atrico.Lib.Common.Collections.Tree
         internal const char VerticalLine = '\u2502'; // '|'
         internal const char Space = ' '; // ' '
 
-        private partial class Node : EquatableObject<Node>, IModifiableTreeNode
+        private partial class Node : EquatableObject<Node>, ITreeNode
         {
             private readonly bool _allowDuplicateNodes;
             private readonly Node _parent;
             private readonly IList<Node> _children;
 
-            public object Data { get; private set; }
+            public object Data { get; set; }
 
-            public IModifiableTreeNode Parent
+            public ITreeNode Parent
             {
                 get { return _parent; }
             }
@@ -53,7 +53,7 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             #region Clone
 
-            IModifiableTreeNode ITreeNodeContainer.Clone(bool deep)
+            ITreeNode ITreeNodeContainer.Clone(bool deep)
             {
                 return CloneNode(newChildren:(deep?null : _children));
             }
@@ -72,13 +72,7 @@ namespace Atrico.Lib.Common.Collections.Tree
 
             #region Modify
 
-            object IModifiableTreeNode.Data
-            {
-                get { return Data; }
-                set { if (!this.IsRoot()) Data = value; }
-            }
-
-            public IModifiableTreeNode Add(object data)
+            public ITreeNode Add(object data)
             {
                 if (!_allowDuplicateNodes)
                 {
@@ -90,7 +84,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return node;
             }
 
-            public IModifiableTreeNode Add(IEnumerable<object> path)
+            public ITreeNode Add(IEnumerable<object> path)
             {
                 var pathArray = path as object[] ?? path.ToArray();
                 if (pathArray.Length == 0) return this;
@@ -98,7 +92,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 return node.Add(pathArray.Skip(1));
             }
 
-            public IModifiableTreeNode Insert(object data)
+            public ITreeNode Insert(object data)
             {
                 if (this.IsRoot())
                 {
@@ -148,7 +142,7 @@ namespace Atrico.Lib.Common.Collections.Tree
                 }
             }
 
-            public ITreeNode Transform(Func<IModifiableTreeNode, ITreeNode> transform)
+            public ITreeNode Transform(Func<ITreeNode, ITreeNode> transform)
             {
                 // Transform children
                 var newChildren = _children.Select(ch => ch.Transform(transform)).Cast<Node>();

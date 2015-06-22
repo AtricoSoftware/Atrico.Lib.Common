@@ -10,17 +10,17 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
     [TestFixture]
     public class TestTransform : TreeTestFixtureBase
     {
-        private static ITreeNode Identity(IModifiableTreeNode node)
+        private static ITreeNode Identity(ITreeNode node)
         {
             return node;
         }
 
-        private static ITreeNode ReverseString(IModifiableTreeNode node)
+        private static ITreeNode ReverseString(ITreeNode node)
         {
             if (!ReferenceEquals(node.Data, null)) node.Data = (int)node.Data * 10;
             return node;
         }
-        private static ITreeNode MergeChildren(IModifiableTreeNode node)
+        private static ITreeNode MergeChildren(ITreeNode node)
         {
             if (!node.IsRoot())
             {
