@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\Tree\Implementation\NodeContainer.cs" />
+    <Compile Include="Collections\Tree\Implementation\NodeContainerT.cs" />
+    <Compile Include="Collections\Tree\Implementation\NodeT.cs" />
     <Compile Include="Collections\Tree\ITreeNode.cs" />
     <Compile Include="Collections\Tree\ITreeNodeContainer.cs" />
     <Compile Include="Collections\Tree\Tree.cs" />

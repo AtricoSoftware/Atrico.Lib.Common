@@ -27,5 +27,10 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
             var lines = tree.ToMultilineString().ToArray();
             foreach (var line in lines) Debug.WriteLine(line);
         }
+        protected static void Display<T>(ITreeNodeContainer<T> tree)
+        {
+            var lines = tree.ToMultilineString().ToArray();
+            foreach (var line in lines) Debug.WriteLine(line);
+        }
     }
 }
