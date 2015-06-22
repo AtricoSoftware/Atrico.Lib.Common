@@ -7,13 +7,19 @@ namespace Atrico.Lib.Common.Collections
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> list, Action<T> action)
+        public static void ForEach<T>(this IEnumerable<T> list, Action<T> action)
         {
             foreach (var item in list)
             {
                 action(item);
             }
-            return list;
+        }
+       public static void ForEach<T>(this IEnumerable list, Action<object> action)
+        {
+            foreach (var item in list)
+            {
+                action(item);
+            }
         }
 
        public static IEnumerable<IGrouping<TKey, TSource>> PartitionBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)

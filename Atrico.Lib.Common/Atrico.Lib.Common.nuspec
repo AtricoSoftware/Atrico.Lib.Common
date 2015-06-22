@@ -14,6 +14,7 @@
     <description>$description$</description>
     <copyright>$copyright$</copyright>
     <releaseNotes>
+      Tree converted to object (typed version added on top of this)
       1.9.1.0
       Removed incorrect reference to domain model
       1.9.0.0
