@@ -72,23 +72,21 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
             GetNodesFromHere().Reverse().ForEach(remaining.Push);
             while (remaining.Any())
             {
-                var container = remaining.Pop();
-                var node = container;
-                if (node != null) action(node);
-                container.Children.Reverse().ForEach(remaining.Push);
+                var node = remaining.Pop();
+                action(node);
+                node.Children.Reverse().ForEach(remaining.Push);
             }
         }
 
         public void BreadthFirst(Action<ITreeNode> action)
         {
-            var remaining = new Queue<ITreeNodeContainer>();
+            var remaining = new Queue<ITreeNode>();
             GetNodesFromHere().ForEach(remaining.Enqueue);
             while (remaining.Any())
             {
-                var container = remaining.Dequeue();
-                var node = container as ITreeNode;
-                if (node != null) action(node);
-                container.Children.ForEach(remaining.Enqueue);
+                var node = remaining.Dequeue();
+                action(node);
+                node.Children.ForEach(remaining.Enqueue);
             }
         }
 
