@@ -10,19 +10,20 @@ namespace Atrico.Lib.Common.RegEx.Elements
         /// <summary>
         ///     Creates an element from a tree of characters
         /// </summary>
-        /// <param name="node">The root node of the tree</param>
+        /// <param name="container">The root node of the tree</param>
         /// <returns>New element</returns>
-        public static RegExElement Create(TreeT<CharNode>.INode node)
+        public static RegExElement Create(ITreeNodeContainer<CharNode> container)
         {
             RegExElement element = null;
-            var children = node.Children.Select(Create).ToArray();
+            var children = container.Children.Select(Create).ToArray();
             if (children.Any())
             {
                 // Alternation of all children
                 element = RegExAlternation.Create(children);
             }
-            if (node.IsRoot()) return element;
             // Sequence of data + children
+            var node = container as ITreeNode<CharNode>;
+            if (node == null) return element;
             element = RegExSequence.Create(new[] {Create(node.Data.Char), element});
             if (node.Data.IsTerminator)
             {
@@ -100,13 +101,13 @@ namespace Atrico.Lib.Common.RegEx.Elements
         ///     For debugging purposes
         /// </summary>
         /// <returns>Text tree</returns>
-        internal TreeT<string>.INode ToTree()
+        internal ITreeNodeContainer ToTree()
         {
-            var tree = TreeT<string>.Create(true);
+            var tree = Tree.Create(true);
             AddNodeToTree(tree);
             return tree;
         }
 
-        protected abstract void AddNodeToTree(TreeT<string>.IModifiableNode root);
+        protected abstract void AddNodeToTree(ITreeNodeContainer root);
     }
 }

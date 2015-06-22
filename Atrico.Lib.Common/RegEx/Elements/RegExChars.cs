@@ -159,7 +159,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
                 }
             }
 
-            protected override void AddNodeToTree(TreeT<string>.IModifiableNode root)
+            protected override void AddNodeToTree(ITreeNodeContainer root)
             {
                 root.Add(ToString());
             }

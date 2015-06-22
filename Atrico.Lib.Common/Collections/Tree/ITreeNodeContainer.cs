@@ -49,7 +49,7 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// </summary>
         /// <param name="path">The path</param>
         /// <returns>New leaf node</returns>
-        ITreeNode Add(IEnumerable<object> path);
+        ITreeNode AddPath(IEnumerable<object> path);
 
         /// <summary>
         ///     Removes the specified child node
@@ -104,7 +104,7 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// </summary>
         /// <param name="path">The path</param>
         /// <returns>New leaf node</returns>
-        ITreeNode<T> Add(IEnumerable<T> path);
+        ITreeNode<T> AddPath(IEnumerable<T> path);
 
         /// <summary>
         ///     Removes the specified child node

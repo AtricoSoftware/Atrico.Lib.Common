@@ -58,9 +58,9 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
             return new Node<T>(_implementation.Add(data));
         }
 
-        public ITreeNode<T> Add(IEnumerable<T> path)
+        public ITreeNode<T> AddPath(IEnumerable<T> path)
         {
-            return new Node<T>(_implementation.Add(path));
+            return new Node<T>(_implementation.AddPath(path.Cast<object>()));
         }
 
         public void Remove(T data)

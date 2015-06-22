@@ -40,7 +40,7 @@ namespace Atrico.Lib.Common.Test.RegEx
                 return this;
             }
 
-            protected override void AddNodeToTree(TreeT<string>.IModifiableNode root)
+            protected override void AddNodeToTree(ITreeNodeContainer root)
             {
                 root.Add(ToString());
             }
@@ -59,7 +59,14 @@ namespace Atrico.Lib.Common.Test.RegEx
             Debug.WriteLine(element);
         }
 
-        protected static void DisplayTree<T>(TreeT<T>.INode tree)
+        protected static void DisplayTree(ITreeNodeContainer tree)
+        {
+            foreach (var line in tree.ToMultilineString())
+            {
+                Debug.WriteLine(line);
+            }
+        }
+       protected static void DisplayTree<T>(ITreeNodeContainer<T> tree)
         {
             foreach (var line in tree.ToMultilineString())
             {

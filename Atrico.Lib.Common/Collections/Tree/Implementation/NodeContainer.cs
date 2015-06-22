@@ -48,12 +48,12 @@ namespace Atrico.Lib.Common.Collections.Tree.Implementation
             return node;
         }
 
-        public ITreeNode Add(IEnumerable<object> path)
+        public ITreeNode AddPath(IEnumerable<object> path)
         {
             var pathArray = path as object[] ?? path.ToArray();
             if (pathArray.Length == 0) return this as ITreeNode;
             var node = Add(pathArray[0]);
-            return node.Add(pathArray.Skip(1));
+            return node.AddPath(pathArray.Skip(1));
         }
 
         public void Remove(object data)

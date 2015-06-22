@@ -102,7 +102,7 @@ namespace Atrico.Lib.Common.RegEx.Elements
 
             #endregion
 
-            protected override void AddNodeToTree(TreeT<string>.IModifiableNode root)
+            protected override void AddNodeToTree(ITreeNodeContainer root)
             {
                 AddNodeToTree(root, "OR");
             }
