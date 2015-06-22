@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using Atrico.Lib.Common.Collections.Tree;
+using Atrico.Lib.Common.Collections.Tree.Implementation;
 using Atrico.Lib.Testing;
 
 namespace Atrico.Lib.Common.Test.Collections.Trees
@@ -10,18 +11,18 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
         protected static string ConvertAscii(string ascii)
         {
             return ascii
-                .Replace("+", Tree.MidChildNode.ToString())
-                .Replace("-", Tree.Dash.ToString())
-                .Replace("/", Tree.FirstChildNode.ToString())
-                .Replace("\\", Tree.LastChildNode.ToString())
-                .Replace("~", Tree.SingleRoot.ToString())
-                .Replace(">", Tree.FirstOfDoubleRoot.ToString())
-                .Replace("#", Tree.MidRoot.ToString())
-                .Replace("|", Tree.VerticalLine.ToString())
-                .Replace(" ", Tree.Space.ToString());
+                .Replace("+", Node.MidChildNode.ToString())
+                .Replace("-", Node.Dash.ToString())
+                .Replace("/", Node.FirstChildNode.ToString())
+                .Replace("\\", Node.LastChildNode.ToString())
+                .Replace("~", Node.SingleRoot.ToString())
+                .Replace(">", Node.FirstOfDoubleRoot.ToString())
+                .Replace("#", Node.MidRoot.ToString())
+                .Replace("|", Node.VerticalLine.ToString())
+                .Replace(" ", Node.Space.ToString());
         }
 
-        protected static void Display(ITreeNode tree)
+        protected static void Display(ITreeNodeContainer tree)
         {
             var lines = tree.ToMultilineString().ToArray();
             foreach (var line in lines) Debug.WriteLine(line);

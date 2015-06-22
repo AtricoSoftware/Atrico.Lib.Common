@@ -20,7 +20,6 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
 
             // Assert
             Display(tree);
-            Assert.That(Value.Of(tree.Parent).Is().Null(), "Tree parent");
             Assert.That(Value.Of(tree.Children).Count().Is().EqualTo(0), "Tree children count");
         }
 
@@ -35,7 +34,6 @@ namespace Atrico.Lib.Common.Test.Collections.Trees
 
             // Assert
             Display(tree);
-            Assert.That(Value.Of(tree.Parent).Is().Null(), "Tree parent");
             Assert.That(Value.Of(tree.Children).Count().Is().EqualTo(1), "Tree children count");
             Assert.That(Value.Of(tree.Children).Is().EqualTo(new[] {node}), "Tree children");
             Assert.That(Value.Of(node.Parent).Is().ReferenceEqualTo(tree), "Node parent");

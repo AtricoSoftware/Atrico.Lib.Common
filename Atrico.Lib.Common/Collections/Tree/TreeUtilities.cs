@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Atrico.Lib.Common.Collections.Tree.Implementation;
 
 namespace Atrico.Lib.Common.Collections.Tree
 {
@@ -18,6 +19,11 @@ namespace Atrico.Lib.Common.Collections.Tree
         {
             return node.Parent == null;
         }
+        public static bool IsRoot(this ITreeNodeContainer container)
+        {
+            var node = container as ITreeNode;
+            return node == null || IsRoot(node);
+        }
        /// <summary>
         ///     Determines whether this node is leaf (terminal node)
         /// </summary>
@@ -31,32 +37,33 @@ namespace Atrico.Lib.Common.Collections.Tree
         /// <summary>
         ///     Get all the nodes as paths
         /// </summary>
-        /// <param name="node">The root of tree</param>
+        /// <param name="container">The root of tree</param>
         /// <returns>List of paths (list of data)</returns>
-        public static IEnumerable<IEnumerable<object>> GetNodes(this ITreeNode node)
+        public static IEnumerable<IEnumerable<object>> GetNodes(this ITreeNodeContainer container)
         {
-            return GetNodesImpl(node, true);
+            return GetNodesImpl(container, true);
         }
 
         /// <summary>
         ///     Get all the leaves (terminal nodes) as paths
         /// </summary>
-        /// <param name="node">The root of tree</param>
+        /// <param name="container">The root of tree</param>
         /// <returns>List of paths (list of data)</returns>
-        public static IEnumerable<IEnumerable<object>> GetLeaves(this ITreeNode node)
+        public static IEnumerable<IEnumerable<object>> GetLeaves(this ITreeNodeContainer container)
         {
-            return GetNodesImpl(node, false);
+            return GetNodesImpl(container, false);
         }
-
  
-        private static IEnumerable<IEnumerable<object>> GetNodesImpl(ITreeNode node, bool includeNonTerminal)
+ 
+        private static IEnumerable<IEnumerable<object>> GetNodesImpl(ITreeNodeContainer container, bool includeNonTerminal)
         {
             var leaves = new List<IEnumerable<object>>();
-            foreach (var childLeaves in node.Children.Select(child => GetNodesImpl(child, includeNonTerminal)))
+            foreach (var childLeaves in container.Children.Select(child => GetNodesImpl(child, includeNonTerminal)))
             {
-                leaves.AddRange(childLeaves.Select(leaf => node.IsRoot() ? leaf : new[] {node.Data}.Concat(leaf)));
+                leaves.AddRange(childLeaves.Select(leaf => container.IsRoot() ? leaf : new[] { (container as ITreeNode).Data }.Concat(leaf)));
             }
-            if (!node.IsRoot() && (includeNonTerminal || !leaves.Any())) leaves.Add(new[] {node.Data});
+            var node = container as ITreeNode;
+            if (node != null && !node.IsRoot() && (includeNonTerminal || !leaves.Any())) leaves.Add(new[] {node.Data});
             return leaves;
         }
     }

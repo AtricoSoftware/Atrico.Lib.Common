@@ -42,12 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\Tree\Implementation\NodeContainer.cs" />
     <Compile Include="Collections\Tree\ITreeNode.cs" />
     <Compile Include="Collections\Tree\ITreeNodeContainer.cs" />
     <Compile Include="Collections\Tree\Tree.cs" />
     <Compile Include="Collections\Tree\TreeT.cs" />
-    <Compile Include="Collections\Tree\Tree.Node.cs" />
-    <Compile Include="Collections\Tree\Tree.Node.ToMultilineString.cs" />
+    <Compile Include="Collections\Tree\Implementation\Node.cs" />
+    <Compile Include="Collections\Tree\Implementation\NodeContainer.ToMultilineString.cs" />
     <Compile Include="Collections\Tree\TreeTUtilities.cs" />
     <Compile Include="ComparableObject.cs" />
     <Compile Include="Console\ConsoleUtils.cs" />
@@ -105,6 +106,7 @@
   <ItemGroup>
     <Content Include="_TODO.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -12,8 +12,21 @@ namespace Atrico.Lib.Common.Collections.Tree
 
         /// <summary>
         ///     Parent node
-        ///     null if root node
         /// </summary>
-        ITreeNode Parent { get; }
+        ITreeNodeContainer Parent { get; }
+
+        /// <summary>
+        ///     Clones this instance and makes modifiable
+        /// </summary>
+        /// <param name="deep">If true, clone children</param>
+        /// <returns>Copy of node</returns>
+        ITreeNode Clone(bool deep = false);
+
+        /// <summary>
+        ///     Inserts a node with the specified data
+        /// </summary>
+        /// <param name="data">Node data</param>
+        /// <returns>New node</returns>
+        ITreeNode Insert(object data);
     }
 }
