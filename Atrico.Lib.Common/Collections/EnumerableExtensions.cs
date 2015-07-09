@@ -9,20 +9,15 @@ namespace Atrico.Lib.Common.Collections
     {
         public static void ForEach<T>(this IEnumerable<T> list, Action<T> action)
         {
-            foreach (var item in list)
-            {
-                action(item);
-            }
-        }
-       public static void ForEach<T>(this IEnumerable list, Action<object> action)
-        {
-            foreach (var item in list)
-            {
-                action(item);
-            }
+            foreach (var item in list) action(item);
         }
 
-       public static IEnumerable<IGrouping<TKey, TSource>> PartitionBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        public static void ForEach<T>(this IEnumerable list, Action<object> action)
+        {
+            foreach (var item in list) action(item);
+        }
+
+        public static IEnumerable<IGrouping<TKey, TSource>> PartitionBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             var result = new List<IGrouping<TKey, TSource>>();
             Grouping<TKey, TSource> current = null;

@@ -14,6 +14,9 @@
     <description>$description$</description>
     <copyright>$copyright$</copyright>
     <releaseNotes>
+      1.10.0.0
+      RunContextInfo added
+      Reflection helpers added (type.IsNullable, Type.IsEnum)
       Tree converted to object (typed version added on top of this)
       1.9.1.0
       Removed incorrect reference to domain model

@@ -92,8 +92,10 @@
     <Compile Include="RegEx\Elements\RegExElement.cs" />
     <Compile Include="ResettableCache\ResettableCache.cs" />
     <Compile Include="ResettableCache\IResettable.cs" />
+    <Compile Include="RunContextInfo.cs" />
     <Compile Include="Security\CredentialLocker.cs" />
     <Compile Include="Security\DataProtectionExtensions.cs" />
+    <Compile Include="Reflection\TypeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Atrico.Lib.Common.nuspec" />
