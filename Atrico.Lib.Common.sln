@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atrico.Lib.Common.Test", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atrico.Lib.Common.Test.ConsoleApp", "ConsoleApplication1\Atrico.Lib.Common.Test.ConsoleApp.csproj", "{A4D5A5BF-5266-4086-8A76-0077C7FA059C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplication1", "WpfApplication1\WpfApplication1.csproj", "{3B16E3ED-27EF-4102-91B1-8CE9597562BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{A4D5A5BF-5266-4086-8A76-0077C7FA059C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4D5A5BF-5266-4086-8A76-0077C7FA059C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4D5A5BF-5266-4086-8A76-0077C7FA059C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B16E3ED-27EF-4102-91B1-8CE9597562BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B16E3ED-27EF-4102-91B1-8CE9597562BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B16E3ED-27EF-4102-91B1-8CE9597562BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B16E3ED-27EF-4102-91B1-8CE9597562BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
