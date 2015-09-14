@@ -7,7 +7,7 @@ using Atrico.Lib.Common.RegEx;
 using Atrico.Lib.Testing.TestAttributes;
 using Atrico.Lib.Testing.TestAttributes.NUnit;
 
-namespace Atrico.Lib.Common.Test.RegEx
+namespace Atrico.Lib.Common.Tests.RegEx
 {
     [TestFixture]
     public class TestNumberMatcher : RegExTestFixtureBase

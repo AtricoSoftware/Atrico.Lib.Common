@@ -1,12 +1,11 @@
-﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Atrico.Lib.Assertions;
 using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.RegEx.Elements;
 using Atrico.Lib.Testing.TestAttributes.NUnit;
 
-namespace Atrico.Lib.Common.Test.RegEx.Elements
+namespace Atrico.Lib.Common.Tests.RegEx.Elements
 {
     [TestFixture]
     public class TestRegExSequence : RegExTestFixtureBase

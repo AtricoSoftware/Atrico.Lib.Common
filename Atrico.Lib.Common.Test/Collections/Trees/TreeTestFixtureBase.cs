@@ -4,7 +4,7 @@ using Atrico.Lib.Common.Collections.Tree;
 using Atrico.Lib.Common.Collections.Tree.Implementation;
 using Atrico.Lib.Testing;
 
-namespace Atrico.Lib.Common.Test.Collections.Trees
+namespace Atrico.Lib.Common.Tests.Collections.Trees
 {
     public abstract class TreeTestFixtureBase : TestFixtureBase
     {

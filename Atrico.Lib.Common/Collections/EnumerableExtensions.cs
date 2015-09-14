@@ -12,7 +12,7 @@ namespace Atrico.Lib.Common.Collections
             foreach (var item in list) action(item);
         }
 
-        public static void ForEach<T>(this IEnumerable list, Action<object> action)
+        public static void ForEach(this IEnumerable list, Action<object> action)
         {
             foreach (var item in list) action(item);
         }

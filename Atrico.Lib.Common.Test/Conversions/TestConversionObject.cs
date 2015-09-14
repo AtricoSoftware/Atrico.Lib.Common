@@ -4,7 +4,7 @@ using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Testing;
 using Atrico.Lib.Testing.TestAttributes.NUnit;
 
-namespace Atrico.Lib.Common.Test.Conversions
+namespace Atrico.Lib.Common.Tests.Conversions
 {
 	[TestFixture]
 	public class TestConversionObject : TestFixtureBase

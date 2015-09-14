@@ -5,7 +5,7 @@ using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Testing.TestAttributes.NUnit;
 
-namespace Atrico.Lib.Common.Test.Permutations
+namespace Atrico.Lib.Common.Tests.Permutations
 {
     [TestFixture]
     public class TestPermutations

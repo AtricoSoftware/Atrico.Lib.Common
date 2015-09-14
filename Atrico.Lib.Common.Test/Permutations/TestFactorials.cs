@@ -6,7 +6,7 @@ using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.Permutations;
 using Atrico.Lib.Testing.TestAttributes.NUnit;
 
-namespace Atrico.Lib.Common.Test.Permutations
+namespace Atrico.Lib.Common.Tests.Permutations
 {
     [TestFixture]
     public class TestFactorials

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Version = Atrico.Lib.Common.SemanticVersion.Version;
 
 namespace Atrico.Lib.Common
 {
@@ -67,7 +68,7 @@ namespace Atrico.Lib.Common
 
         private static Version GetAssemblyVersion(Assembly assembly)
         {
-            return assembly == null ? new Version() : assembly.GetName().Version;
+            return assembly == null ? Version.From(0) : Version.From(assembly.GetName().Version);
         }
 
         private static string GetAssemblyCopyright(Assembly assembly)

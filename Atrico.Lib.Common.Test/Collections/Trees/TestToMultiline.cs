@@ -5,7 +5,7 @@ using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.Collections.Tree;
 using Atrico.Lib.Testing.TestAttributes.NUnit;
 
-namespace Atrico.Lib.Common.Test.Collections.Trees
+namespace Atrico.Lib.Common.Tests.Collections.Trees
 {
     [TestFixture]
     public class TestToMultiline : TreeTestFixtureBase

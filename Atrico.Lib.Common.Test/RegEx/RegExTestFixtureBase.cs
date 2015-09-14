@@ -5,7 +5,7 @@ using Atrico.Lib.Common.Collections.Tree;
 using Atrico.Lib.Common.RegEx.Elements;
 using Atrico.Lib.Testing;
 
-namespace Atrico.Lib.Common.Test.RegEx
+namespace Atrico.Lib.Common.Tests.RegEx
 {
     public class RegExTestFixtureBase : TestFixtureBase
     {

@@ -15,6 +15,8 @@
     <copyright>$copyright$</copyright>
     <releaseNotes>
       1.11.0.0
+      PropertyContainer added
+      SemanticVersion added
       Multiple .net versions
       1.10.1.0
       Removed unecessary content

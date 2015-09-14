@@ -4,7 +4,7 @@ using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.RegEx.Elements;
 using Atrico.Lib.Testing.TestAttributes.NUnit;
 
-namespace Atrico.Lib.Common.Test.RegEx.Elements
+namespace Atrico.Lib.Common.Tests.RegEx.Elements
 {
     [TestFixture]
     public class TestSimplifyAlternation : RegExTestFixtureBase
