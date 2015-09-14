@@ -81,6 +81,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Collections\Trees\TestRemove.cs" />
+    <Compile Include="PropertyContainer\TestPropertyContainerEquality.cs" />
     <Compile Include="PropertyContainer\TestPropertyContainerEvents.cs" />
     <Compile Include="PropertyContainer\TestPropertyContainerGetSet.cs" />
     <Compile Include="RegEx\Elements\TestRegExRepeats.cs" />

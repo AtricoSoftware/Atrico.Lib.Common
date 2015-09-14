@@ -7,11 +7,6 @@
         {
         }
 
-        protected override object CreateInitialValue<T>()
-        {
-            return default(T);
-        }
-
         protected override T GetValue<T>(string name)
         {
             return (T)Properties[name];

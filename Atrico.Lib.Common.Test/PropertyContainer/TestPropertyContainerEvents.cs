@@ -16,10 +16,11 @@ namespace Atrico.Lib.Common.Test.PropertyContainer
         {
             public int CallCount { get; private set; }
             public PropertyChangedEventArgs Args { get; private set; }
-
+            public object Sender { get; private set; }
             public void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
             {
                 Args = e;
+                Sender = sender;
                 ++CallCount;
             }
         }
@@ -33,9 +34,10 @@ namespace Atrico.Lib.Common.Test.PropertyContainer
         public void TestSetDefault()
         {
             var name = GetCallingMethodName();
+            var sender = this;
 
             // Arrange
-            var props = new Common.PropertyContainer.PropertyContainer(this);
+            var props = new Common.PropertyContainer.PropertyContainer(sender);
             var handler = new PropertyHandler();
             props.PropertyChanged += handler.OnPropertyChanged;
 
@@ -46,6 +48,7 @@ namespace Atrico.Lib.Common.Test.PropertyContainer
             // Assert
             Assert.That(Value.Of(handler.CallCount).Is().EqualTo(1), "Single callback");
             Assert.That(Value.Of(handler.Args.PropertyName).Is().EqualTo(name), "Correct name");
+            Assert.That(Value.Of(handler.Sender).Is().ReferenceEqualTo(sender), "Correct sender");
         }
 
         [Test]
@@ -54,9 +57,10 @@ namespace Atrico.Lib.Common.Test.PropertyContainer
             var name = GetCallingMethodName();
             const int count = 10;
             var values = RandomValues.UniqueValues<int>(count);
+            object sender = null;
 
             // Arrange
-            var props = new Common.PropertyContainer.PropertyContainer(this);
+            var props = new Common.PropertyContainer.PropertyContainer(sender);
             var handler = new PropertyHandler();
             props.PropertyChanged += handler.OnPropertyChanged;
 
@@ -70,6 +74,7 @@ namespace Atrico.Lib.Common.Test.PropertyContainer
             // Assert
             Assert.That(Value.Of(handler.CallCount).Is().EqualTo(count), "Multiple callbacks");
             Assert.That(Value.Of(handler.Args.PropertyName).Is().EqualTo(name), "Correct name");
+            Assert.That(Value.Of(handler.Sender).Is().ReferenceEqualTo(sender), "Correct sender");
         }
 
         [Test]
@@ -77,9 +82,10 @@ namespace Atrico.Lib.Common.Test.PropertyContainer
         {
             var name = GetCallingMethodName();
             var values = Enumerable.Repeat(123, 10);
+            var sender = new object();
 
             // Arrange
-            var props = new Common.PropertyContainer.PropertyContainer(this);
+            var props = new Common.PropertyContainer.PropertyContainer(sender);
             var handler = new PropertyHandler();
             props.PropertyChanged += handler.OnPropertyChanged;
 
@@ -93,6 +99,7 @@ namespace Atrico.Lib.Common.Test.PropertyContainer
             // Assert
             Assert.That(Value.Of(handler.CallCount).Is().EqualTo(1), "Single callback");
             Assert.That(Value.Of(handler.Args.PropertyName).Is().EqualTo(name), "Correct name");
+            Assert.That(Value.Of(handler.Sender).Is().ReferenceEqualTo(sender), "Correct sender");
         }
     }
 }
