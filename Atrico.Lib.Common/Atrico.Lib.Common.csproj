@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DecimalUtilities.cs" />
     <Compile Include="SemanticVersion\Version.cs" />
     <Compile Include="Collections\Tree\Implementation\NodeContainer.cs" />
     <Compile Include="Collections\Tree\Implementation\NodeContainerT.cs" />
