@@ -7,14 +7,19 @@
         {
         }
 
-        protected override T GetValue<T>(string name)
+        protected override T GetValue<T>(object prop)
         {
-            return (T)Properties[name];
+            return (T)prop;
         }
 
-        protected override void SetValue<T>(string name, T value)
+        protected override object AmendValue<T>(object prop, T value)
         {
-            Properties[name] = value;
+            return value;
+        }
+
+        protected override object CreateValue<T>(string name, T value)
+        {
+            return value;
         }
     }
 }

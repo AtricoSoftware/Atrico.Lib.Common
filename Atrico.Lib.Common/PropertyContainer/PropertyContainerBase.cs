@@ -8,7 +8,7 @@ namespace Atrico.Lib.Common.PropertyContainer
     public abstract class PropertyContainerBase<TProp> : IPropertyContainer
     {
         private readonly object _owner;
-        protected readonly IDictionary<string, TProp> Properties = new Dictionary<string, TProp>();
+        private readonly IDictionary<string, TProp> _properties = new Dictionary<string, TProp>();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -19,7 +19,7 @@ namespace Atrico.Lib.Common.PropertyContainer
 
         public T Get<T>([CallerMemberName] string name = null)
         {
-            return !Properties.ContainsKey(name) ? default(T) : GetValue<T>(name);
+            return !_properties.ContainsKey(name) ? default(T) : GetValue<T>(_properties[name]);
         }
 
         public void Set<T>(T value, [CallerMemberName] string name = null)
@@ -30,17 +30,18 @@ namespace Atrico.Lib.Common.PropertyContainer
             {
                 return;
             }
-            SetValue(name, value);
+            _properties[name] = _properties.ContainsKey(name) ? AmendValue(_properties[name], value) : CreateValue(name, value);
             OnPropertyChanged(name);
         }
 
         public IEnumerable<string> Names
         {
-            get { return Properties.Keys; }
+            get { return _properties.Keys; }
         }
 
-        protected abstract T GetValue<T>(string name);
-        protected abstract void SetValue<T>(string name, T value);
+        protected abstract T GetValue<T>(TProp prop);
+        protected abstract TProp AmendValue<T>(TProp prop, T value);
+        protected abstract TProp CreateValue<T>(string name, T value);
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -61,7 +62,7 @@ namespace Atrico.Lib.Common.PropertyContainer
         public override int GetHashCode()
         {
             var hashcode = 17;
-            foreach (var entry in Properties.OrderBy(e => e.Key))
+            foreach (var entry in _properties.OrderBy(e => e.Key))
             {
                 hashcode = (hashcode * 31) ^ entry.Key.GetHashCode();
                 hashcode = (hashcode * 31) ^ (ReferenceEquals(entry.Value, null) ? 0 : entry.Value.GetHashCode());
