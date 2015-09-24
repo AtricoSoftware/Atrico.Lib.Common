@@ -9,7 +9,6 @@ namespace Atrico.Lib.Common.Console
     ///     Write a table to the console
     /// </summary>
     public class Table : IMultilineDisplayable
-
     {
         private readonly List<List<object>> _rows = new List<List<object>>();
         private readonly char?[] _border;
@@ -95,16 +94,14 @@ namespace Atrico.Lib.Common.Console
             SetBorder(Border.BottomLeftCorner, '+');
             SetBorder(Border.BottomRightCorner, '+');
             // Internal
-            if (internals)
-            {
-                SetBorder(Border.Horizontal, '-');
-                SetBorder(Border.Vertical, '|');
-                SetBorder(Border.TopMiddleCorner, '+');
-                SetBorder(Border.MiddleLeftCorner, '+');
-                SetBorder(Border.InternalCorner, '+');
-                SetBorder(Border.MiddleRightCorner, '+');
-                SetBorder(Border.BottomMiddleCorner, '+');
-            }
+            if (!internals) return this;
+            SetBorder(Border.Horizontal, '-');
+            SetBorder(Border.Vertical, '|');
+            SetBorder(Border.TopMiddleCorner, '+');
+            SetBorder(Border.MiddleLeftCorner, '+');
+            SetBorder(Border.InternalCorner, '+');
+            SetBorder(Border.MiddleRightCorner, '+');
+            SetBorder(Border.BottomMiddleCorner, '+');
 
             return this;
         }
