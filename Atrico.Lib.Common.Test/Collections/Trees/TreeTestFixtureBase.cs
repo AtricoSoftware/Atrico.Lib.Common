@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using Atrico.Lib.Common.Collections.Tree;
-using Atrico.Lib.Common.Collections.Tree.Implementation;
+using Atrico.Lib.Common.zzImplementation.Collections.Tree;
 using Atrico.Lib.Testing;
 
 namespace Atrico.Lib.Common.Tests.Collections.Trees

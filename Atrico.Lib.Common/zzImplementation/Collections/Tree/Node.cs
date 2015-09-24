@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Atrico.Lib.Common.Collections;
+using Atrico.Lib.Common.Collections.Tree;
 
-namespace Atrico.Lib.Common.Collections.Tree.Implementation
+namespace Atrico.Lib.Common.zzImplementation.Collections.Tree
 {
     internal sealed class Node : NodeContainer, ITreeNode
     {

@@ -1,4 +1,6 @@
-namespace Atrico.Lib.Common.Collections
+using Atrico.Lib.Common.Collections;
+
+namespace Atrico.Lib.Common.zzImplementation.Collections
 {
 	internal class CollectionDifferencesError : CollectionDifferences
 	{

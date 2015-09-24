@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Atrico.Lib.Common.Collections;
 
-namespace Atrico.Lib.Common.Collections
+namespace Atrico.Lib.Common.zzImplementation.Collections
 {
 	internal class CollectionDifferencesWrongOrder : CollectionDifferences
 	{

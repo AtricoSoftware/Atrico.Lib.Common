@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Atrico.Lib.Common.Collections;
+using Atrico.Lib.Common.Collections.Tree;
 
-namespace Atrico.Lib.Common.Collections.Tree.Implementation
+namespace Atrico.Lib.Common.zzImplementation.Collections.Tree
 {
     internal partial class NodeContainer : EquatableObject<NodeContainer>, ITreeNodeContainer
     {

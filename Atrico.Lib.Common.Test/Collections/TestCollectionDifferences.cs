@@ -4,6 +4,7 @@ using Atrico.Lib.Assertions;
 using Atrico.Lib.Assertions.Constraints;
 using Atrico.Lib.Assertions.Elements;
 using Atrico.Lib.Common.Collections;
+using Atrico.Lib.Common.zzImplementation.Collections;
 using Atrico.Lib.Testing.TestAttributes.NUnit;
 
 namespace Atrico.Lib.Common.Tests.Collections

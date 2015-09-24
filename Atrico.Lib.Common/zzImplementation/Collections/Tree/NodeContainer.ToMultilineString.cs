@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Atrico.Lib.Common.Collections.Tree.Implementation
+namespace Atrico.Lib.Common.zzImplementation.Collections.Tree
 {
     internal partial class NodeContainer
     {
