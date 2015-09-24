@@ -124,7 +124,7 @@
     <Compile Include="RegEx\Elements\RegExChars.cs" />
     <Compile Include="RegEx\Elements\RegExElement.cs" />
     <Compile Include="ResettableCache\ResettableCache.cs" />
-    <Compile Include="ResettableCache\IResettable.cs" />
+    <Compile Include="IResettable.cs" />
     <Compile Include="RunContextInfo.cs" />
     <Compile Include="Security\CredentialLocker.cs" />
     <Compile Include="Security\DataProtectionExtensions.cs" />

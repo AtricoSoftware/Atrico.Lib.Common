@@ -1,4 +1,4 @@
-﻿namespace Atrico.Lib.Common.ResettableCache
+﻿namespace Atrico.Lib.Common
 {
     /// <summary>
     ///     Interface for object that can be reset
