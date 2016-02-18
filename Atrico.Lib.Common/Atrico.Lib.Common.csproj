@@ -72,6 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateAndTime\ISetDateTime.cs" />
+    <Compile Include="DateAndTime\ModifiableDateTimeProvider.cs" />
     <Compile Include="DecimalUtilities.cs" />
     <Compile Include="SemanticVersion\Version.cs" />
     <Compile Include="zzImplementation\Collections\Tree\NodeContainer.cs" />
@@ -93,8 +95,8 @@
     <Compile Include="zzImplementation\Collections\CollectionDifferencesWrongOrder.cs" />
     <Compile Include="Collections\EnumerableExtensions.cs" />
     <Compile Include="Console\Table.cs" />
-    <Compile Include="DateAndTime\DateTimeHelper.cs" />
-    <Compile Include="DateAndTime\IDateTime.cs" />
+    <Compile Include="DateAndTime\DefaultDateTimeProvider.cs" />
+    <Compile Include="DateAndTime\IDateTimeProvider.cs" />
     <Compile Include="Events\EventHelper.cs" />
     <Compile Include="IMultilineDisplayable.cs" />
     <Compile Include="NamesByConvention\EverythingAfter.cs" />

@@ -6,7 +6,7 @@ namespace Atrico.Lib.Common.DateAndTime
     ///     Get the current time/date
     ///     Use service to allow injection for testing
     /// </summary>
-    public interface IDateTime
+    public interface IDateTimeProvider
     {
         /// <summary>
         ///     Gets the current date/time

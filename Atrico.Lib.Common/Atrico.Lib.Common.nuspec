@@ -16,6 +16,7 @@
     <releaseNotes>
       1.12
       Updated copyright year, versioning now Maj.Min.auto
+      DateTime provider added
       1.11.0.0
       Decimal utilities - Trim string
       PropertyContainer added

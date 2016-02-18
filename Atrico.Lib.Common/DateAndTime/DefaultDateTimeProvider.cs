@@ -3,9 +3,9 @@
 namespace Atrico.Lib.Common.DateAndTime
 {
     /// <summary>
-    ///     Default handler for current date/time
+    ///     Default provider for current date/time
     /// </summary>
-    public class DateTimeHelper : IDateTime
+    public class DefaultDateTimeProvider : IDateTimeProvider
     {
         public DateTime Now
         {
