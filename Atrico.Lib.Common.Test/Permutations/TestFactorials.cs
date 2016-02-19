@@ -24,7 +24,7 @@ namespace Atrico.Lib.Common.Tests.Permutations
             }
         }
 
-        public IEnumerable<Tuple<uint, ulong>> FactorialValues
+        public static IEnumerable<Tuple<uint, ulong>> FactorialValues
         {
             get
             {
@@ -35,7 +35,7 @@ namespace Atrico.Lib.Common.Tests.Permutations
             }
         }
 
-        public IEnumerable<Tuple<uint, uint, ulong>> DivideValues
+        public static IEnumerable<Tuple<uint, uint, ulong>> DivideValues
         {
             get
             {
