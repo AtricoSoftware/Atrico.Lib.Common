@@ -11,11 +11,6 @@ namespace Atrico.Lib.Common.DateAndTime
         /// <summary>
         ///     Gets the current date/time
         /// </summary>
-        DateTime Now { get; }
-
-        /// <summary>
-        ///     Gets the current date/time as DT Offset
-        /// </summary>
-        DateTimeOffset NowOffset { get; }
+        DateTimeOffset Now { get; }
     }
 }

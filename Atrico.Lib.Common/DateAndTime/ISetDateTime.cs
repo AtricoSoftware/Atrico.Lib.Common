@@ -12,6 +12,6 @@ namespace Atrico.Lib.Common.DateAndTime
 		/// Stored as offset so 24 hours after setting date, date will have increased
 		/// </summary>
 		/// <param name="date">Date to set</param>
-		void SetDate(DateTime date);
+		void SetDate(DateTimeOffset date);
 	}
 }

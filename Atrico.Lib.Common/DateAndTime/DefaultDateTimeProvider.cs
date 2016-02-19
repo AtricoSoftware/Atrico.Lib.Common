@@ -7,12 +7,7 @@ namespace Atrico.Lib.Common.DateAndTime
     /// </summary>
     public class DefaultDateTimeProvider : IDateTimeProvider
     {
-        public DateTime Now
-        {
-            get { return DateTime.Now; }
-        }
-
-        public DateTimeOffset NowOffset
+        public DateTimeOffset Now
         {
             get { return DateTimeOffset.Now; }
         }

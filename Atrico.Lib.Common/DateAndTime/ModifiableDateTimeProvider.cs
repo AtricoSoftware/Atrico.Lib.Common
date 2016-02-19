@@ -10,19 +10,14 @@ namespace Atrico.Lib.Common.DateAndTime
 	{
 		private long _daysOffset = 0L;
 
-		public DateTime Now
-		{
-			get { return DateTime.Now.AddDays(_daysOffset); }
-		}
-
-		public DateTimeOffset NowOffset
+		public DateTimeOffset Now
 		{
 			get { return DateTimeOffset.Now.AddDays(_daysOffset); }
 		}
 
-		public void SetDate(DateTime date)
+		public void SetDate(DateTimeOffset date)
 		{
-			_daysOffset = (long)((date.Date - DateTime.Now.Date).TotalDays);
+			_daysOffset = (long)((date.Date - DateTimeOffset.Now.Date).TotalDays);
 		}
 	}
 }
